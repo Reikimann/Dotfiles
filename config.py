@@ -1,3 +1,4 @@
+
 # Reikimann's qtile config
 
 ####Imports####
@@ -26,13 +27,14 @@ config_file = "/home/cbirkmand/.config/qtile/config.py"
 
 # home_dir = os.getenv('HOME')
 
+
 #### Defaults ####
 
 layout_defaults = dict(
     border_focus='#bd93f9',
     border_normal='#21222c',
     border_width=2, 
-    margin=10,
+    margin=5,
     border_on_single = True
     )
 
@@ -55,11 +57,13 @@ widget_text_left = dict (
     fontsize = 30
     )
 
+
 #### Hooks ####
 
 @hook.subscribe.startup_once
 def startup():
     subprocess.call('/home/cbirkmand/.config/qtile/autostart.sh')
+
 
 
 ####Keybindings####
@@ -70,7 +74,6 @@ keys = [
 
     # Edit config
     Key([mod], "e", lazy.spawn("kitty -e nvim /home/cbirkmand/.config/qtile/config.py"), desc="Edit config file"),
-
 
     # Terminal
     Key([mod], "Return", lazy.spawn(terminal), desc="Launch terminal"),
@@ -96,6 +99,11 @@ keys = [
     Key([], "XF86MonBrightnessUp", lazy.spawn("brightnessctl set 10%+")),
     Key([], "XF86MonBrightnessDown", lazy.spawn("brightnessctl set 10%-")),
 
+    # Toggle fullscreen
+    Key([mod, "shift"], "f", lazy.window.toggle_fullscreen(), desc="Toggle fullscreen"),
+
+    # Toggle bar
+    Key([mod, "shift"], "t", lazy.hide_show_bar("top"), desc="Toggle bar"),
 
     # Switch between windows
     Key([mod], "h", lazy.layout.left(), desc="Move focus to left"),
@@ -144,27 +152,42 @@ keys = [
 ]
 
 
+####Keychords####
+
+#keys = [
+#        KeyChord([mod], "s", [
+#            Key([], "s", lazy.spawn("shutdown now")),
+#            Key([], "r", lazy.spawn("reboot"))
+#        ])
+#]
+
 
 ####Groups####
-
 
 groups = [Group(i) for i in ["1", "2", "3", "4", "5", "6", "7", "8", "9"]]
 
 for i in groups:
-    keys.extend([
-        # mod1 + letter of group = switch to group
-        Key([mod], i.name, lazy.group[i.name].toscreen(),
-            desc="Switch to group {}".format(i.name)),
-
-        # mod1 + shift + letter of group = switch to & move focused window to group
-        Key([mod, "shift"], i.name, lazy.window.togroup(i.name, switch_group=True),
-            desc="Switch to & move focused window to group {}".format(i.name)),
-        # Or, use below if you prefer not to switch to that group.
-        # # mod1 + shift + letter of group = move focused window to group
-        # Key([mod, "shift"], i.name, lazy.window.togroup(i.name),
-        #     desc="move focused window to group {}".format(i.name)),
+    keys.extend(
+        [
+            # mod1 + letter of group = switch to group
+            Key(
+                [mod],
+                i.name,
+                lazy.group[i.name].toscreen(),
+                desc="Switch to group {}".format(i.name),
+            ),
+            # mod1 + shift + letter of group = switch to & move focused window to group
+            Key(
+                [mod, "shift"],
+                i.name,
+                lazy.window.togroup(i.name, switch_group=True),
+                desc="Switch to & move focused window to group {}".format(i.name),
+            ),
+            # Or, use below if you prefer not to switch to that group.
+            # # mod1 + shift + letter of group = move focused window to group
+            # Key([mod, "shift"], i.name, lazy.window.togroup(i.name),
+            #     desc="move focused window to group {}".format(i.name)),
     ])
-
 
 
 ####Layouts####
@@ -189,8 +212,6 @@ layouts = [
 
 
 
-
-
 ####Custom Func####
 
 
@@ -209,6 +230,7 @@ screens = [
                     filename="~/Pictures/Logo/python-white.png",
                     margin=2
                     ),
+                #widget.Systray(),
                 widget.TextBox(**widget_text_left),
                 widget.GroupBox(
                     disable_drag=True,
@@ -221,41 +243,40 @@ screens = [
                     ),
                 widget.TextBox(**widget_text_left),
                 widget.Prompt(
-                    bell_style = ''
-                    ),
+                   bell_style = ''
+                   ),
                 widget.WindowName(
-                    max_chars=20
-                    ),
+                   max_chars=20
+                   ),
                 widget.Clock(format='%A, %B %d - %H:%M '),
                 widget.Spacer(540),
-                widget.WidgetBox(widgets=[
-                    # widget.TextBox(**widget_text_right),
-                    widget.Wlan(
-                        format = '{essid} {percent:1.0%}  '
-                        ),
-                    widget.TextBox(**widget_text_right),
-                    widget.Net(
-                        format = '{down} ↓↑{up}'
-                        ),
-                    widget.TextBox(**widget_text_right),
-                    widget.CheckUpdates(
-                       update_interval = 1800,
-                       display_format = '{updates} : ﮮ',
-                       distro = "Arch_checkupdates",
-                       mouse_callbacks = {'Button1': lambda: qtile.cmd_spawn(terminal + ' -e sudo pacman -Syu')},
-                       padding = 5
-                        ),
-                    ],
-                    close_button_location = 'right',
-                    text_closed = '<=',
-                    text_open = '>='
-                    ),
+                #widget.WidgetBox(widgets=[
+                #    # widget.TextBox(**widget_text_right),
+                #    widget.Wlan(
+                #        format = '{essid} {percent:1.0%}  '
+                #        ),
+                #    widget.TextBox(**widget_text_right),
+                #    widget.Net(
+                #        format = '{down} ↓↑{up}'
+                #    ),
+                #    widget.TextBox(**widget_text_right),
+                #    widget.CheckUpdates(
+                #        update_interval = 1800,
+                #        display_format = '{updates} : ﮮ',
+                #        distro = "Arch_checkupdates",
+                #        mouse_callbacks = {'Button1': lambda: qtile.cmd_spawn(terminal + ' -e sudo pacman -Syu')},
+                #        padding = 5
+                #        ),
+                #    ],
+                #    close_button_location = 'right',
+                #    text_closed = '<=',
+                #    text_open = '>='
+                #    ),
                 widget.TextBox(**widget_text_right),
                 widget.CurrentLayoutIcon(
                     scale=0.75
                     ),
                 widget.TextBox(**widget_text_right),
-                widget.Systray(),
                 # widget.TextBox(**widget_text_right),
                 widget.PulseVolume(
                         fmt = '  {}'
@@ -266,21 +287,19 @@ screens = [
             24,
             # Margin [N E S W]
             # border_width=[2, 2, 2, 2],
-            margin=[10, 10, 0, 10], # Space around bar {8}
-            opacity = 1,
+            margin=[5, 5, 0, 5], # Space around bar {8}
+            # opacity = 1,
             background='#282a36',
-            border_color='#282a36'
+            border_color='#282a36',
         ),
     ),
 ]
 
 # Drag floating layouts.
 mouse = [
-    Drag([mod], "Button1", lazy.window.set_position_floating(),
-         start=lazy.window.get_position()),
-    Drag([mod], "Button3", lazy.window.set_size_floating(),
-         start=lazy.window.get_size()),
-    Click([mod], "Button2", lazy.window.bring_to_front())
+    Drag([mod], "Button1", lazy.window.set_position_floating(), start=lazy.window.get_position()),
+    Drag([mod], "Button3", lazy.window.set_size_floating(), start=lazy.window.get_size()),
+    Click([mod], "Button2", lazy.window.bring_to_front()),
 ]
 
 dgroups_key_binder = None
@@ -289,22 +308,19 @@ follow_mouse_focus = False
 bring_front_click = True
 cursor_warp = False
 floating_layout = layout.Floating(float_rules=[
-    # Run the utility of `xprop` to see the wm class and name of an X client.
-    *layout.Floating.default_float_rules,
-    Match(wm_class='confirmreset'),  # gitk
-    Match(wm_class='makebranch'),  # gitk
-    Match(wm_class='maketag'),  # gitk
-    Match(wm_class='ssh-askpass'),  # ssh-askpass
-    Match(title='branchdialog'),  # gitk
-    Match(title='pinentry'),  # GPG key password entry
-    ],
-    border_focus='#bd93f9',
-    border_normal='#21222c',
-    border_width=2, 
-    border_on_single = True
+        *layout.Floating.default_float_rules,
+        Match(wm_class="confirmreset"),  # gitk
+        Match(wm_class="makebranch"),  # gitk
+        Match(wm_class="maketag"),  # gitk
+        Match(wm_class="ssh-askpass"),  # ssh-askpass
+        Match(title="branchdialog"),  # gitk
+        Match(title="pinentry"),  # GPG key password entry
+        ],
+        border_focus='#bd93f9',
+        border_normal='#21222c',
+        border_width=2, 
+        border_on_single = True
 )
-
-
 auto_fullscreen = True
 focus_on_window_activation = "smart"
 reconfigure_screens = True
