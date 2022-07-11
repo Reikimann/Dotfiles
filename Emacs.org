@@ -1,0 +1,607 @@
+#+title Reikimann's Emacs Configuration
+#+PROPERTY: header-args:emacs-lisp :tangle ./init.el :mkdirp yes
+
+Things to figure out:
+- Org return follows link in normal-mode(not insert) when =RET= is pressed
+- Org-superstar-mode
+
+* Welcome!
+This is a configuration partly build with help from the *Emacs From Scratch* series.
+This file generates [[file:init.el][init.el]] which can be loaded by Emacs at startup.
+
+** Tips for Use
+In this document there are many links that lead you to documentation for the various packages in use. If you're looking at this file in Emacs, you can put your cursor on a link and press =C-c C-o= or run =M-x org-open-at-point= to open the link in your web browser.
+
+* Basic Configuration
+** Main Vars
+*NOTE:* You will most likely need to adjust this font size for your system!
+Just ignore the comment.
+
+#+begin_src emacs-lisp
+
+  ;; Please edit the Emacs.org file instead of this. Init.el is auto-generated.
+  (defvar reiki/default-font-size 130)
+  (defvar reiki/default-fixed-font "Liga SFMono Nerd Font")
+
+#+end_src
+** Basic UI Configuration
+#+begin_src emacs-lisp
+  (setq inhibit-startup-message t)
+
+  (scroll-bar-mode -1)        ;Disable visible scrollbar
+  (tool-bar-mode -1)          ;Disable the toolbar
+  (tooltip-mode -1)           ;Disable tooltips
+  (set-fringe-mode 10)        ;Give some breathing room
+
+  (menu-bar-mode -1)          ;Disable the menu bar
+
+  (setq use-dialog-box nil)   ;Dont popup dialog-boxes when prompting
+
+  ;; Set up the visible bell
+  (setq visible-bell t)
+
+  (save-place-mode 1)         ;Remember and restore cursor location
+
+  ;; Smooth scrolling (kinda)
+  (setq scroll-margin 10)
+  (setq scroll-step 1)
+
+  ;; Line numbers (relative)
+  (column-number-mode)
+  (global-display-line-numbers-mode 1)
+  (setq display-line-numbers-type 'relative)
+
+  ;; Disable line numbers for some modes
+  (dolist (mode '(org-mode-hook
+                  term-mode-hook
+                  shell-mode-hook
+                  eshell-mode-hook))
+    (add-hook mode (lambda () (display-line-numbers-mode 0))))
+  
+#+end_src
+** Font Configuration 
+
+#+begin_src emacs-lisp
+
+  (set-face-attribute 'default nil :font reiki/default-fixed-font :height reiki/default-font-size)
+
+  ;; Set the fixed pitch face
+  ;;(set-face-attribute 'fixed-pitch nil :font "Liga SFMono Nerd Font" :height 160)
+
+  ;; Set the variable pitch face
+  ;;(set-face-attribute 'variable-pitch nil :font "Cantarell" :height 180 :weight 'regular)
+
+#+end_src
+
+** Default Misc
+
+#+begin_src emacs-lisp
+
+  ;; Revert buffers when the underlying file has changed
+  (global-auto-revert-mode 1)
+
+  ;; Revert Dired and other buffers
+  (setq global-auto-revert-non-file-buffers t)
+
+  ;; Save what you enter into minibuffer
+  (setq history-length 25)
+  (savehist-mode 1)
+
+  ;; Remember recently edited files
+  (recentf-mode 1)
+
+  ;; Sets transparency
+  ;;(set-frame-parameter (selected-frame) 'alpha '(90 . 90))
+  ;;(add-to-list 'default-frame-alist '(alpha . (90 . 90)))
+
+#+end_src
+
+* Package System Setup
+Emacs has a built in package manager but it doesn't make it easy to automatically install packages on a new system the first time you pull down your configuration.
+[[https://github.com/jwiegley/use-package][Use-package]] is a really helpful package used in this configuration to make it a lot easier to automate the installation and configuration of everything else we use.
+
+#+begin_src emacs-lisp
+
+  ;; Initialize package sources
+  (require 'package)
+
+  (setq package-archives '(("melpa" . "https://melpa.org/packages/")
+                           ("org" . "https://orgmode.org/elpa/")
+                           ("elpa" . "https://elpa.gnu.org/packages/")))
+
+  (package-initialize)
+  (unless package-archive-contents
+   (package-refresh-contents))
+
+  ;; Initialize use-package on non-Linux platforms
+  (unless (package-installed-p 'use-package)
+     (package-install 'use-package))
+
+  (require 'use-package)
+  (setq use-package-always-ensure t)
+
+#+end_src
+
+* Keybinding Configuration
+This configuration uses evil-mode for a Vi-like modal editing experience. general.el is used for easy keybinding configuration that integrates well with which-key. evil-collection is used to automatically configure various Emacs modes with Vi-like keybindings for evil-mode.
+
+** Evil and General
+This configuration uses [[https://evil.readthedocs.io/en/latest/index.html][evil-mode]] for a Vi-like modal editing experience.
+[[https://github.com/noctuid/general.el][General.el]] is used for easy keybinding configuration that integrates well with which-key.
+[[https://github.com/emacs-evil/evil-collection][Evil-collection]] is used to automatically configure various Emacs modes with Vi-like keybindings for evil-mode.
+
+#+begin_src emacs-lisp
+
+  ;; Make ESC quit prompts
+  (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
+
+  (use-package general
+    :config
+    (general-create-definer reiki/leader-keys
+      :keymaps '(normal insert visual emacs)
+      :prefix "SPC"
+      :global-prefix "C-SPC")
+
+    (reiki/leader-keys
+     "u" '(:ignore t :which-key "UI")
+     "o" '(:ignore o :which-key "Org")
+     "s" '(save-buffer :which-key "Save buffer")
+     "e" #'((lambda () (interactive) (counsel-find-file (locate-user-emacs-file "Emacs.org"))) :which-key "Emacs config")
+     "j" #'((lambda () (interactive) (switch-to-buffer (other-buffer))) :which-key "Prev buff")
+     ))
+
+  (reiki/leader-keys
+    ;; Scaling
+    "us" '(hydra-text-scale/body :which-key "Scale text")
+    ;; Themes
+    "ut" '(counsel-load-theme :which-key "Choose theme")
+    ;; Org
+    "oc" '(org-capture :which-key "Capture")
+    "oi" '(counsel-imenu :which-key "IMenu"))
+
+  ;; Vim like modal editting
+  (use-package evil
+    :init
+    (setq evil-want-integration t)
+    (setq evil-want-keybinding nil)
+    (setq evil-want-C-u-scroll t)
+    (setq evil-want-C-i-jump nil)
+    :config
+    (evil-mode 1)
+    (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
+    (define-key evil-insert-state-map (kbd "C-h") 'evil-delete-backward-char-and-join)
+
+    ;; Use visual line motions even outside of visual-line-mode buffers
+    (evil-global-set-key 'motion "j" 'evil-next-visual-line)
+    (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
+
+    (evil-set-initial-state 'messages-buffer-mode 'normal)
+    (evil-set-initial-state 'dashboard-mode 'normal))
+
+  (use-package evil-collection
+    :after evil
+    :config
+    (evil-collection-init))
+  
+#+end_src
+** Hydra (and Text Scaling)
+This is an example of using [[https://github.com/abo-abo/hydra][Hydra]] to design a transient key binding for quickly adjusting the scale of the text on screen.  We define a hydra that is bound to =C-s t s= and, once activated, =j= and =k= increase and decrease the text scale.  You can press any other key (or =f= specifically) to exit the transient key map.
+
+#+begin_src emacs-lisp
+
+  (use-package hydra)
+
+  (defhydra hydra-text-scale (:timeout 4)
+    "scale text"
+    ("j" text-scale-increase "in")
+    ("k" text-scale-decrease "out")
+    ("f" nil "finished" :exit t))
+
+#+end_src
+
+* UI Configuration
+** Command Log Mode
+[[https://github.com/lewang/command-log-mode][Command-log-mode]] is useful for displaying a panel showing each key binding you use in a panel on the right side of the frame. Great for live streams and screencasts!
+
+#+begin_src emacs-lisp
+
+  (use-package command-log-mode)
+
+#+end_src
+** Color Theme
+[[https://github.com/hlissner/emacs-doom-themes][Doom-themes]] is a great set of themes with a lot of variety and support for many different Emacs modes.  Taking a look at the [[https://github.com/hlissner/emacs-doom-themes/tree/screenshots][screenshots]] might help you decide which one you like best.  You can also run =M-x counsel-load-theme= to choose between them easily.
+#+begin_src emacs-lisp
+
+  (use-package doom-themes
+    :init (load-theme 'doom-tokyo-night t))
+
+#+end_src
+** Better Modeline
+[[https://github.com/seagle0128/doom-modeline][Doom-modeline]] is a very attractive and rich (yet still minimal) mode line configuration for Emacs.  The default configuration is quite good but you can check out the [[https://github.com/seagle0128/doom-modeline#customize][configuration options]] for more things you can enable or disable.
+
+*NOTE:* The first time you load your configuration on a new machine, you'll need to run =M-x all-the-icons-install-fonts=, so that mode line icons display correctly.
+
+#+begin_src emacs-lisp
+
+  (use-package all-the-icons)
+
+  (use-package doom-modeline
+    :ensure t
+    :init (doom-modeline-mode 1)
+    :custom ((doom-modeline-height 16)))
+
+#+end_src
+** Which Key
+[[https://github.com/justbur/emacs-which-key][Which-key]] is a useful UI panel that appears when you start pressing any key binding in Emacs to offer you all possible completions for the prefix.  For example, if you press =C-c= (hold control and press the letter =c=), a panel will appear at the bottom of the frame displaying all of the bindings under that prefix and which command they run.  This is very useful for learning the possible key bindings in the mode of your current buffer.
+
+#+begin_src emacs-lisp
+
+  (use-package which-key
+    :init (which-key-mode)
+    :diminish which-key-mode
+    :config
+    (setq which-key-idle-delay 0.2))
+
+#+end_src
+** Ivy and Counsel
+[[https://oremacs.com/swiper/][Ivy]] is an excellent completion framework for Emacs.  It provides a minimal yet powerful selection menu that appears when you open files, switch buffers, and for many other tasks in Emacs.
+
+Counsel is a customized set of commands to replace =find-file= with =counsel-find-file=, etc which provide useful commands for each of the default completion commands.
+
+[[https://github.com/Yevgnen/ivy-rich][Ivy-rich]] adds extra columns to a few of the Counsel commands to provide more information about each item.
+
+#+begin_src emacs-lisp
+
+  (use-package ivy
+    :diminish
+    :bind (("C-s" . swiper)
+           :map ivy-minibuffer-map
+           ("TAB" . ivy-alt-done)	
+           ("C-l" . ivy-alt-done)
+           ("C-j" . ivy-next-line)
+           ("C-k" . ivy-previous-line)
+           :map ivy-switch-buffer-map
+           ("C-k" . ivy-previous-line)
+           ("C-l" . ivy-done)
+           ("C-d" . ivy-switch-buffer-kill)
+           :map ivy-reverse-i-search-map
+           ("C-k" . ivy-previous-line)
+           ("C-d" . ivy-reverse-i-search-kill))
+    :demand
+    :config
+    (ivy-mode 1))
+
+  (use-package ivy-rich
+    :init
+    (ivy-rich-mode 1))
+
+  (use-package counsel
+    :bind (("M-x" . counsel-M-x)
+           ("C-x b" . counsel-ibuffer)
+           ("C-x C-f" . counsel-find-file)
+           :map minibuffer-local-map
+           ("C-r" . 'counsel-minibuffer-history))
+    :config
+    (setq ivy-initial-inputs-alist nil)) ;; Don't start searches with ^
+
+#+end_src
+** Helpful Help Commands
+[[https://github.com/Wilfred/helpful][Helpful]] adds a lot of very helpful information to Emacs' =describe-= command buffers.  For example, if you use =describe-function=, you will not only get the documentation about the function, you will also see the source code of the function and where it gets used in other places in the Emacs configuration.  It is very useful for figuring out how things work in Emacs.
+
+#+begin_src emacs-lisp
+
+  (use-package helpful
+    :custom
+    (counsel-describe-function-function #'helpful-callable)
+    (counsel-describe-variable-function #'helpful-variable)
+    :bind
+    ([remap describe-function] . counsel-describe-function)
+    ([remap describe-command] . helpful-command)
+    ([remap describe-variable] . counsel-describe-variable)
+    ([remap describe-key] . helpful-key))
+
+#+end_src
+* Org Mode
+[[https://orgmode.org/][Org Mode]] is one of the hallmark features of Emacs.  It is a rich document editor, project planner, task and time tracker, blogging engine, and literate coding utility all wrapped up in one package.
+
+** Basic Config
+This section contains the basic configuration for =org-mode= + the configuration for Org agendas and capture templates.
+
+#+begin_src emacs-lisp
+
+  (defun reiki/org-mode-setup ()
+    ;;(variable-pitch-mode 1)
+    (org-indent-mode)
+    (visual-line-mode 1))
+
+  (use-package org
+    :hook (org-mode . reiki/org-mode-setup)
+    :config
+    (setq org-ellipsis " ▾"
+          org-hide-emphasis-markers t) ;;hides markers like /italic/ or *bold*
+
+    (setq org-return-follows-link t)
+    (setq org-agenda-start-with-log-mode t)
+    (setq org-log-done 'time)
+    (setq org-log-into-drawer t)
+
+    (require 'org-habit)
+    (add-to-list 'org-modules 'org-habit)
+    (setq org-habit-graph-column 60)
+
+    (setq org-agenda-files
+          '("~/dox/OrgFiles/Tasks.org"
+            "~/dox/OrgFiles/Habits.org"
+            "~/dox/OrgFiles/Birthdays.org"))
+
+    ;; C-c C-t
+    (setq org-todo-keywords
+      '((sequence "TODO(t)" "DOING(d)" "NEXT(n)" "|" "DONE(D!)")
+        (sequence "BACKLOG(b)" "PLAN(p)" "READY(r)" "ACTIVE(a)" "REVIEW(v)" "WAIT(w@/!)" "HOLD(h)" "|" "COMPLETED(c)" "FAILED" "CANC(k@)")))
+
+    (setq org-refile-targets
+      '(("Archive.org" :maxlevel . 1)
+        ("Tasks.org" :maxlevel . 1)))
+
+    ;; Save Org buffers after refiling!
+    (advice-add 'org-refile :after 'org-save-all-org-buffers)
+
+    ;;C-c C-q 
+    (setq org-tag-alist
+      '((:startgroup)
+         ; Put mutually exclusive tags here
+         (:endgroup)
+         ("@errand" . ?E)
+         ("@home" . ?H)
+         ("@work" . ?W)
+         ("@school" . ?S)
+         ("agenda" . ?a)
+         ("planning" . ?p)
+         ("note" . ?n)
+         ("idea" . ?i)))
+
+    ;; Configure custom agenda views
+    (setq org-agenda-custom-commands
+     '(("d" "Dashboard"
+       ((agenda "" ((org-deadline-warning-days 7)))
+        (todo "NEXT"
+          ((org-agenda-overriding-header "Next Tasks")))
+        (tags-todo "agenda/ACTIVE" ((org-agenda-overriding-header "Active Projects")))))
+
+      ("n" "Next Tasks"
+       ((todo "NEXT"
+          ((org-agenda-overriding-header "Next Tasks")))))
+
+      ("W" "Work Tasks" tags-todo "+work")
+
+      ;; Low-effort next actions
+      ("e" tags-todo "+TODO=\"NEXT\"+Effort<15&+Effort>0"
+       ((org-agenda-overriding-header "Low Effort Tasks")
+        (org-agenda-max-todos 20)
+        (org-agenda-files org-agenda-files)))
+
+      ("w" "Workflow Status"
+       ((todo "WAIT"
+              ((org-agenda-overriding-header "Waiting on External")
+               (org-agenda-files org-agenda-files)))
+        (todo "REVIEW"
+              ((org-agenda-overriding-header "In Review")
+               (org-agenda-files org-agenda-files)))
+        (todo "PLAN"
+              ((org-agenda-overriding-header "In Planning")
+               (org-agenda-todo-list-sublevels nil)
+               (org-agenda-files org-agenda-files)))
+        (todo "BACKLOG"
+              ((org-agenda-overriding-header "Project Backlog")
+               (org-agenda-todo-list-sublevels nil)
+               (org-agenda-files org-agenda-files)))
+        (todo "READY"
+              ((org-agenda-overriding-header "Ready for Work")
+               (org-agenda-files org-agenda-files)))
+        (todo "ACTIVE"
+              ((org-agenda-overriding-header "Active Projects")
+               (org-agenda-files org-agenda-files)))
+        (todo "COMPLETED"
+              ((org-agenda-overriding-header "Completed Projects")
+               (org-agenda-files org-agenda-files)))
+        (todo "CANC"
+              ((org-agenda-overriding-header "Cancelled Projects")
+               (org-agenda-files org-agenda-files)))))))
+
+    (setq org-capture-templates
+      `(("t" "Tasks / Projects")
+        ("tt" "Task" entry (file+olp "~/dox/OrgFiles/Tasks.org" "Inbox")
+             "* TODO %?\n  %U\n  %a\n  %i" :empty-lines 1)
+
+        ("j" "Journal Entries")
+        ("jj" "Journal" entry
+             (file+olp+datetree "~/dox/OrgFiles/Journal.org")
+             "\n* %<%I:%M %p> - Journal :journal:\n\n%?\n\n"
+             ;; ,(dw/read-file-as-string "~/Notes/Templates/Daily.org")
+             :clock-in :clock-resume
+             :empty-lines 1)
+        ("jm" "Meeting" entry
+             (file+olp+datetree "~/dox/OrgFiles/Journal.org")
+             "* %<%I:%M %p> - %a :meetings:\n\n%?\n\n"
+             :clock-in :clock-resume
+             :empty-lines 1)
+
+        ("w" "Workflows")
+        ("we" "Checking Email" entry (file+olp+datetree "~/dox/OrgFiles/Journal.org")
+             "* Checking Email :email:\n\n%?" :clock-in :clock-resume :empty-lines 1)
+
+        ("m" "Metrics Capture")
+        ("mw" "Water" table-line (file+headline "~/dox/OrgFiles/Metrics.org" "Water")
+         "| %U | %^{Cups} | %^{Notes} |" :kill-buffer t)))
+
+    (define-key global-map (kbd "C-c j")
+      (lambda () (interactive) (org-capture)))
+
+    (reiki/org-font-setup)) 
+
+#+end_src
+
+*** Nicer Heading Bullets
+[[https://github.com/sabof/org-bullets][Org-bullets]] replaces the heading stars in =org-mode= buffers with nicer looking characters that you can control. Another option for this is [[https://github.com/integral-dw/org-superstar-mode][org-superstar-mode]].
+
+#+begin_src emacs-lisp
+
+  (use-package org-bullets
+    :after org
+    :hook (org-mode . org-bullets-mode)
+    :custom
+    (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
+
+#+end_src
+
+*** Center Org Buffers
+We use [[https://github.com/joostkremers/visual-fill-column][visual-fill-column]] to center =org-mode= buffers for a more pleasing writing experience as it centers the contents of the buffer horizontally to seem more like you are editing a document. You can remove the block below if you don't like the behavior.
+
+#+begin_src emacs-lisp
+
+  (defun reiki/org-mode-visual-fill ()
+    (setq visual-fill-column-width 100
+          visual-fill-column-center-text t)
+    (visual-fill-column-mode 1))
+
+  (use-package visual-fill-column
+    :hook (org-mode . reiki/org-mode-visual-fill))
+
+#+end_src
+
+** Better Font Faces
+The =reiki/org-font-setup= function configures various text faces to tweak the sizes of headings =org-mode=. 
+#+begin_src emacs-lisp
+
+  (defun reiki/org-font-setup ()
+    ;; Replace list hyphen with dot
+    (font-lock-add-keywords 'org-mode
+                            '(("^ *\\([-]\\) "
+                               (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
+
+    ;; Set faces for heading levels
+    (dolist (face '((org-level-1 . 1.2)
+                    (org-level-2 . 1.1)
+                    (org-level-3 . 1.05)
+                    (org-level-4 . 1.0)
+                    (org-level-5 . 1.0)
+                    (org-level-6 . 1.0)
+                    (org-level-7 . 1.0)
+                    (org-level-8 . 1.0)))
+      (set-face-attribute (car face) nil :font reiki/default-fixed-font :weight 'regular :height (cdr face))))
+
+#+end_src
+
+** Org Babel
+To execute or export code in =org-mode= code blocks, you'll need to set up =org-babel-load-languages= for each language you'd like to use. [[https://orgmode.org/worg/org-contrib/babel/languages/index.html][This page]] documents all of the languages that you can use with =org-babel=.
+E.g type =<el= and press =<tab>= to make a elisp source block.
+
+#+begin_src emacs-lisp
+
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((emacs-lisp . t)
+     (python . t)))
+
+  (setq org-confirm-babel-evaluate nil)
+
+  ;; Remember to figure out what this allows
+  ;;(push '("conf-unix" . conf-unix) org-src-lang-modes)
+
+  (require 'org-tempo)
+
+  (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
+  (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
+  (add-to-list 'org-structure-template-alist '("py" . "src python"))
+
+#+end_src
+
+** Auto-tangle Configuration Files
+This snippet adds a hook to =org-mode= buffers so that =reiki/org-babel-tangle-config= gets executed each time a buffer gets saved. This function checks to see if the file being saved is the =Emacs.org= file you're looking at right now, and if so, automatically exports the configuration here to the associated output files.
+
+#+begin_src emacs-lisp
+  
+  ;; Automatically tangle our Emacs.org config file when we save it
+  (defun reiki/org-babel-tangle-config ()
+    (when (string-equal (buffer-file-name)
+                        (expand-file-name "~/.config/emacs/Emacs.org"))
+      ;; Dynamic scoping to the rescue
+      (let ((org-confirm-babel-evaluate nil))
+        (org-babel-tangle))))
+
+  (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'reiki/org-babel-tangle-config)))
+
+#+end_src
+
+* Development
+** Projectile
+#+begin_src emacs-lisp
+
+  (use-package projectile
+    :diminish projectile-mode
+    :config (projectile-mode)
+    :custom ((projectile-completion-system 'ivy))
+    :bind-keymap
+    ("C-c p" . projectile-command-map)
+    :init
+    ;; NOTE: Set this to the folder where you keep your Git repos!
+    (when (file-directory-p "~/dox/coding")
+      (setq projectile-project-search-path '("~/dox/coding")))
+    (setq projectile-switch-project-action #'projectile-dired))
+
+  (use-package counsel-projectile
+    :config (counsel-projectile-mode))
+
+#+end_src
+** Magit
+#+begin_src emacs-lisp
+
+#+end_src
+** Rainbow Delimiters
+#+begin_src emacs-lisp
+
+  (use-package rainbow-delimiters
+    :hook (prog-mode . rainbow-delimiters-mode))
+
+#+end_src
+** Latex
+*** Latex Preview Pane
+[[https://www.emacswiki.org/emacs/LaTeXPreviewPane][Latex-preview-pane]] is a package that enables you to preview your =LaTeX= files directly in Emacs. You can run =M-x latex-preview-pane-mode= to enable the mode on a per-buffer basis.
+
+#+begin_src emacs-lisp
+
+  ;; Install latex-preview-pane if needed
+  (unless (package-installed-p 'latex-preview-pane)
+    (package-install 'latex-preview-pane))
+
+  ;; Uncomment to load latex-preview-pane automatically with your LaTeX files 
+  ;;(latex-preview-pane-enable)
+
+#+end_src
+* System Cleanup
+Stops hidden files, created by Emacs, cluttering your system.
+
+#+begin_src emacs-lisp
+
+  ;; Moves backups to specified directory
+  (setq backup-directory-alist `(("." . , (expand-file-name "tmp/backups/" user-emacs-directory))))
+
+  ;; auto-save-mode doesn't create4 the path automatically!
+  (make-directory (expand-file-name "tmp/auto-saves/" user-emacs-directory) t)
+
+  (setq auto-save-list-file-prefix (expand-file-name "tmp/auto-saves/sessions/" user-emacs-directory)
+        auto-save-file-name-transforms `((".*" ,(expand-file-name "tmp/auto-saves/" user-emacs-directory) t)))
+
+  (setq create-lockfiles nil)
+
+#+end_src
+* Built-in Packages
+** DocView
+Loads DocView pages continuously.
+
+#+begin_src emacs-lisp
+
+  ;; View all pages in DocView-mode
+  (setq doc-view-continuous t)
+
+#+end_src
