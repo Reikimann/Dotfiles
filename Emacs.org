@@ -4,6 +4,7 @@
 Things to figure out:
 - Org return follows link in normal-mode(not insert) when =RET= is pressed
 - Org-superstar-mode
+- Forge and Magit(evil-collection)
 
 * Welcome!
 This is a configuration partly build with help from the *Emacs From Scratch* series.
@@ -37,14 +38,10 @@ Just ignore the comment.
 
   (setq use-dialog-box nil)   ;Dont popup dialog-boxes when prompting
 
-  ;; Set up the visible bell
-  (setq visible-bell t)
+  (setq visible-bell t)       ;Enables visual bell (turn off to hear sound. Unless we ignore it)
+  (setq ring-bell-function 'ignore) ;;BUT ignore it, to see and hear nothing
 
   (save-place-mode 1)         ;Remember and restore cursor location
-
-  ;; Smooth scrolling (kinda)
-  (setq scroll-margin 10)
-  (setq scroll-step 1)
 
   ;; Line numbers (relative)
   (column-number-mode)
@@ -57,8 +54,13 @@ Just ignore the comment.
                   shell-mode-hook
                   eshell-mode-hook))
     (add-hook mode (lambda () (display-line-numbers-mode 0))))
-  
+
+  ;; Sets transparency
+  ;;(set-frame-parameter (selected-frame) 'alpha '(90 . 90))
+  ;;(add-to-list 'default-frame-alist '(alpha . (90 . 90)))
+
 #+end_src
+
 ** Font Configuration 
 
 #+begin_src emacs-lisp
@@ -74,7 +76,7 @@ Just ignore the comment.
 #+end_src
 
 ** Default Misc
-
+*** Buffers
 #+begin_src emacs-lisp
 
   ;; Revert buffers when the underlying file has changed
@@ -87,15 +89,45 @@ Just ignore the comment.
   (setq history-length 25)
   (savehist-mode 1)
 
-  ;; Remember recently edited files
-  (recentf-mode 1)
-
-  ;; Sets transparency
-  ;;(set-frame-parameter (selected-frame) 'alpha '(90 . 90))
-  ;;(add-to-list 'default-frame-alist '(alpha . (90 . 90)))
+  ;; Blank scratch buffer (almost)
+  (setq initial-scratch-message ";; Scratch buffer: YEET!")
 
 #+end_src
 
+*** Editting
+#+begin_src emacs-lisp
+  ;; Remember recently edited files
+  (recentf-mode 1)
+
+  ;; Tabs!
+  (setq tab-width 4)
+
+  ;; Sentences end with one space
+  (setq sentence-end-double-space nil)
+#+end_src
+
+*** Interaction
+#+begin_src emacs-lisp
+
+  ;; When emacs asks for "yes" or "no", let "y" or "n" suffice
+  (setq use-short-answers t)
+
+  ;; Major mode of new buffers
+  ;;(setq initial-major-mode 'org-mode)
+
+  (setq blink-cursor-interval 0.6)
+  (blink-cursor-mode 10) ; Stops blinking after X, if 0 disable blinking
+
+#+end_src
+
+*** Scrolling
+#+begin_src emacs-lisp
+
+  ;; Smooth scrolling (kinda)
+  (setq scroll-margin 10)
+  (setq scroll-step 1)
+
+#+end_src
 * Package System Setup
 Emacs has a built in package manager but it doesn't make it easy to automatically install packages on a new system the first time you pull down your configuration.
 [[https://github.com/jwiegley/use-package][Use-package]] is a really helpful package used in this configuration to make it a lot easier to automate the installation and configuration of everything else we use.
@@ -123,12 +155,10 @@ Emacs has a built in package manager but it doesn't make it easy to automaticall
 #+end_src
 
 * Keybinding Configuration
-This configuration uses evil-mode for a Vi-like modal editing experience. general.el is used for easy keybinding configuration that integrates well with which-key. evil-collection is used to automatically configure various Emacs modes with Vi-like keybindings for evil-mode.
+This configuration uses evil-mode for a Vi-like modal editing experience. General.el is used for easy keybinding configuration that integrates well with which-key. Evil-collection is used to automatically configure various Emacs modes with Vi-like keybindings for evil-mode.
 
-** Evil and General
-This configuration uses [[https://evil.readthedocs.io/en/latest/index.html][evil-mode]] for a Vi-like modal editing experience.
+** General
 [[https://github.com/noctuid/general.el][General.el]] is used for easy keybinding configuration that integrates well with which-key.
-[[https://github.com/emacs-evil/evil-collection][Evil-collection]] is used to automatically configure various Emacs modes with Vi-like keybindings for evil-mode.
 
 #+begin_src emacs-lisp
 
@@ -143,8 +173,16 @@ This configuration uses [[https://evil.readthedocs.io/en/latest/index.html][evil
       :global-prefix "C-SPC")
 
     (reiki/leader-keys
+     "SPC" '(counsel-M-x :which-key "M-x")
+     ;; Nested
      "u" '(:ignore t :which-key "UI")
      "o" '(:ignore o :which-key "Org")
+     ;; Nav
+     "." '(counsel-find-file :which-key "find file")
+     "," '(counsel-recentf :which-key "recent files")
+     ;; Buffers
+     "q" '(kill-current-buffer :which-key "kill buff")
+     "Q" '(save-buffers-kill-terminal :which-key "Quit emacs")
      "s" '(save-buffer :which-key "Save buffer")
      "e" #'((lambda () (interactive) (counsel-find-file (locate-user-emacs-file "Emacs.org"))) :which-key "Emacs config")
      "j" #'((lambda () (interactive) (switch-to-buffer (other-buffer))) :which-key "Prev buff")
@@ -159,6 +197,14 @@ This configuration uses [[https://evil.readthedocs.io/en/latest/index.html][evil
     "oc" '(org-capture :which-key "Capture")
     "oi" '(counsel-imenu :which-key "IMenu"))
 
+#+end_src
+
+** Evil
+This configuration uses [[https://evil.readthedocs.io/en/latest/index.html][evil-mode]] for a Vi-like modal editing experience.
+[[https://github.com/emacs-evil/evil-collection][Evil-collection]] is used to automatically configure various Emacs modes with Vi-like keybindings for evil-mode.
+
+#+begin_src emacs-lisp
+
   ;; Vim like modal editting
   (use-package evil
     :init
@@ -168,22 +214,37 @@ This configuration uses [[https://evil.readthedocs.io/en/latest/index.html][evil
     (setq evil-want-C-i-jump nil)
     :config
     (evil-mode 1)
+    (evil-set-undo-system 'undo-redo)
     (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
     (define-key evil-insert-state-map (kbd "C-h") 'evil-delete-backward-char-and-join)
+    ;;(define-key evil-motion-state-map "/" 'swiper) ; Replace normal search with swiper
 
     ;; Use visual line motions even outside of visual-line-mode buffers
     (evil-global-set-key 'motion "j" 'evil-next-visual-line)
     (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
 
+
+    ;; Setting cursor colors
+    (setq evil-emacs-state-cursor    '("#ebcb8b" box))
+    (setq evil-normal-state-cursor   '("#649bce" box))
+    (setq evil-visual-state-cursor   '("#677691" box))
+    (setq evil-operator-state-cursor '("#ebcb8b" hollow))
+    (setq evil-insert-state-cursor '("#eb998b" (bar . 2)))
+    (setq evil-replace-state-cursor  '("#eb998b" hbar))
+    (setq evil-motion-state-cursor   '("#ad8beb" box))
+
+    ;; Initial modes
     (evil-set-initial-state 'messages-buffer-mode 'normal)
-    (evil-set-initial-state 'dashboard-mode 'normal))
+    (evil-set-initial-state 'dashboard-mode 'motion)
+    (evil-set-initial-state 'pdf-view-mode 'motion))
 
   (use-package evil-collection
     :after evil
     :config
     (evil-collection-init))
-  
+
 #+end_src
+
 ** Hydra (and Text Scaling)
 This is an example of using [[https://github.com/abo-abo/hydra][Hydra]] to design a transient key binding for quickly adjusting the scale of the text on screen.  We define a hydra that is bound to =C-s t s= and, once activated, =j= and =k= increase and decrease the text scale.  You can press any other key (or =f= specifically) to exit the transient key map.
 
@@ -228,9 +289,18 @@ This is an example of using [[https://github.com/abo-abo/hydra][Hydra]] to desig
   (use-package doom-modeline
     :ensure t
     :init (doom-modeline-mode 1)
-    :custom ((doom-modeline-height 16)))
+    :custom ((doom-modeline-height 16))
+    :config
+    (setq doom-modeline-buffer-file-name-style 'file-name ;; Just show file name (no path)
+          doom-modeline-continuous-word-count-modes '(markdown-mode gfm-mode org-mode)
+          doom-modeline-enable-word-count t
+          doom-modeline-buffer-encoding nil 
+          doom-modeline-buffer-encoding nil ;; Whether display the buffer encoding.
+          doom-modeline-indent-info t ;; Whether display the indentation information.
+          ))
 
 #+end_src
+
 ** Which Key
 [[https://github.com/justbur/emacs-which-key][Which-key]] is a useful UI panel that appears when you start pressing any key binding in Emacs to offer you all possible completions for the prefix.  For example, if you press =C-c= (hold control and press the letter =c=), a panel will appear at the bottom of the frame displaying all of the bindings under that prefix and which command they run.  This is very useful for learning the possible key bindings in the mode of your current buffer.
 
@@ -240,51 +310,84 @@ This is an example of using [[https://github.com/abo-abo/hydra][Hydra]] to desig
     :init (which-key-mode)
     :diminish which-key-mode
     :config
+    (setq which-key-prefix-prefix "◉")
     (setq which-key-idle-delay 0.2))
 
 #+end_src
-** Ivy and Counsel
-[[https://oremacs.com/swiper/][Ivy]] is an excellent completion framework for Emacs.  It provides a minimal yet powerful selection menu that appears when you open files, switch buffers, and for many other tasks in Emacs.
 
+** Counsel, Ivy and Prescient
+*** Counsel
 Counsel is a customized set of commands to replace =find-file= with =counsel-find-file=, etc which provide useful commands for each of the default completion commands.
+
+#+begin_src emacs-lisp
+
+    (use-package counsel
+      :bind (("M-x" . counsel-M-x)
+             ("C-x C-f" . counsel-find-file)
+             ("C-x b" . counsel-switch-buffer)
+             ;;("C-x b" . counsel-ibuffer)
+             ;:map minibuffer-local-map
+             ;("C-r" . 'counsel-minibuffer-history)
+             ))
+#+end_src
+
+*** Ivy
+[[https://oremacs.com/swiper/][Ivy]] is an excellent completion framework for Emacs.  It provides a minimal yet powerful selection menu that appears when you open files, switch buffers, and for many other tasks in Emacs.
 
 [[https://github.com/Yevgnen/ivy-rich][Ivy-rich]] adds extra columns to a few of the Counsel commands to provide more information about each item.
 
 #+begin_src emacs-lisp
+    (use-package ivy
+      :diminish
+      :bind (("C-s" . swiper)
+             :map ivy-minibuffer-map
+             ("TAB" . ivy-alt-done)	
+             ("C-l" . ivy-alt-done)
+             ("C-j" . ivy-next-line)
+             ("C-k" . ivy-previous-line)
+             :map ivy-switch-buffer-map
+             ("C-k" . ivy-previous-line)
+             ("C-l" . ivy-done)
+             ("C-d" . ivy-switch-buffer-kill)
+             :map ivy-reverse-i-search-map
+             ("C-k" . ivy-previous-line)
+             ("C-d" . ivy-reverse-i-search-kill))
+      :demand
+      :config
+      (setq ivy-extra-directories nil) ;; Hides . and .. directories
+      (setq ivy-initial-inputs-alist nil) ;; Don't start searches with ^
+      (ivy-mode 1)
 
-  (use-package ivy
-    :diminish
-    :bind (("C-s" . swiper)
-           :map ivy-minibuffer-map
-           ("TAB" . ivy-alt-done)	
-           ("C-l" . ivy-alt-done)
-           ("C-j" . ivy-next-line)
-           ("C-k" . ivy-previous-line)
-           :map ivy-switch-buffer-map
-           ("C-k" . ivy-previous-line)
-           ("C-l" . ivy-done)
-           ("C-d" . ivy-switch-buffer-kill)
-           :map ivy-reverse-i-search-map
-           ("C-k" . ivy-previous-line)
-           ("C-d" . ivy-reverse-i-search-kill))
-    :demand
-    :config
-    (ivy-mode 1))
+      ;; Shows a preview of the face in counsel-describe-face
+      (add-to-list 'ivy-format-functions-alist '(counsel-describe-face . counsel--faces-format-function)))
 
-  (use-package ivy-rich
-    :init
-    (ivy-rich-mode 1))
+    ;; Nice icons in Ivy. Replaces all-the-icons-ivy.
+    (use-package all-the-icons-ivy-rich
+      :init (all-the-icons-ivy-rich-mode 1)
+      :config
+      (setq all-the-icons-ivy-rich-icon-size 1.0))
 
-  (use-package counsel
-    :bind (("M-x" . counsel-M-x)
-           ("C-x b" . counsel-ibuffer)
-           ("C-x C-f" . counsel-find-file)
-           :map minibuffer-local-map
-           ("C-r" . 'counsel-minibuffer-history))
-    :config
-    (setq ivy-initial-inputs-alist nil)) ;; Don't start searches with ^
+    (use-package ivy-rich
+      :after (ivy)
+      :init
+      (setq ivy-rich-path-style 'abbrev)
+      :config
+      (ivy-rich-mode 1))
 
 #+end_src
+
+*** Prescient
+#+begin_src emacs-lisp
+
+  (use-package ivy-prescient
+    :after counsel
+    :config
+    (setq prescient-sort-length-enable nil) ; Disables sort by length
+    (prescient-persist-mode 1)
+    (ivy-prescient-mode 1))
+
+#+end_src
+
 ** Helpful Help Commands
 [[https://github.com/Wilfred/helpful][Helpful]] adds a lot of very helpful information to Emacs' =describe-= command buffers.  For example, if you use =describe-function=, you will not only get the documentation about the function, you will also see the source code of the function and where it gets used in other places in the Emacs configuration.  It is very useful for figuring out how things work in Emacs.
 
@@ -317,13 +420,14 @@ This section contains the basic configuration for =org-mode= + the configuration
   (use-package org
     :hook (org-mode . reiki/org-mode-setup)
     :config
-    (setq org-ellipsis " ▾"
+    (setq org-ellipsis " ⤵" ;  ⬎ ▼ ▾ ↷ ⤦ ⤸
           org-hide-emphasis-markers t) ;;hides markers like /italic/ or *bold*
 
     (setq org-return-follows-link t)
     (setq org-agenda-start-with-log-mode t)
     (setq org-log-done 'time)
     (setq org-log-into-drawer t)
+    (setq org-startup-folded 'show3levels) ;; Org files starts folded (first X levels)
 
     (require 'org-habit)
     (add-to-list 'org-modules 'org-habit)
@@ -565,6 +669,14 @@ This snippet adds a hook to =org-mode= buffers so that =reiki/org-babel-tangle-c
 
 #+end_src
 ** Latex
+Following text is a comment from a [[https://www.youtube.com/watch?v=SCPoF1PTZpI&lc=Ugy3MSK67MeOzJDldpZ4AaABAg.9coz1zr2syn9cq0F64cbz2][System Crafters Video]]:
+
+PDF-Tools displays in very high quality and renders much faster than DocView in my experience. I do recall random bugs of LaTeX live preview not updating sometimes with PDF-Tools, I forgot how one is supposed to fix it as it was inconsistent. PDF-Tools as the name implies works mostly with PDF's only so DocView has a leg up if you plan on using DVI or PS files. PDF-Tools does not have Evil keybinds by default but I've seen people rebind the keys to make it functionally similar. (I'd link you to a page containing the config but this comment would probably be deleted. Just trust me it exists.)
+
+Depending on your workflow another method of typing LaTeX is AucTex and Org Latex Preview which allows you to display LaTeX within an Org document without having to split the window into two panes and use Org-LaTex-Export to generate a PDF in the end if you need it. Org Fragtog is a must if you go in this direction. 
+
+Personally I enjoy this second method more due to the LaTeX being held within Org meaning you can use a lot of the power of Org Mode with your LaTeX documents. E.g. Turn Math definitions into Flashcards with Org-FC, Create mindmaps / graphs of theorems using Org-Roam, turn your personal notes into a website blog post using Org HTML export etc.
+
 *** Latex Preview Pane
 [[https://www.emacswiki.org/emacs/LaTeXPreviewPane][Latex-preview-pane]] is a package that enables you to preview your =LaTeX= files directly in Emacs. You can run =M-x latex-preview-pane-mode= to enable the mode on a per-buffer basis.
 
@@ -605,3 +717,4 @@ Loads DocView pages continuously.
   (setq doc-view-continuous t)
 
 #+end_src
+
