@@ -3,8 +3,12 @@
 
 Things to figure out:
 - Org return follows link in normal-mode(not insert) when =RET= is pressed
-- Org-superstar-mode
+- Org-superstar-mode (nope)
+- Org-modern
 - Forge and Magit(evil-collection)
+- Check out Jake-B's hydra [[https://github.com/jakebox/jake-emacs#hydra][config]]
+- Check out Iosevka and Iosevka Aile
+
 
 * Welcome!
 This is a configuration partly build with help from the *Emacs From Scratch* series.
@@ -25,16 +29,18 @@ Just ignore the comment.
   (defvar reiki/default-fixed-font "Liga SFMono Nerd Font")
 
 #+end_src
+
 ** Basic UI Configuration
 #+begin_src emacs-lisp
-  (setq inhibit-startup-message t)
+
+  (setq inhibit-startup-screen t
+        inhibit-startup-echo-area-message user-login-name)
 
   (scroll-bar-mode -1)        ;Disable visible scrollbar
   (tool-bar-mode -1)          ;Disable the toolbar
+  (menu-bar-mode -1)          ;Disable the menu bar
   (tooltip-mode -1)           ;Disable tooltips
   (set-fringe-mode 10)        ;Give some breathing room
-
-  (menu-bar-mode -1)          ;Disable the menu bar
 
   (setq use-dialog-box nil)   ;Dont popup dialog-boxes when prompting
 
@@ -47,6 +53,8 @@ Just ignore the comment.
   (column-number-mode)
   (global-display-line-numbers-mode 1)
   (setq display-line-numbers-type 'relative)
+  ;; Explicitly define a width to reduce the cost of on-the-fly computation
+  (setq-default display-line-numbers-width 2) ; Change to 3 to view four digits
 
   ;; Disable line numbers for some modes
   (dolist (mode '(org-mode-hook
@@ -100,7 +108,7 @@ Just ignore the comment.
   (recentf-mode 1)
 
   ;; Tabs!
-  (setq tab-width 4)
+  (setq-default tab-width 4)
 
   ;; Sentences end with one space
   (setq sentence-end-double-space nil)
@@ -127,7 +135,61 @@ Just ignore the comment.
   (setq scroll-margin 10)
   (setq scroll-step 1)
 
+  ;; More performant rapid scrolling over unfontified regions. May cause brief
+  ;; spells of inaccurate syntax highlighting right after scrolling, which should
+  ;; quickly self-correct. 
+  (setq fast-but-imprecise-scrolling nil) ; Set to t to enable
+
 #+end_src
+* Startup Performance
+
+#+begin_src emacs-lisp
+
+  (defun reiki/display-startup-time ()
+    (message "Emacs loaded in %s with %d garbage collections."
+             (format "%.2f seconds"
+                     (float-time
+                      (time-subtract after-init-time before-init-time)))
+             gcs-done))
+
+  (add-hook 'emacs-startup-hook #'reiki/display-startup-time)
+
+  ;; Shave seconds off startup time by starting the scratch buffer in
+  ;; `fundamental-mode', rather than, say, `org-mode' or `text-mode', which pull
+  ;; in a ton of packages.
+  (setq initial-major-mode 'fundamental-mode)
+
+#+end_src
+
+** Early-init.el
+
+#+begin_src emacs-lisp :tangle early-init.el
+
+  ;; Resizing the Emacs frame can be a terribly expensive part of changing the
+  ;; font. By inhibiting this, we halve startup times, particularly when we use
+  ;; fonts that are larger than the system default (which would resize the frame).
+  (setq frame-inhibit-implied-resize t)
+
+  ;; Premature redisplays can substantially affect startup times and produce
+  ;; ugly flashes of unstyled Emacs.
+  (setq-default inhibit-redisplay t
+                inhibit-message t)
+  (add-hook 'window-setup-hook
+            (lambda ()
+              (setq-default inhibit-redisplay nil
+                            inhibit-message nil)
+              (redisplay)))
+
+  ;; Less clutter on startup
+  (add-to-list 'default-frame-alist '(tool-bar-lines . 0))
+  (add-to-list 'default-frame-alist '(menu-bar-lines . 0))
+  (add-to-list 'default-frame-alist '(vertical-scroll-bars))
+
+  ;; Emacs "updates" its ui more often than it needs to, so slow it down slightly
+  (setq idle-update-delay 1.0)  ; default is 0.5
+
+#+end_src
+
 * Package System Setup
 Emacs has a built in package manager but it doesn't make it easy to automatically install packages on a new system the first time you pull down your configuration.
 [[https://github.com/jwiegley/use-package][Use-package]] is a really helpful package used in this configuration to make it a lot easier to automate the installation and configuration of everything else we use.
@@ -165,37 +227,80 @@ This configuration uses evil-mode for a Vi-like modal editing experience. Genera
   ;; Make ESC quit prompts
   (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 
-  (use-package general
-    :config
-    (general-create-definer reiki/leader-keys
-      :keymaps '(normal insert visual emacs)
-      :prefix "SPC"
-      :global-prefix "C-SPC")
+  (use-package general)
 
-    (reiki/leader-keys
-     "SPC" '(counsel-M-x :which-key "M-x")
-     ;; Nested
-     "u" '(:ignore t :which-key "UI")
-     "o" '(:ignore o :which-key "Org")
-     ;; Nav
-     "." '(counsel-find-file :which-key "find file")
-     "," '(counsel-recentf :which-key "recent files")
-     ;; Buffers
-     "q" '(kill-current-buffer :which-key "kill buff")
-     "Q" '(save-buffers-kill-terminal :which-key "Quit emacs")
-     "s" '(save-buffer :which-key "Save buffer")
-     "e" #'((lambda () (interactive) (counsel-find-file (locate-user-emacs-file "Emacs.org"))) :which-key "Emacs config")
-     "j" #'((lambda () (interactive) (switch-to-buffer (other-buffer))) :which-key "Prev buff")
-     ))
+  (general-create-definer reiki/leader-keys
+    :keymaps '(normal insert visual emacs)
+    :prefix "SPC"
+    :global-prefix "C-SPC")
 
   (reiki/leader-keys
-    ;; Scaling
+    "SPC" '(counsel-M-x :which-key "M-x")
+    ;; Nav
+    "." '(counsel-find-file :which-key "find file")
+    "," '(counsel-recentf :which-key "recent files")
+    ;; Buffers
+    "q" '(kill-current-buffer :which-key "kill buff")
+    "Q" '(save-buffers-kill-terminal :which-key "Quit emacs")
+    "s" '(save-buffer :which-key "Save buffer")
+    "e" #'((lambda () (interactive) (counsel-find-file (locate-user-emacs-file "Emacs.org"))) :which-key "Emacs config")
+    "j" #'((lambda () (interactive) (switch-to-buffer (other-buffer))) :which-key "Prev buff")
+    )
+
+  (reiki/leader-keys
+    ;; "Applications"
+    "a" '(:ignore a :which-key "Apps")
+    "ad" '(counsel-dired :which-key "Dired")
+    ;; UI
+    "u" '(:ignore u :which-key "UI")
     "us" '(hydra-text-scale/body :which-key "Scale text")
-    ;; Themes
     "ut" '(counsel-load-theme :which-key "Choose theme")
+    ;; Buffers
+    "b" '(:ignore b :which-key "Buffer")
+    "bb" '(counsel-switch-buffer :which-key "Switch buffer")
+    "br" '(revert-buffer :which-key "Revert buffer")
     ;; Org
+    "o" '(:ignore o :which-key "Org")
     "oc" '(org-capture :which-key "Capture")
-    "oi" '(counsel-imenu :which-key "IMenu"))
+    "oi" '(counsel-imenu :which-key "IMenu")
+    "oa" '(org-agenda :which-key "Org agenda")
+    ;; Help
+    "h" '(:ignore h :which-key "Help/Emacs")
+    "hv" '(counsel-describe-variable :which-key "Des. variable")
+    "hb" '(counsel-descbinds :which-key "Des. bindings")
+    "hM" '(describe-mode :which-key "Des. mode")
+    "hf" '(counsel-describe-function :which-key "Des. func")
+    "hF" '(counsel-describe-face :which-key "Des. face")
+    "hk" '(describe-key :which-key "Des. key")
+    "hg" '(customize-group :which-key "Customize group")
+    ;; Modes
+    "m" '(:ignore m :which-key "Modes")
+    "me" '(emacs-lisp-mode :which-key "Elisp mode")
+    "mi" '(lisp-interaction-mode :which-key "Lisp interaction mode")
+    "mo" '(org-mode :which-key "Org mode")
+    "mt" '(text-mode :which-key "Text mode")
+    ;; Help/emacs packages
+    "hp" '(:ignore p :which-key "Packages")
+    "hpr" 'package-refresh-contents
+    "hpi" 'package-install
+    "hpd" 'package-delete
+    ;; Toggles
+    "t" '(:ignore t :which-key "Toggles")
+    "tv" '(visual-line-mode :which-key "Visual line mode")
+    "tn" '(display-line-numbers-mode :which-key "Display line numbers")
+    "ta" '(variable-pitch-mode :which-key "Variable pitch mode")
+    "tc" '(visual-fill-column-mode :which-key "Visual fill column mode")
+    "tR" '(read-only-mode :which-key "Read only mode")
+    "tr" '(display-fill-column-indicator-mode :which-key "Fill column indicator")
+    ;; Windows
+    "w" '(:ignore w :which-key "Window")
+    "wN" '(make-frame :which-key "make frame")
+    "wd" '(evil-window-delete :which-key "delete window")
+    "wl" '(evil-window-right :which-key "evil-window-right")
+    "wh" '(evil-window-left :which-key "evil-window-left")
+    "wj" '(evil-window-down :which-key "evil-window-down")
+    "wk" '(evil-window-up :which-key "evil-window-up")
+    )
 
 #+end_src
 
@@ -321,19 +426,21 @@ Counsel is a customized set of commands to replace =find-file= with =counsel-fin
 
 #+begin_src emacs-lisp
 
-    (use-package counsel
-      :bind (("M-x" . counsel-M-x)
-             ("C-x C-f" . counsel-find-file)
-             ("C-x b" . counsel-switch-buffer)
-             ;;("C-x b" . counsel-ibuffer)
-             ;:map minibuffer-local-map
-             ;("C-r" . 'counsel-minibuffer-history)
-             ))
+  (use-package counsel
+    :bind (("M-x" . counsel-M-x)
+           ("C-x C-f" . counsel-find-file)
+           ("C-x b" . counsel-switch-buffer))
+           ;;("C-x b" . counsel-ibuffer)
+           ;:map minibuffer-local-map
+           ;("C-r" . 'counsel-minibuffer-history)
+    :config 
+    ;; Removes recentfiles/bookmarks from counsel-switch-buffer if set to nil
+    (setq counsel-switch-buffer-preview-virtual-buffers t))
 #+end_src
 
 *** Ivy
 [[https://oremacs.com/swiper/][Ivy]] is an excellent completion framework for Emacs.  It provides a minimal yet powerful selection menu that appears when you open files, switch buffers, and for many other tasks in Emacs.
-
+ 
 [[https://github.com/Yevgnen/ivy-rich][Ivy-rich]] adds extra columns to a few of the Counsel commands to provide more information about each item.
 
 #+begin_src emacs-lisp
@@ -356,6 +463,7 @@ Counsel is a customized set of commands to replace =find-file= with =counsel-fin
       :config
       (setq ivy-extra-directories nil) ;; Hides . and .. directories
       (setq ivy-initial-inputs-alist nil) ;; Don't start searches with ^
+      (setq ivy-wrap t) ;; Wrap around to top, when on last item
       (ivy-mode 1)
 
       ;; Shows a preview of the face in counsel-describe-face
@@ -382,6 +490,10 @@ Counsel is a customized set of commands to replace =find-file= with =counsel-fin
   (use-package ivy-prescient
     :after counsel
     :config
+    ;; don't prescient sort these commands
+    (dolist (command '(counsel-find-file))
+      (setq ivy-prescient-sort-commands (append ivy-prescient-sort-commands (list command))))
+    ;(:not swiper swiper-isearch ivy-switch-buffer)
     (setq prescient-sort-length-enable nil) ; Disables sort by length
     (prescient-persist-mode 1)
     (ivy-prescient-mode 1))
@@ -427,7 +539,8 @@ This section contains the basic configuration for =org-mode= + the configuration
     (setq org-agenda-start-with-log-mode t)
     (setq org-log-done 'time)
     (setq org-log-into-drawer t)
-    (setq org-startup-folded 'show3levels) ;; Org files starts folded (first X levels)
+    (setq org-startup-folded 'show2levels) ;; Org files starts folded (first X levels)
+    ;; (setq org-startup-folded 'content)
 
     (require 'org-habit)
     (add-to-list 'org-modules 'org-habit)
@@ -554,7 +667,7 @@ This section contains the basic configuration for =org-mode= + the configuration
     :after org
     :hook (org-mode . org-bullets-mode)
     :custom
-    (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
+    (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●"))) ; "◉" "○" "◈" "◇" "✳"
 
 #+end_src
 
@@ -716,5 +829,9 @@ Loads DocView pages continuously.
   ;; View all pages in DocView-mode
   (setq doc-view-continuous t)
 
+#+end_src
+** Dired
+#+begin_src emacs-lisp
+  (setq dired-kill-when-opening-new-dired-buffer nil) ;; Pretty self-explanatory
 #+end_src
 
