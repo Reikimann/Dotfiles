@@ -193,16 +193,16 @@ for i in groups:
 
 groups.append(ScratchPad("scratchpad", [
     DropDown("term", terminal, width=0.6, height=0.7, x=0.2, y=0.15, opacity=0.8),
-    DropDown("lf", "kitty -e lf", width=0.6, height=0.7, x=0.2, y=0.15, opacity=0.8),
     DropDown("browser", "waterfox-g4", width=0.7, height=0.8, x=0.15, y=0.1, opacity=1),
     DropDown("music", "spotify", width=0.7, height=0.8, x=0.15, y=0.1, opacity=1),
+    #DropDown("discord", "discord", width=0.7, height=0.8, x=0.15, y=0.1, opacity=1),
     ]))
 
 keys.extend([
     Key([mod, "control"], "1", lazy.group["scratchpad"].dropdown_toggle("term")),
-    Key([mod, "control"], "2", lazy.group["scratchpad"].dropdown_toggle("lf")),
-    Key([mod, "control"], "3", lazy.group["scratchpad"].dropdown_toggle("browser")),
-    Key([mod, "control"], "4", lazy.group["scratchpad"].dropdown_toggle("music")),
+    Key([mod, "control"], "2", lazy.group["scratchpad"].dropdown_toggle("browser")),
+    Key([mod, "control"], "3", lazy.group["scratchpad"].dropdown_toggle("music")),
+    #Key([mod, "control"], "4", lazy.group["scratchpad"].dropdown_toggle("discord")),
     ])
 
 ####Layouts####

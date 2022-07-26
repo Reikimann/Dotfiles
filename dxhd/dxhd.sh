@@ -1,53 +1,58 @@
 #!/bin/sh
 
-## reload dxhd
+## Reload dxhd
 # super + escape
 dxhd -r
 
-## launch kitty
+## Launch kitty
 # super + return
 kitty
 
-## Volume up
-# super + up
-amixer -D pulse sset Master 5%+ unmute
-
-## Volume down
-# super + down
-amixer -D pulse sset Master 5%- unmute
+## Volume up/down
+# super + {up,down}
+amixer -D pulse sset Master {5%+,5%-} unmute
 
 ## Volume toggle
 # super + right
 amixer -D pulse sset Master toggle
 
+## Music prev/next
+# super + shift + {left,right}
+playerctl -p spotify {previous,next}
+
+## Music play/pause
+# super + shift + space
+playerctl -p spotify play-pause
+
+## Opens lf
 # super + f
 kitty -e lf
 
-## change wallpaper
+## Change wallpaper
 # super + g
 feh --randomize --no-fehbg --bg-fill '/home/reikimann/pix/wallpapers'
 
-## open screenshot menu
+## Open screenshot menu
 # print
 flameshot gui
 
-## opens discord
+## Opens discord
 # super + d
 discord
 
-## opens firefox
+## Opens browser
 # super + b
 waterfox-g4
 
-## opens rofi
+## Opens rofi
 # super + y
 rofi -show run
 
-## opens emacs
+## Opens emacs
 # super + e
 emacs
 
-## opens emacs
+## Opens emacs
 # super + s
 spotify
 
