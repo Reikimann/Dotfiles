@@ -95,6 +95,7 @@
 - Onlyoffice
 - Figma-linux
 - Geogebra-5
+- Maple with Gym-package
 - Teams-for-linux
 - Zaread-git
 - Rofi-calc
