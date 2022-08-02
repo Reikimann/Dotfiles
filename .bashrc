@@ -37,6 +37,7 @@ export VISUAL=nvim
 export EDITOR="$VISUAL"
 export RANGER_LOAD_DEFAULT_RC=FALSE
 export LC_ALL=en_DK.UTF-8
+export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border --info=inline --cycle'
 
 #############Home Fixes#################
 
@@ -69,10 +70,10 @@ alias v="nvim"
 alias ..="cd"
 alias ls="ls --group-directories-first --color=always"
 alias ls="ls -lah --group-directories-first --color=always"
+alias fzff="fzf --preview 'bat --style=numbers --color=always --line-range :500 {}'"
 
-
-
-
+source /usr/share/fzf/key-bindings.bash
+source /usr/share/fzf/completion.bash
 
 
 export LF_ICONS="\
