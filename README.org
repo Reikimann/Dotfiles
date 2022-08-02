@@ -1,0 +1,137 @@
+#+title: Reikimanns Dotfiles
+
+** Fonts and icons
+- Liga SFMono Nerd Font
+- Iosevka Aile (ttc-iosevka-aile)
+- Fira code (ttf-fira-code)
+- Opensans (ttf-opensans)
+- Adobe-source-han-sans-cn-fonts
+- Adobe-source-han-sans-jp-fonts
+- Adobe-source-han-sans-kr-fonts
+- Opendesktop-fonts
+- Papirus-icon-theme
+- Adwaita-icon-theme
+
+** Programs needed for Setup
+- Lf
+  - Ueberzug
+  - Mediainfo
+  - lynx
+  - bat
+  - glow
+  - unzip
+  - ffmpegthumbnailer
+  - pdftoppm
+  - odt2txt
+  - catdoc
+  - docxtxt
+- Kitty
+- Dxhd
+  - Alsa-utils (amixer)
+  - Playerctl
+  - Feh
+  - Flameshot
+  - Discord
+  - Waterfox-g4
+  - Rofi
+  - Spotify
+- Nvim
+  - Pdflatex
+  - Texlive-most
+- Emacs
+- Dragon-drag-and-drop (Git version)
+- Neofetch
+- Nyxt
+- Picom
+- Dunst
+  - Libnotify
+- Polybar
+  - Zscroll
+  - Playerctl
+- Qtile
+  - Xorg-setxkbmap
+  - Feh
+  - Dunst
+  - Brightnessctl
+  - Alsa-utils
+- Ranger
+- Starship
+- Zathura
+- Zsh
+  - Zsh-autosuggestions
+  - Zsh-completions
+  - Zsh-syntax-highlighting
+  - Bash-zsh-insulter
+  - Fzf
+  - Zoxide
+  - Starship
+  - Unimatrix
+  - Exa
+  - Lf
+- Xdg-user-dirs
+
+** Other programs
+- Spotify
+- Waterfox-g4-bin
+- Discord
+- Sxiv
+- Lxappearance
+- Peek
+- Gdu
+- Nano
+- Ripgrep
+- Graphicsmagick
+- Pulsemixer
+- Grub-tools
+- Man-db
+- Man-pages
+- Xorg-xinit
+- Xorg-xinput
+- Xorg-xkill
+- Wget
+
+*** School
+- Minder
+- Onlyoffice
+- Figma-linux
+- Geogebra-5
+- Teams-for-linux
+- Zaread-git
+- Rofi-calc
+- Texlive-bibtexextra
+- Texlive-fontsextra
+- Texlive-formatsextra
+- Texlive-games
+- Texlive-humanities
+- Texlive-langchinese
+- Texlive-langcyrillic
+- Texlive-langextra
+- Texlive-langgreek
+- Texlive-langjapanese
+- Texlive-langkorean
+- Texlive-music
+- Texlive-pstricks
+- Texlive-publishers
+- Texlive-science
+
+*** Funny
+- Atlauncher
+- Asciiquarium
+- Figlet
+- Unimatrix-git
+- Lolcat
+- Cowsay
+- Cbonsai-git
+- Cava
+- Tspreed
+
+
+
+
+
+
+
+
+
+
+
