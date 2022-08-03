@@ -10,11 +10,11 @@ kitty
 
 ## Volume up/down
 # super + {up,down}
-amixer -D pulse sset Master {5%+,5%-} unmute
+amixer sset Master {5%+,5%-} unmute
 
 ## Volume toggle
 # super + right
-amixer -D pulse sset Master toggle
+amixer sset Master toggle
 
 ## Music prev/next
 # super + shift + {left,right}
@@ -27,6 +27,10 @@ playerctl -p spotify play-pause
 ## Opens lf
 # super + f
 kitty -e lf
+
+## Opens dman
+# super + m
+dman
 
 ## Change wallpaper
 # super + g
@@ -46,7 +50,7 @@ waterfox-g4
 
 ## Opens rofi
 # super + y
-rofi -show run
+rofi -show run -sorting-method fzf
 
 ## Opens emacs
 # super + e

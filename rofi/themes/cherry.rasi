@@ -1,0 +1,62 @@
+/*
+ * rofi themes - cherry
+ * colors - custom
+ * mode - dark
+ */
+
+configuration {
+    modi: "drun";
+    display-drun: "";
+    drun-display-format: "{name}";
+}
+
+* {
+    bg: #061115;
+    fg: #d9d7d6;
+    alt: #0b151a;
+    rad: 8px;
+
+    background-color: @bg;
+    text-color: @fg;
+}
+
+window { 
+    width: 40%; 
+    border-radius: @rad;
+}
+
+mainbox { children: [ inputbar, listview ]; }
+
+inputbar {
+    children: [ entry ];
+    padding: 6em 12em 2em 2em;
+    border-radius: 0 0 8px 8px;
+    background-image: url("img/cherry.png");
+}
+
+entry {
+    padding: 1.5% 3%;
+    placeholder: "Search";
+    border-radius: @rad;
+}
+
+listview {
+    lines: 5;
+    cycle: true;
+    padding: 2em 12em 2em 2em;
+}
+
+element {
+    padding: 1.5% 3%;
+    border-radius: @rad;
+}
+
+element-icon {
+    size: 1.5em;
+}
+
+element-text, entry { vertical-align: 0.5; }
+
+element selected, element-text selected { background-color: @alt; }
+listview, element, element-selected, element-text { cursor: pointer; }
+entry { cursor: text; }

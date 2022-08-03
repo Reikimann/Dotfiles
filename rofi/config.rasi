@@ -1,0 +1,11 @@
+configuration {
+ modi: "window,drun,ssh,combi,run";
+ font: "Liga SFMono Nerd Font 13";
+ matching: "regex";
+
+ kb-row-up: "Control+k";
+ kb-row-down: "Control+j";
+ kb-remove-to-eol: "";
+ kb-accept-entry: "Control+m,Return,KP_Enter";
+}
+@theme "themes/cherry"

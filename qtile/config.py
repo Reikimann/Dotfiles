@@ -83,9 +83,9 @@ keys = [
     Key([mod, "shift"], "e", lazy.spawn("kitty -e nvim /home/reikimann/.config/qtile/config.py"), desc="Edit config file"),
 
     # Volume -- amixer by alsa-utils
-    Key([], "XF86AudioRaiseVolume", lazy.spawn("amixer -D pulse sset Master 5%+ unmute")),
-    Key([], "XF86AudioLowerVolume", lazy.spawn("amixer -D pulse sset Master 5%- unmute")),
-    Key([], "XF86AudioMute", lazy.spawn("amixer -D pulse sset Master toggle")),
+    Key([], "XF86AudioRaiseVolume", lazy.spawn("amixer sset Master 5%+ unmute")),
+    Key([], "XF86AudioLowerVolume", lazy.spawn("amixer sset Master 5%- unmute")),
+    Key([], "XF86AudioMute", lazy.spawn("amixer sset Master toggle")),
 
     # Brightness
     Key([], "XF86MonBrightnessUp", lazy.spawn("brightnessctl set 10%+")),
@@ -193,16 +193,16 @@ for i in groups:
 
 groups.append(ScratchPad("scratchpad", [
     DropDown("term", terminal, width=0.6, height=0.7, x=0.2, y=0.15, opacity=0.8),
-    DropDown("file-manager", "lfub", width=0.7, height=0.8, x=0.15, y=0.1, opacity=1),
+    DropDown("browser", "waterfox-g4", width=0.7, height=0.8, x=0.15, y=0.1, opacity=1),
     DropDown("music", "spotify", width=0.7, height=0.8, x=0.15, y=0.1, opacity=1),
-    #DropDown("browser", "waterfox-g4", width=0.7, height=0.8, x=0.15, y=0.1, opacity=1),
+    #DropDown("discord", "discord", width=0.7, height=0.8, x=0.15, y=0.1, opacity=1),
     ]))
 
 keys.extend([
     Key([mod, "control"], "1", lazy.group["scratchpad"].dropdown_toggle("term")),
-    Key([mod, "control"], "2", lazy.group["scratchpad"].dropdown_toggle("file-manager")),
+    Key([mod, "control"], "2", lazy.group["scratchpad"].dropdown_toggle("browser")),
     Key([mod, "control"], "3", lazy.group["scratchpad"].dropdown_toggle("music")),
-    #Key([mod, "control"], "2", lazy.group["scratchpad"].dropdown_toggle("browser")),
+    #Key([mod, "control"], "4", lazy.group["scratchpad"].dropdown_toggle("discord")),
     ])
 
 ####Layouts####
