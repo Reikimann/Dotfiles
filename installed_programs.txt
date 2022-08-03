@@ -14,7 +14,7 @@ flameshot
 gdu
 glow
 graphicsmagick
-grub-tools
+grub-customizer
 kitty
 lolcat
 lxappearance
@@ -56,6 +56,7 @@ xorg-xinit
 xorg-xinput
 xorg-xkill
 zoxide
+git
 
 
 atlauncher
@@ -74,6 +75,8 @@ tspreed
 unimatrix-git
 waterfox-g4-bin
 zaread-git
+nvim-packer-git
+ttf-ms-fonts
 
 
 
