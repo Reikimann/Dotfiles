@@ -13,6 +13,7 @@
 - Adwaita-icon-theme
 
 ** Programs needed for Setup
+- Git
 - Lf
   - Ueberzug
   - Mediainfo
