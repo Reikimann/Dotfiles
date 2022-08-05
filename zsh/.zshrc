@@ -97,26 +97,6 @@ eval "$(starship init zsh)"
 
 ################################################
 
-export VISUAL=nvim
-export EDITOR="$VISUAL"
-export TERMINAL="kitty"
-export BROWSER="waterfox-g4"
-export READER="zathura"
-export FILE="lf"
-export RANGER_LOAD_DEFAULT_RC=FALSE
-export LC_ALL=en_DK.UTF-8
-export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border --info=inline --cycle'
-
-#############Home Fixes#################
-
-export HISTFILE="${XDG_STATE_HOME}"/bash/history
-export GNUPGHOME="$XDG_DATA_HOME"/gnupg
-export GOPATH="$XDG_DATA_HOME"/go
-export GRADLE_USER_HOME="$XDG_DATA_HOME"/gradle
-export LESSHISTFILE="$XDG_CACHE_HOME"/less/history
-export _JAVA_OPTIONS=-Djava.util.prefs.userRoot="$XDG_CONFIG_HOME"/java
-export CUDA_CACHE_PATH="$XDG_CACHE_HOME"/nv
-export ZDOTDIR="$HOME/.config/zsh"
 
 alias nvidia-settings="nvidia-settings --config="$XDG_CONFIG_HOME"/nvidia/settings"
 

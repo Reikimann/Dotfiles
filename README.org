@@ -27,6 +27,7 @@
   - odt2txt
   - catdoc
   - docxtxt
+  - nsxiv
 - Kitty
 - Dxhd
   - Alsa-utils (amixer)
@@ -71,13 +72,14 @@
   - Unimatrix
   - Exa
   - Lf
+  - nsxiv
 - Xdg-user-dirs
 
 ** Other programs
 - Spotify
 - Waterfox-g4-bin
 - Discord
-- Sxiv
+- Nsxiv
 - Lxappearance
 - Peek
 - Gdu
