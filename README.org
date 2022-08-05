@@ -13,6 +13,7 @@
 - Adwaita-icon-theme
 
 ** Programs needed for Setup
+- Mpv
 - Git
 - Paru (aur-helper)
 - Lf

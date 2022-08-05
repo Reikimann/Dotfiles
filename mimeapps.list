@@ -11,6 +11,7 @@ image/png=img.desktop;
 image/jpeg=img.desktop;
 image/gif=img.desktop;
 video/x-matroska=video.desktop
+video/mp4=video.desktop
 inode/directory=file.desktop
 
 x-scheme-handler/http=userapp-Waterfox-ZBAXN1.desktop

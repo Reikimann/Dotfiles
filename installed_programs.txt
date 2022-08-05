@@ -3,6 +3,7 @@ adobe-source-han-sans-jp-fonts
 adobe-source-han-sans-kr-fonts
 asciiquarium
 bat
+mpv
 brightnessctl
 cowsay
 discord
