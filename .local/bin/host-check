@@ -1,0 +1,5 @@
+#!/usr/bin/sh
+
+if [ $(uname -n) = "superiority" ]; then 
+  /usr/bin/nm-applet & disown;
+fi
