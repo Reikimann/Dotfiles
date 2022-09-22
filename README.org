@@ -24,7 +24,8 @@
   - glow
   - unzip
   - ffmpegthumbnailer
-  - pdftoppm
+  - poppler
+  - poppler-glib
   - odt2txt
   - catdoc
   - docxtxt

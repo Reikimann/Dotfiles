@@ -34,6 +34,8 @@ ripgrep
 rofi-calc
 starship
 sxiv
+poppler
+poppler-glib
 texlive-bibtexextra
 texlive-fontsextra
 texlive-formatsextra
