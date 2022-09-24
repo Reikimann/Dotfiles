@@ -2,6 +2,7 @@ configuration {
  modi: "window,drun,ssh,combi,run";
  font: "Liga SFMono Nerd Font 13";
  matching: "regex";
+ combi-modi: "drun,run";
 
  kb-row-up: "Control+k";
  kb-row-down: "Control+j";
