@@ -46,10 +46,12 @@ db.custom_header = {
 
 
 db.custom_center = {
-    {icon = " ", desc = "Find File             ", shortcut = "SPC a", action = "Telescope find_files"},
-    {icon = " ", desc = "Search Text           ", shortcut = "SPC a", action = "Telescope live_grep"},
-    {icon = " ", desc = "Recent Files          ", shortcut = "SPC a", action = "Telescope oldfiles"},
-    {icon = " ", desc = "Config                ", shortcut = "SPC a", action = "edit ~/.config/nvim/init.lua"},
+    {icon = " ", desc = "Create New File           ", shortcut = "n", action = ":ene <BAR> startinsert <CR>"},
+    {icon = " ", desc = "Search Text               ", shortcut = "s", action = "Telescope live_grep"},
+    {icon = " ", desc = "Recent Files              ", shortcut = "r", action = "Telescope oldfiles"},
+    {icon = " ", desc = "Edit Config               ", shortcut = "c", action = "e ~/.config/nvim/init.lua"},
+    {icon = " ", desc = "Update Plugins            ", shortcut = "u", action = ":PackerUpdate<CR>"},
+    {icon = " ", desc = "Quit Neovim               ", shortcut = "q", action = ":qa<CR>"},
 }
 
 db.custom_footer = {"Do one thing, do it well - Unix Philosophy"}

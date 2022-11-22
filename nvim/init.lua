@@ -12,7 +12,8 @@ require('telescope-config')
 require('vimwiki-config')
 require('colorizer-config')
 require('vim-latex-live-preview-config')
+require('vimtex-config')
 vim.g.tokyonight_style = "night"
 vim.g.tokyonight_italic_functions = true
-vim.cmd[[colorscheme tokyonight]]
+vim.cmd[[colorscheme tokyonight-night]]
 

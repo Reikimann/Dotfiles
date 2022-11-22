@@ -1,12 +1,11 @@
 return require('packer').startup(function()
     -- Packer can manage itself
     use {'wbthomason/packer.nvim'}
-    -- use {'Mofiqul/dracula.nvim'}
-    -- use {'AlphaTechnolog/pywal.nvim', as = 'pywal' }
     use {'folke/tokyonight.nvim'}
+    use {'sam4llis/nvim-tundra'}
     use {'nvim-treesitter/nvim-treesitter', run = ":TSUpdate"}
-    use {'nvim-lualine/lualine.nvim', requires = {
-        'kyazdani42/nvim-web-devicons', opt = true}}
+    use {'nvim-lualine/lualine.nvim', 
+        requires = {'kyazdani42/nvim-web-devicons'}}
     use {'akinsho/bufferline.nvim', 
         requires = 'kyazdani42/nvim-web-devicons'}
     use {'kyazdani42/nvim-tree.lua', requires = {
@@ -30,6 +29,7 @@ return require('packer').startup(function()
       vim.g["vimwiki_global_ext"] = 0
     end
     }
+    use {'lervag/vimtex'}
     use {'xuhdev/vim-latex-live-preview', {['for'] = 'tex'}}
     use {'nvim-telescope/telescope.nvim',
       requires = { {'nvim-lua/plenary.nvim'} }
