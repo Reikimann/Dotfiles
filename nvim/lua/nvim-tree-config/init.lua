@@ -6,10 +6,6 @@ require'nvim-tree'.setup {
   open_on_tab         = false,
   hijack_cursor       = false,
   update_cwd          = false,
-  -- update_to_buf_dir   = {
-  --   enable = true,
-  --   auto_open = true,
-  -- },
   diagnostics = {
     enable = true,
     icons = {
@@ -17,7 +13,17 @@ require'nvim-tree'.setup {
       info = "",
       warning = "",
       error = "",
-    }
+    },
+  },
+  renderer = {
+    indent_markers = {
+      enable = true,
+      icons = {
+        corner = "╰",
+        edge = "│ ",
+        none = "  ",
+      },
+    },
   },
   update_focused_file = {
     enable      = false,
@@ -29,8 +35,7 @@ require'nvim-tree'.setup {
     args = {}
   },
   filters = {
-    dotfiles = false,
-    custom = {}
+    custom = { "^.git$" },
   },
   git = {
     enable = true,
@@ -42,16 +47,17 @@ require'nvim-tree'.setup {
     hide_root_folder = false,
     side = 'left',
     signcolumn = "yes",
-    -- auto_resize = true,
     mappings = {
       custom_only = false,
-      list = {}
+      list = {},
     },
     number = false,
-    relativenumber = false
+    relativenumber = false,
   },
   trash = {
     cmd = "trash",
-    require_confirm = true
-  }
+    require_confirm = true,
+  },
 }
+
+--vim.g.nvim_tree_indent_markers = 1

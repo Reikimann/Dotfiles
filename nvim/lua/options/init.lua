@@ -7,7 +7,7 @@ vim.o.fileencoding = 'utf-8'
 vim.o.splitbelow = true
 vim.o.splitright = true
 vim.opt.termguicolors = true
-vim.o.cmdheight = 0
+vim.o.cmdheight = 1
 vim.o.conceallevel = 0
 vim.o.showtabline = 1
 vim.o.laststatus = 3 -- Always display the status line
@@ -37,6 +37,3 @@ vim.o.autoindent = true
 vim.bo.autoindent = true
 vim.o.expandtab = true
 vim.bo.expandtab = true
-
---Prøv
---autocmd BufRead,BufNewFile *.html set filetype=html

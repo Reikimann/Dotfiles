@@ -3,11 +3,12 @@ require('telescope').setup {
     defaults = {
         layout_config = {
             width = 0.75,
-            prompt_position = "top",
+            prompt_position = "bottom",
             preview_cutoff = 120,
             horizontal = {mirror = false},
             vertical = {mirror = false},
         },
+        -- use "--hidden" to view .dotfiles
         find_command = {'rg', '--no-heading', '--with-filename', '--line-number', '--column', '--smart-case'},
         prompt_prefix = " ",
         selection_caret = " ",
@@ -17,7 +18,7 @@ require('telescope').setup {
         sorting_strategy = "descending",
         layout_strategy = "horizontal",
         file_sorter = require'telescope.sorters'.get_fuzzy_file,
-        file_ignore_patterns = {"dl/", "pix/", "vids/", "Maple/", "music", "maple2021/", "dox/Mywiki/", "dox/Mywiki_html", "Bootloader", "dox/School/", "KDE", ".git"},
+        file_ignore_patterns = {"dl", "pix", "vids", "dox", "music", "Maple", "maple2021", "Arduino", "dox/school", "KDE", ".git", "venv", "node_modules"},
         generic_sorter =require'telescope.sorters'.get_generic_fuzzy_sorter,
         path_display = {},
         winblend = 0,
