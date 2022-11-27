@@ -39,6 +39,7 @@ export LESS_TERMCAP_us="$(printf '%b' '[1;32m')"
 export LESS_TERMCAP_ue="$(printf '%b' '[0m')"
 export LESSOPEN="| /usr/bin/bat -f %s 2>/dev/null"
 
+export STARSHIP_CONFIG=~/.config/starship/starship.toml
 export LF_ICONS="\
 *.7z=:\
 *.aac=:\
