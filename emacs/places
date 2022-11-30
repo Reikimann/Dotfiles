@@ -1,0 +1,211 @@
+;;; -*- coding: utf-8; mode: lisp-data -*-
+(("/home/reikimann/.config/emacs/Emacs.org" . 24407)
+ ("/home/reikimann/.config/emacs/elfeed/index" . 20745)
+ ("/home/reikimann/.config/emacs/elpa/compat-28.1.2.2/compat-autoloads.el" . 939)
+ ("/home/reikimann/.config/emacs/elpa/with-editor-20221127.2243/with-editor-autoloads.el" . 3965)
+ ("/home/reikimann/" . 319)
+ ("/usr/share/emacs/28.2/etc/HELLO" . 2141)
+ ("/home/reikimann/.config/"
+  (dired-filename . "/home/reikimann/.config/git"))
+ ("/home/reikimann/dox/"
+  (dired-filename . "/home/reikimann/dox/coding"))
+ ("/home/reikimann/.waterfox/tpaagdyg.default-default/chrome/"
+  (dired-filename . "/home/reikimann/.waterfox/tpaagdyg.default-default/chrome/userChrome.css"))
+ ("/home/reikimann/.waterfox/tpaagdyg.default-default/chrome/userChrome.css" . 3024)
+ ("/home/reikimann/.waterfox/tpaagdyg.default-default/"
+  (dired-filename . "/home/reikimann/.waterfox/tpaagdyg.default-default/chrome"))
+ ("/home/reikimann/.waterfox/"
+  (dired-filename . "/home/reikimann/.waterfox/tpaagdyg.default-default"))
+ ("/home/reikimann/.mozilla/"
+  (dired-filename . "/home/reikimann/.mozilla/extensions"))
+ ("/home/reikimann/.config/emacs/"
+  (dired-filename . "/home/reikimann/.config/emacs/setup-files"))
+ ("/home/reikimann/.config/emacs/elpa/elfeed-20210822.2129/elfeed-db.el" . 2090)
+ ("/home/reikimann/.config/emacs/elpa/elfeed-20210822.2129/elfeed-show.el" . 10970)
+ ("/home/reikimann/.config/emacs/elpa/yaml-20220720.2359/yaml-autoloads.el" . 369)
+ ("/home/reikimann/.config/emacs/elpa/compat-28.1.2.0/compat-autoloads.el" . 778)
+ ("/home/reikimann/.config/emacs/elpa/treemacs-20220718.2055/treemacs-autoloads.el" . 31684)
+ ("/home/reikimann/.config/emacs/elpa/projectile-20220719.446/projectile-autoloads.el" . 22003)
+ ("/home/reikimann/.config/emacs/elpa/pdf-tools-20220723.2329/pdf-tools-autoloads.el" . 20642)
+ ("/home/reikimann/.config/emacs/elpa/magit-20220722.345/magit-autoloads.el" . 88453)
+ ("/home/reikimann/.config/emacs/elpa/lsp-mode-20220722.1915/lsp-mode-autoloads.el" . 28421)
+ ("/home/reikimann/.config/emacs/elpa/lsp-ui-20220723.1213/lsp-ui-autoloads.el" . 2009)
+ ("/home/reikimann/.config/emacs/elpa/evil-nerd-commenter-20220718.1414/evil-nerd-commenter-autoloads.el" . 5307)
+ ("/home/reikimann/.config/emacs/elpa/evil-collection-20220720.802/evil-collection-autoloads.el" . 5224)
+ ("/home/reikimann/.config/emacs/elpa/doom-modeline-20220719.1716/doom-modeline-autoloads.el" . 4057)
+ ("/home/reikimann/.config/emacs/elpa/dap-mode-20220718.443/dap-mode-autoloads.el" . 11703)
+ ("/home/reikimann/dox/math_collection.tex" . 6214)
+ ("/home/reikimann/dox/latex/math_collection.tex" . 610)
+ ("/home/reikimann/.config/emacs/elpa/evil-collection-20220712.758/modes/org-present/evil-collection-org-present.el" . 1557)
+ ("/home/reikimann/.config/emacs/org-files/example_html.org" . 1431)
+ ("/home/reikimann/.config/emacs/org-files/example_latex.org" . 189)
+ ("/home/reikimann/.config/emacs/org-files/"
+  (dired-filename . "/home/reikimann/.config/emacs/org-files/example_latex.org"))
+ ("/home/reikimann/.config/emacs/org-files/example_latex.tex" . 412)
+ ("/home/"
+  (dired-filename . "/home/reikimann"))
+ ("/home/reikimann/dox/OrgFiles/"
+  (dired-filename . "/home/reikimann/dox/OrgFiles/Personal"))
+ ("/home/reikimann/dox/OrgFiles/Personal/"
+  (dired-filename . "/home/reikimann/dox/OrgFiles/Personal/Archive.org"))
+ ("/home/reikimann/.config/emacs/games/"
+  (dired-filename . "/home/reikimann/.config/emacs/games/tetris-scores"))
+ ("/home/reikimann/.config/emacs/elpa/org-present-20220108.1802/org-present-autoloads.el" . 466)
+ ("/home/reikimann/dox/latex/"
+  (dired-filename . "/home/reikimann/dox/latex/auto"))
+ ("/home/reikimann/.config/emacs/elpa/magit-20220706.148/magit-autoloads.el" . 88453)
+ ("/home/reikimann/.config/emacs/elpa/git-commit-20220615.1159/git-commit-autoloads.el" . 737)
+ ("/home/reikimann/.config/emacs/elpa/magit-section-20220719.2014/magit-section-autoloads.el" . 523)
+ ("/home/reikimann/.config/emacs/elpa/transient-20220717.1713/transient-autoloads.el" . 2894)
+ ("/home/reikimann/.config/emacs/elpa/with-editor-20220608.1017/with-editor-autoloads.el" . 3965)
+ ("/home/reikimann/.config/emacs/games/tetris-scores" . 246)
+ ("/home/reikimann/.config/emacs/elpa/org-fragtog-20220714.2146/org-fragtog-autoloads.el" . 1212)
+ ("/home/reikimann/.config/emacs/elpa/auctex-13.1.3/tex-site.el" . 4681)
+ ("/home/reikimann/dox/OrgFiles/Personal/Habits.org" . 3)
+ ("/home/reikimann/dox/OrgFiles/Personal/Tasks.org" . 327)
+ ("/home/reikimann/.config/emacs/elpa/auctex-13.1.3/auctex-autoloads.el" . 12222)
+ ("/home/reikimann/.config/emacs/elpa/pdf-tools-20220714.2356/pdf-tools-autoloads.el" . 20642)
+ ("/home/reikimann/.config/emacs/tmp/"
+  (dired-filename . "/home/reikimann/.config/emacs/tmp/backups"))
+ ("/home/reikimann/.config/emacs/elpa/hydra-20220102.803/hydra.el" . 7349)
+ ("/home/reikimann/.config/emacs/elpa/corfu-0.26/corfu.el" . 7760)
+ ("/home/reikimann/.config/emacs/elpa/smartparens-20220623.1523/smartparens.el" . 25505)
+ ("/home/reikimann/.config/emacs/elpa/markdown-mode-20220708.6/markdown-mode.el" . 380563)
+ ("/home/reikimann/.config/emacs/elpa/swiper-20220430.2247/swiper.el" . 30922)
+ ("/home/reikimann/.config/emacs/elpa/dap-mode-20220716.1851/dap-mode-autoloads.el" . 11703)
+ ("/home/reikimann/.config/emacs/elpa/bui-20210108.1141/bui-autoloads.el" . 1610)
+ ("/home/reikimann/.config/emacs/elpa/lsp-docker-20220513.1434/lsp-docker-autoloads.el" . 405)
+ ("/home/reikimann/.config/emacs/elpa/yaml-20220713.358/yaml-autoloads.el" . 369)
+ ("/home/reikimann/.config/emacs/elpa/evil-20220705.1432/evil-core.el" . 4874)
+ ("/home/reikimann/.config/emacs/elpa/elfeed-20210822.2129/elfeed-search.el" . 841)
+ ("/home/reikimann/.config/emacs/elpa/elfeed-20210822.2129/elfeed-autoloads.el" . 3867)
+ ("/home/reikimann/.config/emacs/elpa/smartparens-20220623.1523/smartparens-autoloads.el" . 12640)
+ ("/home/reikimann/.config/emacs/elpa/org-appear-20220617.2355/org-appear.el" . 2358)
+ ("/home/reikimann/.config/emacs/elpa/org-appear-20220617.2355/org-appear-autoloads.el" . 1074)
+ ("/home/reikimann/.config/emacs/elpa/auto-package-update-20211108.2025/auto-package-update-autoloads.el" . 1119)
+ ("/home/reikimann/.config/emacs/elpa/all-the-icons-20220628.2233/all-the-icons-autoloads.el" . 2226)
+ ("/home/reikimann/.config/emacs/elpa/compat-28.1.1.3/compat-autoloads.el" . 778)
+ ("/home/reikimann/.config/emacs/elpa/counsel-20220626.1826/counsel-autoloads.el" . 17123)
+ ("/home/reikimann/.config/emacs/elpa/doom-modeline-20220716.514/doom-modeline-autoloads.el" . 4057)
+ ("/home/reikimann/.config/emacs/elpa/doom-themes-20220622.2317/doom-themes-autoloads.el" . 19971)
+ ("/home/reikimann/.config/emacs/elpa/elisp-refs-20220704.2141/elisp-refs-autoloads.el" . 1720)
+ ("/home/reikimann/.config/emacs/elpa/evil-20220705.1432/evil-autoloads.el" . 3128)
+ ("/home/reikimann/.config/emacs/elpa/evil-collection-20220712.758/evil-collection-autoloads.el" . 5224)
+ ("/home/reikimann/.config/emacs/elpa/helpful-20220704.1722/helpful-autoloads.el" . 1463)
+ ("/home/reikimann/.config/emacs/elpa/lsp-mode-20220716.1818/lsp-mode-autoloads.el" . 28234)
+ ("/home/reikimann/.config/emacs/elpa/lsp-ui-20220714.1453/lsp-ui-autoloads.el" . 2009)
+ ("/home/reikimann/.config/emacs/elpa/projectile-20220710.959/projectile-autoloads.el" . 22003)
+ ("/home/reikimann/.config/emacs/elpa/dired-hide-dotfiles-20210222.1919/dired-hide-dotfiles.el" . 1808)
+ ("/home/reikimann/.config/emacs/elpa/dired-hide-dotfiles-20210222.1919/dired-hide-dotfiles-autoloads.el" . 1144)
+ ("/home/reikimann/.config/nvim/"
+  (dired-filename . "/home/reikimann/.config/nvim/lua"))
+ ("/home/reikimann/pix/wallpapers/"
+  (dired-filename . "/home/reikimann/pix/wallpapers/rose_flower.png"))
+ ("/home/reikimann/pix/"
+  (dired-filename . "/home/reikimann/pix/wallpapers"))
+ ("/home/reikimann/.config/emacs/elpa/dired-open-20180922.1113/dired-open-autoloads.el" . 718)
+ ("/home/reikimann/.config/emacs/elpa/dired-hacks-utils-20201005.2318/dired-hacks-utils-autoloads.el" . 443)
+ ("/home/reikimann/.config/qtile/"
+  (dired-filename . "/home/reikimann/.config/qtile/__pycache__"))
+ ("/home/reikimann/.config/picom/" . 202)
+ ("/home/reikimann/.config/heroic/"
+  (dired-filename . "/home/reikimann/.config/heroic/blob_storage"))
+ ("/home/reikimann/.config/flameshot/"
+  (dired-filename . "/home/reikimann/.config/flameshot/flameshot.ini"))
+ ("/home/reikimann/.config/nvim/lua/"
+  (dired-filename . "/home/reikimann/.config/nvim/lua/autopairs-config"))
+ ("/home/reikimann/.config/nvim/lua/autopairs-config/"
+  (dired-filename . "/home/reikimann/.config/nvim/lua/autopairs-config/init.lua"))
+ ("/home/reikimann/.config/neofetch/"
+  (dired-filename . "/home/reikimann/.config/neofetch/config.conf"))
+ ("/home/reikimann/.config/kitty/"
+  (dired-filename . "/home/reikimann/.config/kitty/kitty.conf"))
+ ("/home/reikimann/.config/java/"
+  (dired-filename . "/home/reikimann/.config/java/fonts"))
+ ("/home/reikimann/.config/htop/"
+  (dired-filename . "/home/reikimann/.config/htop/htoprc"))
+ ("/home/reikimann/.config/gtk-3.0/" . 160)
+ ("/home/reikimann/.config/git/"
+  (dired-filename . "/home/reikimann/.config/git/config"))
+ ("/home/reikimann/.config/dxhd/"
+  (dired-filename . "/home/reikimann/.config/dxhd/dxhd.sh"))
+ ("/home/reikimann/.config/emacs/elpa/all-the-icons-dired-20220620.1939/all-the-icons-dired.el" . 1900)
+ ("/home/reikimann/.config/emacs/elpa/diredfl-20220508.805/diredfl-autoloads.el" . 2002)
+ ("/home/reikimann/dox/Games/"
+  (dired-filename . "/home/reikimann/dox/Games/Heroic"))
+ ("/home/reikimann/dox/Games/Heroic/"
+  (dired-filename . "/home/reikimann/dox/Games/Heroic/Prefixes"))
+ ("/home/reikimann/dox/fonts/"
+  (dired-filename . "/home/reikimann/dox/fonts/Iosevka-reiki"))
+ ("/home/reikimann/dox/fonts/Iosevka-reiki/"
+  (dired-filename . "/home/reikimann/dox/fonts/Iosevka-reiki/monospaced"))
+ ("/home/reikimann/dox/fonts/Iosevka-reiki/monospaced/"
+  (dired-filename . "/home/reikimann/dox/fonts/Iosevka-reiki/monospaced/private-build-plans.toml"))
+ ("/home/reikimann/dox/Games/Heroic/Prefixes/" . 166)
+ ("/home/reikimann/.config/discord/"
+  (dired-filename . "/home/reikimann/.config/discord/0.0.18"))
+ ("/home/reikimann/.config/dunst/"
+  (dired-filename . "/home/reikimann/.config/dunst/dunstrc"))
+ ("/home/reikimann/.config/emacs/var/"
+  (dired-filename . "/home/reikimann/.config/emacs/var/prescient-save.el"))
+ ("/home/reikimann/.config/emacs/transient/" . 210)
+ ("/home/reikimann/.config/emacs/url/" . 160)
+ ("/home/reikimann/.config/emacs/elpa/all-the-icons-dired-20220620.1939/all-the-icons-dired-autoloads.el" . 1170)
+ ("/home/reikimann/.config/emacs/elpa/minions-20220422.1615/minions-autoloads.el" . 1511)
+ ("/home/reikimann/.config/emacs/tmp/backups/"
+  (dired-filename . "/home/reikimann/.config/emacs/tmp/backups/!home!reikimann!.config!emacs!bookmarks~"))
+ ("/home/reikimann/dl/"
+  (dired-filename . "/home/reikimann/dl/Backup"))
+ ("/home/reikimann/dl/Backup/"
+  (dired-filename . "/home/reikimann/dl/Backup/usercache.json"))
+ ("/"
+  (dired-filename . "/home"))
+ ("/home/reikimann/.config/cava/" . 254)
+ ("/home/reikimann/.config/emacs/elpa/eshell-git-prompt-20220206.458/eshell-git-prompt.el" . 2580)
+ ("/home/reikimann/.config/emacs/elpa/eshell-git-prompt-20220206.458/eshell-git-prompt-autoloads.el" . 758)
+ ("/home/reikimann/.config/emacs/elpa/ivy-20220529.1130/ivy.el" . 66291)
+ ("/home/reikimann/.config/emacs/elpa/kind-icon-0.1.6/kind-icon.el" . 7819)
+ ("/home/reikimann/.config/emacs/.cache/treemacs-persist" . 63)
+ ("/home/reikimann/.config/emacs/elpa/evil-nerd-commenter-20220524.1231/evil-nerd-commenter-autoloads.el" . 5307)
+ ("/home/reikimann/.config/emacs/elpa/lsp-treemacs-20220502.459/lsp-treemacs-autoloads.el" . 2997)
+ ("/home/reikimann/.config/emacs/elpa/lsp-ivy-20210904.2043/lsp-ivy-autoloads.el" . 904)
+ ("/home/reikimann/.config/emacs/elpa/treemacs-20220622.2016/treemacs-autoloads.el" . 31684)
+ ("/home/reikimann/.config/emacs/elpa/ace-window-20200606.1259/ace-window-autoloads.el" . 2611)
+ ("/home/reikimann/.config/emacs/elpa/avy-20220102.805/avy-autoloads.el" . 8806)
+ ("/home/reikimann/.config/emacs/elpa/pfuture-20220425.1242/pfuture-autoloads.el" . 967)
+ ("/home/reikimann/.config/emacs/elpa/cfrs-20220129.1149/cfrs-autoloads.el" . 518)
+ ("/home/reikimann/.config/emacs/elpa/posframe-20220528.27/posframe-autoloads.el" . 8423)
+ ("/home/reikimann/.config/emacs/elpa/ht-20210119.741/ht-autoloads.el" . 353)
+ ("/home/reikimann/.config/emacs/elpa/spinner-1.7.4/spinner-autoloads.el" . 2595)
+ ("/home/reikimann/.config/emacs/elpa/markdown-mode-20220708.6/markdown-mode-autoloads.el" . 1689)
+ ("/home/reikimann/.config/emacs/elpa/minimap-1.4/minimap.el" . 9804)
+ ("/home/reikimann/.config/emacs/elpa/minimap-1.4/minimap-autoloads.el" . 1357)
+ ("/home/reikimann/.config/emacs/elpa/ivy-prescient-20220601.1652/ivy-prescient.el" . 966)
+ ("/home/reikimann/.config/zathura/" . 262)
+ ("/home/reikimann/.config/emacs/elpa/which-key-20220518.1941/which-key.el" . 13495)
+ ("/home/reikimann/.config/emacs/elpa/ivy-prescient-20220601.1652/ivy-prescient-autoloads.el" . 1477)
+ ("/home/reikimann/.config/emacs/elpa/prescient-20220601.1652/prescient-autoloads.el" . 399)
+ ("/home/reikimann/.config/emacs/elpa/all-the-icons-ivy-rich-20220625.1332/all-the-icons-ivy-rich-autoloads.el" . 1733)
+ ("/home/reikimann/.config/emacs/elpa/ivy-rich-20210409.931/ivy-rich.el" . 9992)
+ ("/home/reikimann/.config/emacs/custom-vars.el" . 192)
+ ("/home/reikimann/.config/emacs/elpa/visual-fill-column-20220519.1959/visual-fill-column-autoloads.el" . 2813)
+ ("/home/reikimann/.config/emacs/elpa/org-bullets-20200317.1740/org-bullets-autoloads.el" . 1061)
+ ("/home/reikimann/.config/emacs/elpa/tablist-20200427.2205/tablist-autoloads.el" . 1390)
+ ("/home/reikimann/.config/emacs/elpa/counsel-projectile-20211004.2003/counsel-projectile-autoloads.el" . 5849)
+ ("/home/reikimann/.config/emacs/elpa/hydra-20220102.803/hydra-autoloads.el" . 2839)
+ ("/home/reikimann/.config/emacs/elpa/lv-20200507.1518/lv-autoloads.el" . 357)
+ ("/home/reikimann/.config/emacs/elpa/annalist-20190929.207/annalist-autoloads.el" . 1588)
+ ("/home/reikimann/.config/emacs/elpa/goto-chg-20220107.1733/goto-chg-autoloads.el" . 1978)
+ ("/home/reikimann/.config/emacs/elpa/general-20211203.120/general-autoloads.el" . 20678)
+ ("/home/reikimann/.config/emacs/elpa/swiper-20220430.2247/swiper-autoloads.el" . 1381)
+ ("/home/reikimann/.config/emacs/elpa/ivy-rich-20210409.931/ivy-rich-autoloads.el" . 2588)
+ ("/home/reikimann/.config/emacs/elpa/which-key-20220518.1941/which-key-autoloads.el" . 7289)
+ ("/home/reikimann/.config/emacs/elpa/rainbow-delimiters-20210515.1254/rainbow-delimiters-autoloads.el" . 1401)
+ ("/home/reikimann/.config/emacs/elpa/shrink-path-20190208.1335/shrink-path-autoloads.el" . 411)
+ ("/home/reikimann/.config/emacs/elpa/f-20220608.943/f-autoloads.el" . 427)
+ ("/home/reikimann/.config/emacs/elpa/s-20210616.619/s-autoloads.el" . 351)
+ ("/home/reikimann/.config/emacs/elpa/dash-20220608.1931/dash-autoloads.el" . 2856)
+ ("/home/reikimann/.config/emacs/elpa/ivy-20220529.1130/ivy-autoloads.el" . 5334)
+ ("/home/reikimann/.config/emacs/elpa/command-log-mode-20160413.447/command-log-mode-autoloads.el" . 1263)
+ ("/home/reikimann/.config/emacs/elpa/use-package-20210207.1926/use-package-autoloads.el" . 8214)
+ ("/home/reikimann/.config/emacs/elpa/bind-key-20210210.1609/bind-key-autoloads.el" . 2596))

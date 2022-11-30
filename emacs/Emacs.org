@@ -648,26 +648,20 @@ Counsel is a customized set of commands to replace =find-file= with =counsel-fin
     ;; :hook ((prog-mode . corfu-mode)
     ;;        (shell-mode . corfu-mode)
     ;;        (eshell-mode . corfu-mode))
+    (corfu-popupinfo-mode t)
+    (corfu-popupinfo-hide nil)     ;; Hides popup between candidates
+    (corfu-popupinfo-delay '0.1)
 
-    ;; Recommended: Enable Corfu globally.
-    ;; This is recommended since Dabbrev can be used globally (M-/).
-    ;; See also `corfu-excluded-modes'.
+    (corfu-echo-mode t)            ;; Displays oneline documentation in echo area
+
+    (corfu-history-mode t)
+    (corfu-history-length 200)     ;; Sets history-length
+    :config
+    (define-key corfu-popupinfo-map (kbd "M-n") #'corfu-popupinfo-scroll-up)
+    (define-key corfu-popupinfo-map (kbd "M-p") #'corfu-popupinfo-scroll-down)
+    (define-key corfu-popupinfo-map (kbd "M-d") #'corfu-popupinfo-toggle)
     :init
     (global-corfu-mode))
-
-  (use-package corfu-doc
-    :after corfu
-    :config
-    (define-key corfu-map (kbd "M-p") #'corfu-doc-scroll-down)
-    (define-key corfu-map (kbd "M-n") #'corfu-doc-scroll-up)
-    (define-key corfu-map (kbd "M-d") #'corfu-doc-toggle)
-    :custom
-    (corfu-doc-max-width '80)
-    (corfu-doc-max-hight '10)
-    (corfu-doc-delay '0.1)
-    :init
-    (add-hook 'corfu-mode-hook #'corfu-doc-mode)
-    )
 
 #+end_src
 
@@ -1119,7 +1113,7 @@ This snippet adds a hook to =org-mode= buffers so that =reiki/org-babel-tangle-c
       :commands magit-status)
 
 #+end_src
-#+end_src
+
 ** Rainbow Delimiters
 
 #+begin_src emacs-lisp

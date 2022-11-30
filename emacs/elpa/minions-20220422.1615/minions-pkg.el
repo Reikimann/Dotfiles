@@ -1,0 +1,2 @@
+;;; Generated package description from minions.el  -*- no-byte-compile: t -*-
+(define-package "minions" "20220422.1615" "A minor-mode menu for the mode line" '((emacs "25.2") (compat "28.1.1.0")) :commit "19dae1c41542777cb5b0311b6e2e77f43e2fd407" :authors '(("Jonas Bernoulli" . "jonas@bernoul.li")) :maintainer '("Jonas Bernoulli" . "jonas@bernoul.li") :keywords '("convenience") :url "https://github.com/tarsius/minions")
