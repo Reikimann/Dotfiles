@@ -1,0 +1,2 @@
+;;; Generated package description from eshell-git-prompt.el  -*- no-byte-compile: t -*-
+(define-package "eshell-git-prompt" "20220206.458" "Some Eshell prompt for Git users" '((emacs "24.1") (cl-lib "0.5") (dash "2.11.0")) :commit "1eb1fd56649f291cac482fbf06dd43ef867873bc" :authors '(("Chunyang Xu" . "mail@xuchunyang.me")) :maintainer '("Chunyang Xu" . "mail@xuchunyang.me") :keywords '("eshell" "git") :url "https://github.com/xuchunyang/eshell-git-prompt")
