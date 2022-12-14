@@ -1,13 +1,17 @@
 {
   "layer": "top", // Waybar at top layer
   "position": "top", // Waybar position (top|bottom|left|right)
-  "height": 30, // Waybar height (to be removed for auto height)
+  "height": 40, // Waybar height (to be removed for auto height)
   // "width": 1280, // Waybar width
   "spacing": 4, // Gaps between modules (4px)
 
-  "modules-left": ["custom/launcher", "wlr/workspaces", "idle_inhibitor", "custom/media"],
+  "modules-left": ["custom/launcher", "wlr/workspaces", "cpu", "memory", "temperature", "custom/media"],
   "modules-center": ["clock"],
-  "modules-right": ["tray", "pulseaudio", "backlight", "cpu", "memory", "temperature", "network", "battery"],
+  "modules-right": ["tray", "pulseaudio", "backlight", "network", "battery"],
+
+  /* "modules-left": ["custom/launcher", "wlr/workspaces", "idle_inhibitor", "custom/media"], */
+  /* "modules-center": ["clock"], */
+  /* "modules-right": ["tray", "pulseaudio", "backlight", "cpu", "memory", "temperature", "network", "battery"], */
 
   /* Modules configuration */
 
@@ -18,11 +22,10 @@
       "format": "{icon}",
       "format-icons": {
           "urgent": "",
-          "active": "",
-          "default": ""
+          "active": "",
+          "default": "" 
+          /*    */
       },
-      "tooltip": true,
-      "tooltip-format": "{name}",
       "sort-by-number": true
   },
   "keyboard-state": {
@@ -88,13 +91,14 @@
       "format": " {:%H:%M}"
   },
   "cpu": {
-      "format": "{usage}% ",
+      "format": "{usage}% ",
       "tooltip": false
+      /*   */
   },
   "memory": {
       "format": "{}% "
+      /*  */
   },
-  /*  */
   "temperature": {
       // "thermal-zone": 2,
       // "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input",

@@ -1,0 +1,10 @@
+#!/usr/bin/env sh
+
+MINLOCK=$(expr 60 \* 3)
+SCREENOFF=$(expr 60 \* 5)
+
+swayidle -w \
+  timeout $MINLOCK 'swaylock' \
+  timeout $SCREENOFF 'hyprctl dispatch dpms off' \
+  resume 'hyprctl dispatch dpms on' \
+  before-sleep 'swaylock'
