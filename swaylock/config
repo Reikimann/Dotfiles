@@ -12,8 +12,22 @@ indicator-thickness=7
 effect-blur=7x5
 effect-vignette=0.5:0.5
 
-ring-color=3b4252
-key-hl-color=880033
+ring-color=3C4360
 line-color=00000000
 inside-color=00000088
 separator-color=00000000
+
+text-color=5D00BA
+key-hl-color=5D00BA
+bs-hl-color=880033
+
+ring-ver-color=90BC61
+inside-ver-color=90BC61
+
+ring-wrong-color=880033
+inside-wrong-color=880033
+
+text-caps-lock-color=880033
+
+ring-clear-color=E7905C
+inside-clear-color=E7905C
