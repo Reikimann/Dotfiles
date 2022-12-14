@@ -1,0 +1,5 @@
+[Desktop Entry]
+Name=Hyprlandwrap
+Comment=An intelligent dynamic tiling Wayland compositor
+Exec=/home/reikimann/.local/bin/hyprlandwrap
+Type=Application

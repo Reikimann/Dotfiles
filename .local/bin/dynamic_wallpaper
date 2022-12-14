@@ -1,0 +1,19 @@
+#!/usr/bin/env sh
+
+WALL_DIR=~/pix/wallpapers/
+# WALL_DIR=~/pix/old_wallpapers/
+SLEEP_MIN=5
+
+if [ $(pidof swaybg) ]; then
+  killall swaybg
+fi
+swaybg -i "$(find $WALL_DIR -name "*.png" -o -name "*.jpg" | shuf -n1)" -m fill &
+OLD_PID=$!
+while true; do
+  sleep $(expr 60 \* $SLEEP_MIN)
+  swaybg -i "$(find $WALL_DIR -name "*.png" -o -name "*.jpg" | shuf -n1)" -m fill &
+  NEXT_PID=$!
+  sleep 5
+  kill $OLD_PID
+  OLD_PID=$NEXT_PID
+done
