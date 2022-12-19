@@ -89,8 +89,8 @@ ctrlz() {
 zle -N ctrlz
 bindkey '^Z' ctrlz
 
-
-
+bindkey -s '^p' 'project\n'
+bindkey -s '^n' 'configs\n'
 
 eval "$(zoxide init zsh)"
 eval "$(starship init zsh)"
@@ -186,7 +186,7 @@ if (( ${+terminfo[smkx]} && ${+terminfo[rmkx]} )); then
 	add-zle-hook-widget -Uz zle-line-finish zle_application_mode_stop
 fi
 
-
+source ~/.local/bin/change_pwd.sh
 
 source /usr/share/fzf/key-bindings.zsh
 source /usr/share/fzf/completion.zsh

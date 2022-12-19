@@ -94,6 +94,7 @@ map gd cd ~/dox/
 map gs cd ~/dox/school/
 map gp cd ~/pix/
 map gD cd ~/dl/
+map gb cd ~/.local/bin
  
 map dr dragon
 map ds dragon-stay
