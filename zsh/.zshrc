@@ -91,6 +91,8 @@ bindkey '^Z' ctrlz
 
 bindkey -s '^p' 'project\n'
 bindkey -s '^n' 'configs\n'
+bindkey -s '^s' 'school\n'
+
 
 eval "$(zoxide init zsh)"
 eval "$(starship init zsh)"

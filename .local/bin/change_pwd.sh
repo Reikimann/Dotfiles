@@ -1,18 +1,36 @@
-# Use command below to get full-path. Useful when sorting multiple directories.
-# fd . $search_dir --exact-depth=1 --type d --print0 | fzf --exit-0 --read0)
-
 project () {
   local search_dir=~/coding
+  local preview_cmd="exa -lah --sort=type --icons --no-permissions --no-filesize --no-time --no-user $search_dir/{}"
 
-  local target_dir=$(fd . $search_dir --exact-depth=1 --type d --exec printf '{/}\0' | fzf --exit-0 --read0)
+  local target_dir=$(fd . $search_dir --exact-depth=1 --type d --exec printf '{/}\0' | fzf --preview $preview_cmd --exit-0 --read0)
 
-  cd $search_dir/$target_dir
+  if [[ -n $target_dir ]]; then
+    cd $search_dir/$target_dir
+    exa -lah --group-directories-first --icons
+  fi
 }
 
 configs () {
   local search_dir=~/.config
+  local preview_cmd="exa -lah --sort=type --icons --no-permissions --no-filesize --no-time --no-user $search_dir/{}"
 
-  local target_dir=$(fd . $search_dir --exact-depth=1 --type d --exec printf '{/}\0' | fzf --exit-0 --read0)
+  local target_dir=$(fd . $search_dir --exact-depth=1 --type d --exec printf '{/}\0' | fzf --preview $preview_cmd --exit-0 --read0)
 
-  cd $search_dir/$target_dir
+  if [[ -n $target_dir ]]; then
+    cd $search_dir/$target_dir
+    exa -lah --group-directories-first --icons
+  fi
 }
+
+school () {
+  local search_dir=~/dox/school
+ 
+  # Piping into `sed -Ez "s|(.*)\/|\1|"` will remove the last slash
+  local target_dir=$(fd . --base-directory $search_dir --min-depth=1 --type d --print0 --strip-cwd-prefix | sed -Ez "s|(.*)\/|\1|" | fzf --exit-0 --read0)
+
+  if [[ -n $target_dir ]]; then
+    cd $search_dir/$target_dir
+    exa -lah --group-directories-first --icons
+  fi
+}
+
