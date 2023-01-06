@@ -43,11 +43,17 @@ set scrolloff 15
 set ifs "\n"
 
 # Custom functions
-
 cmd open ${{
     test -L $f && f=$(readlink -f $f)
     case $(file --mime-type $f -b) in
         image/vnd.djvu|application/pdf|application/octet-stream|application/postscript) setsid -f zathura $fx >/dev/null 2>&1 ;;
+        text/xml)
+          is_maple=$(file $f --mime-type | sed -E 's|^.*\.([mw]{2}):\s(.*)|\1:\2|')
+
+          if [[ $is_maple = mw:text/xml ]]; then
+            setsid -f /home/reikimann/.local/src/maple2022/bin/xmaple $f >/dev/null 2>&1
+          fi
+        ;;
         text/*|application/json|inode/x-empty) $EDITOR $fx;;
         image/x-xcf) setsid -f gimp $f >/dev/null 2>&1 ;;
         image/svg+xml) display -- $f ;;
