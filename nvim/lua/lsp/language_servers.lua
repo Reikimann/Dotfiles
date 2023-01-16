@@ -1,7 +1,26 @@
--- Set up lspconfig.
+
+-- It's important that you set up the plugins in the following order:
+-- mason.nvim
+-- mason-lspconfig.nvim
+-- Setup servers via lspconfig
+
+require("mason").setup()
+require("mason-lspconfig").setup({
+  ensure_installed = {
+    "html", -- paru -S vscode-html-languageserver
+    "cssls", -- paru -S vscode-css-languageserver
+    "tsserver", -- paru -S typescript-language-server
+    "pylsp", -- paru -S python-lsp-server
+    -- "ls_emmet", -- npm install -g ls_emmet, then moved it to .local/bin
+    "sumneko_lua", -- paru -S lua-language-server
+    "rust_analyzer",
+  }
+})
+
+-- -- Set up lspconfig.
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
-require'lspconfig.configs'.ls_emmet = {
+require 'lspconfig.configs'.ls_emmet = {
   default_config = {
     cmd = { 'ls_emmet', '--stdio' };
     filetypes = { 'html', 'css', 'scss', 'xml', 'sass' };
@@ -12,7 +31,7 @@ require'lspconfig.configs'.ls_emmet = {
   };
 }
 
--- Find langservers at: https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
+-- -- Find langservers at: https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
 local langservers = {
   "html", -- paru -S vscode-html-languageserver
   "cssls", -- paru -S vscode-css-languageserver
@@ -20,11 +39,12 @@ local langservers = {
   "pylsp", -- paru -S python-lsp-server
   "ls_emmet", -- npm install -g ls_emmet, then moved it to .local/bin
   "sumneko_lua", -- paru -S lua-language-server
+  "rust_analyzer",
 }
 
 for _, server in ipairs(langservers) do
   if server == "sumneko_lua" then
-    require"lspconfig"[server].setup {
+    require "lspconfig"[server].setup {
       settings = {
         Lua = {
           runtime = {
@@ -32,7 +52,7 @@ for _, server in ipairs(langservers) do
             path = "/usr/bin/luajit",
           },
           diagnostics = {
-            globals = {"vim"},
+            globals = { "vim" },
           },
           workspace = {
             -- Make the server aware of Neovim runtime files
@@ -46,8 +66,10 @@ for _, server in ipairs(langservers) do
       },
     }
   else
-    require"lspconfig"[server].setup {
+    require "lspconfig"[server].setup {
       capabilities = capabilities
     }
   end
 end
+
+
