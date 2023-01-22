@@ -6,10 +6,11 @@ Things to figure out:
 - Org-modern
 - GCMH
 - Why doesn't org-appear evil hook work?
-- Cape
 - [[https://github.com/minad/corfu/wiki#configuring-corfu-for-lsp-mode=][Corfu lsp]]
 - Setup Python Development
-- Vertico, Marginalia, Consult & Orderless(maybe)
+- Vertico, Marginalia, Consult & Orderless [[https://kristofferbalintona.me/posts/202202211546/][Blog howto]]
+- Cape
+- [[https://github.com/radian-software/ctrlf][Ctrlf search plugin]]
 - Forge
   - Remember to use =:after magit= to defer forge
 - Check out Jake-B's hydra [[https://github.com/jakebox/jake-emacs#hydra][config]]
@@ -159,6 +160,7 @@ Just ignore the comment.
   ;; Smooth scrolling (kinda)
   (setq scroll-margin 10)
   (setq scroll-step 1)
+  (setq scroll-conservatively 101)
 
   ;; More performant rapid scrolling over unfontified regions. May cause brief
   ;; spells of inaccurate syntax highlighting right after scrolling, which should
@@ -265,7 +267,7 @@ Emacs has a built in package manager but it doesn't make it easy to automaticall
   (use-package auto-package-update
     :defer 0.5
     :custom
-    (auto-package-update-interval 7)
+    (auto-package-update-interval 14)
     (auto-package-update-prompt-before-update t)
     (auto-package-update-hide-results t)
     :config
@@ -546,6 +548,45 @@ This configuration uses [[https://evil.readthedocs.io/en/latest/index.html][evil
 
 #+end_src
 
+** Corfu
+
+#+BEGIN_src emacs-lisp
+
+  (use-package corfu
+    :bind
+    (:map corfu-map ("RET" . nil)) ;; Return key is for newline not completions 
+    :custom
+    (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
+    (corfu-auto t)                 ;; Enable auto completion
+    (corfu-auto-delay 0.2)         ;; Seconds to wait before showing auto completion
+    (corfu-on-exact-match nil)
+    (corfu-auto-prefix 0)          ;; Minimum length before showing auto completion
+    (corfu-count 10)               ;; Number of candidates to show
+    (corfu-scroll-margin 5)        ;; Use scroll margin
+    (corfu-popupinfo-hide nil)     ;; Hides docs between candidates
+    (corfu-popupinfo-delay '0.1)     ;; Hides docs between candidates
+    (corfu-popupinfo-max-width '80)
+    (corfu-popupinfo-max-hight '10)
+    (corfu-echo-mode nil)
+    ;; Enable Corfu only for certain modes.
+    ;; :hook ((prog-mode . corfu-mode)
+    ;;        (shell-mode . corfu-mode)
+    ;;        (eshell-mode . corfu-mode))
+
+    ;; Recommended: Enable Corfu globally.
+    ;; This is recommended since Dabbrev can be used globally (M-/).
+    ;; See also `corfu-excluded-modes'.
+    :config
+    (define-key corfu-map (kbd "M-p") #'corfu-popupinfo-scroll-down)
+    (define-key corfu-map (kbd "M-n") #'corfu-popupinfo-scroll-up)
+    (define-key corfu-map (kbd "M-d") #'corfu-popupinfo-toggle)
+    :init
+    (corfu-popupinfo-mode)
+    (corfu-history-mode)
+    (global-corfu-mode))
+
+#+end_src
+
 ** Counsel, Ivy and Prescient
 *** Counsel
 Counsel is a customized set of commands to replace =find-file= with =counsel-find-file=, etc which provide useful commands for each of the default completion commands.
@@ -626,42 +667,6 @@ Counsel is a customized set of commands to replace =find-file= with =counsel-fin
     (setq prescient-sort-length-enable nil) ; Disables sort by length
     (prescient-persist-mode 1)
     (ivy-prescient-mode 1))
-
-#+end_src
-
-** Corfu and Corfu Docs
-
-#+BEGIN_src emacs-lisp
-
-  (use-package corfu
-    :bind
-    (:map corfu-map ("RET" . nil)) ;; Return key is for newline not completions 
-    :custom
-    (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
-    (corfu-auto t)                 ;; Enable auto completion
-    (corfu-auto-delay 0.2)         ;; Seconds to wait before showing auto completion
-    (corfu-on-exact-match nil)
-    (corfu-auto-prefix 0)          ;; Minimum length before showing auto completion
-    (corfu-count 10)               ;; Number of candidates to show
-    (corfu-scroll-margin 5)        ;; Use scroll margin
-    ;; Enable Corfu only for certain modes.
-    ;; :hook ((prog-mode . corfu-mode)
-    ;;        (shell-mode . corfu-mode)
-    ;;        (eshell-mode . corfu-mode))
-    (corfu-popupinfo-mode t)
-    (corfu-popupinfo-hide nil)     ;; Hides popup between candidates
-    (corfu-popupinfo-delay '0.1)
-
-    (corfu-echo-mode t)            ;; Displays oneline documentation in echo area
-
-    (corfu-history-mode t)
-    (corfu-history-length 200)     ;; Sets history-length
-    :config
-    (define-key corfu-popupinfo-map (kbd "M-n") #'corfu-popupinfo-scroll-up)
-    (define-key corfu-popupinfo-map (kbd "M-p") #'corfu-popupinfo-scroll-down)
-    (define-key corfu-popupinfo-map (kbd "M-d") #'corfu-popupinfo-toggle)
-    :init
-    (global-corfu-mode))
 
 #+end_src
 
@@ -1113,7 +1118,7 @@ This snippet adds a hook to =org-mode= buffers so that =reiki/org-babel-tangle-c
       :commands magit-status)
 
 #+end_src
-
+#+end_src
 ** Rainbow Delimiters
 
 #+begin_src emacs-lisp
