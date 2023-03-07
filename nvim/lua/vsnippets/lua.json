@@ -1,0 +1,14 @@
+{
+  "date": {
+    "prefix": ["cd"],
+    "body": "-- ${VIM:system('date')}"
+  },
+  "filepath": {
+    "prefix": ["fpath"],
+    "body": "$TM_FILEPATH"
+  },
+  "fname": {
+    "prefix": ["fname"],
+    "body": "$TM_FILENAME_BASE"
+  }
+}

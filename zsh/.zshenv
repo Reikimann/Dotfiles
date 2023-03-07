@@ -30,6 +30,7 @@ export CUDA_CACHE_PATH="$XDG_CACHE_HOME/nv"
 export ZDOTDIR="$HOME/.config/zsh"
 export RUSTUP_HOME="$XDG_DATA_HOME/rustup"
 export CARGO_HOME="$XDG_DATA_HOME/cargo"
+export MOZ_DBUS_REMOTE=1
 
 export PATH="$CARGO_HOME/bin:$PATH"
 

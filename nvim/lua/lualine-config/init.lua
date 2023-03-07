@@ -224,17 +224,6 @@ ins_left({
 lualine.setup(config)
 
 
-
-
-
-
-
-
-
-
-
-
-
 -------------------- old -------------
 
 --require('lualine').setup({

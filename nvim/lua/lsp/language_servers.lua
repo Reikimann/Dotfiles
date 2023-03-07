@@ -12,8 +12,11 @@ require("mason-lspconfig").setup({
     "tsserver", -- paru -S typescript-language-server
     "pylsp", -- paru -S python-lsp-server
     -- "ls_emmet", -- npm install -g ls_emmet, then moved it to .local/bin
-    "sumneko_lua", -- paru -S lua-language-server
+    -- "sumneko_lua", -- paru -S lua-language-server
+    "lua_ls",
     "rust_analyzer",
+    "ltex",
+    "texlab",
   }
 })
 
@@ -38,8 +41,11 @@ local langservers = {
   "tsserver", -- paru -S typescript-language-server
   "pylsp", -- paru -S python-lsp-server
   "ls_emmet", -- npm install -g ls_emmet, then moved it to .local/bin
-  "sumneko_lua", -- paru -S lua-language-server
+  -- "sumneko_lua", -- paru -S lua-language-server
+  "lua_ls",
   "rust_analyzer",
+  "ltex",
+  "texlab",
 }
 
 for _, server in ipairs(langservers) do

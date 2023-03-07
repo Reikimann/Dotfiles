@@ -1,18 +1,7 @@
 require('plugins')
-require('options')
 require('keybindings')
-require('lualine-config')
-require('bufferline-config')
-require('treesitter-config')
-require('whichkey-config')
-require('indent-blankline-config')
-require('autopairs-config')
-require('dashboard-config')
-require('telescope-config')
-require('vimwiki-config')
-require('colorizer-config')
-require('vim-latex-live-preview-config')
-require('vimtex-config')
-require('nvim-tree-config')
-require('lsp')
-require('tokyonight-config')
+require('options')
+
+
+
+-- figure out why lspsaga.action in keybindings/init.lua spits out an error

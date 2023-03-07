@@ -8,7 +8,7 @@ vim.o.splitbelow = true
 vim.o.splitright = true
 vim.opt.termguicolors = true
 vim.o.cmdheight = 1
-vim.o.conceallevel = 0
+-- vim.o.conceallevel = 0 -- set in vimtex
 vim.o.showtabline = 1
 vim.o.laststatus = 3 -- Always display the status line
 vim.o.showmode = false
@@ -17,12 +17,12 @@ vim.o.writebackup = false
 vim.o.swapfile = false
 vim.o.updatetime = 500
 vim.o.timeoutlen = 100
-vim.o.clipboard = 'unnamedplus'
 vim.o.hlsearch = false
+vim.o.incsearch = true
+
 vim.o.ignorecase = true
 vim.o.scrolloff = 15
 -- vim.o.sidescrolloff = 5
-vim.o.mouse = 'a'
 vim.wo.wrap = true
 vim.wo.linebreak = true
 vim.wo.number = true
@@ -37,3 +37,8 @@ vim.o.autoindent = true
 vim.bo.autoindent = true
 vim.o.expandtab = true
 vim.bo.expandtab = true
+
+vim.g.vsnip_snippet_dir = vim.fn.expand('~/.config/nvim/lua/vsnippets/')
+
+
+
