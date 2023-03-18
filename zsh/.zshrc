@@ -64,67 +64,6 @@ zle -N zle-line-init
 echo -ne '\e[5 q' # Use beam shape cursor on startup.
 preexec() { echo -ne '\e[5 q' ;} # Use beam shape cursor for each new prompt.
 
-
-# Use lf to switch directories and bind it to ctrl-o
-lfcd () {
-    tmp="$(mktemp)"
-    lf -last-dir-path="$tmp" "$@"
-    if [ -f "$tmp" ]; then
-        dir="$(cat "$tmp")"
-        rm -f "$tmp"
-        [ -d "$dir" ] && [ "$dir" != "$(pwd)" ] && cd "$dir"
-    fi
-}
-bindkey -s '^o' 'lfcd\n'
-
-
-# Ctrl+z sleep process
-ctrlz() {
-  if [[ $#BUFFER == 0 ]]; then
-    fg >/dev/null 2>&1 && zle redisplay
-  else
-    zle push-input
-  fi
-}
-zle -N ctrlz
-bindkey '^Z' ctrlz
-
-bindkey -s '^p' 'project\n'
-bindkey -s '^n' 'configs\n'
-bindkey -s '^s' 'school\n'
-
-
-eval "$(zoxide init zsh)"
-eval "$(starship init zsh)"
-
-################################################
-
-
-alias nvidia-settings="nvidia-settings --config="$XDG_CONFIG_HOME"/nvidia/settings"
-
-################################################
-
-
-neofetch
-
-alias matrix="unimatrix -l cCaGgkr -s 98 -a -f"
-alias c="clear && zsh"
-alias C="clear && bash"
-alias exa="exa --sort=type --icons"
-alias exal="exa -lah --sort=type --icons"
-alias v="nvim"
-alias lf="lfub"
-alias ..="cd .."
-alias ls="ls --group-directories-first --color=always"
-alias ls="ls -lah --group-directories-first --color=always"
-alias fzff="fzf --preview 'bat --style=numbers --color=always --line-range :500 {}'"
-alias py="python3"
-
-alias rtfm='man'
-alias nomnom='killall'
-alias yolo='git commit -m "$(curl -s http://whatthecommit.com/index.txt)"'
-
-
 # Rehash when downloading new program
 zshcache_time="$(date +%s%N)"
 
@@ -187,6 +126,67 @@ if (( ${+terminfo[smkx]} && ${+terminfo[rmkx]} )); then
 	add-zle-hook-widget -Uz zle-line-init zle_application_mode_start
 	add-zle-hook-widget -Uz zle-line-finish zle_application_mode_stop
 fi
+
+# PERSONAL
+
+# Use lf to switch directories and bind it to ctrl-o
+lfcd () {
+  tmp="$(mktemp)"
+  lf -last-dir-path="$tmp" "$@"
+  if [ -f "$tmp" ]; then
+    dir="$(cat "$tmp")"
+    rm -f "$tmp"
+    [ -d "$dir" ] && [ "$dir" != "$(pwd)" ] && cd "$dir"
+  fi
+}
+bindkey -s '^o' 'lfcd\n'
+
+# Ctrl+z sleep process
+ctrlz() {
+  if [[ $#BUFFER == 0 ]]; then
+    fg >/dev/null 2>&1 && zle redisplay
+  else
+    zle push-input
+  fi
+}
+zle -N ctrlz
+bindkey '^Z' ctrlz
+
+
+
+
+bindkey -s '^p' 'project\n'
+bindkey -s '^n' 'configs\n'
+bindkey -s '^s' 'school\n'
+
+eval "$(zoxide init zsh)"
+eval "$(starship init zsh)"
+
+################################################
+
+alias nvidia-settings="nvidia-settings --config="$XDG_CONFIG_HOME"/nvidia/settings"
+
+################################################
+
+alias matrix="unimatrix -l cCaGgkr -s 98 -a -f"
+alias c="clear && zsh"
+alias C="clear && bash"
+alias exa="exa --sort=type --icons"
+alias exal="exa -lah --sort=type --icons"
+alias v="nvim"
+alias lf="lfub"
+alias ..="cd .."
+alias ls="ls --group-directories-first --color=always"
+alias ls="ls -lah --group-directories-first --color=always"
+alias fzff="fzf --preview 'bat --style=numbers --color=always --line-range :500 {}'"
+alias py="python3"
+
+alias rtfm='man'
+alias nomnom='killall'
+alias yolo='git commit -m "$(curl -s http://whatthecommit.com/index.txt)"'
+
+neofetch
+
 
 source ~/.local/bin/change_pwd.sh
 
