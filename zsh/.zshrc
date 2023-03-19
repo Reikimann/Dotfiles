@@ -159,9 +159,6 @@ bindkey -s '^p' 'project\n'
 bindkey -s '^n' 'configs\n'
 bindkey -s '^s' 'school\n'
 
-eval "$(zoxide init zsh)"
-eval "$(starship init zsh)"
-
 ################################################
 
 alias nvidia-settings="nvidia-settings --config="$XDG_CONFIG_HOME"/nvidia/settings"
@@ -184,7 +181,10 @@ alias py="python3"
 alias rtfm='man'
 alias nomnom='killall'
 alias yolo='git commit -m "$(curl -s http://whatthecommit.com/index.txt)"'
+alias standalone="convert -density 300 -alpha remove"
 
+eval "$(zoxide init zsh)"
+eval "$(starship init zsh)"
 neofetch
 
 
