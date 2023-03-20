@@ -3,7 +3,7 @@ image=~/pix/wallpapers/rose_flower.png
 daemonize
 
 grace=2
-fade-in=0.3
+ignore-empty-password
 
 indicator
 indicator-radius=100
