@@ -13,6 +13,7 @@ vim.g.vimtex_compiler_method = 'latexmk'
 -- following line. The default is usually fine and is the symbol "\".
 vim.g.maplocalleader = ","
 vim.g.vimtex_fold_enabled = 1
+vim.g.vimtex_view_forward_search_on_start = 0 -- Stops highlighting changes in zathura on start
 
 -- Dunno
 -- vim.opt.conceallevel = 2

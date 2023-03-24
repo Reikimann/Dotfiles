@@ -6,7 +6,10 @@ return require('packer').startup({
     use {'folke/tokyonight.nvim', config = "require('tokyonight-config')"}
     use {'rose-pine/neovim', as = "rose-pine"} -- add config = "vim.cmd('colorscheme rose-pine')" to make it the default colorscheme
     -------------------UI----------------
-    use {"glepnir/dashboard-nvim", config = "require('dashboard-config')"}
+    use {"glepnir/dashboard-nvim", 
+      config = "require('dashboard-config')",
+      event = "VimEnter"
+    }
     use {'nvim-telescope/telescope.nvim', requires = {{'nvim-lua/plenary.nvim'}}, cmd = "Telescope", config = "require('telescope-config')"}
     -- use { "nvim-telescope/telescope-file-browser.nvim" } -- not working
     use {'akinsho/toggleterm.nvim', config = "require('toggleterm-config')"}
@@ -60,7 +63,6 @@ return require('packer').startup({
         vim.g["vimwiki_global_ext"] = 0
       end
     }
-    use {"xuhdev/vim-latex-live-preview", config = "require('vim-latex-live-preview-config')", {['for'] = 'tex'}}
     use {"lervag/vimtex", config = "require('vimtex-config')"}
     ----------------FUN------------------
     use {"eandrju/cellular-automaton.nvim", cmd = "CellularAutomaton"}

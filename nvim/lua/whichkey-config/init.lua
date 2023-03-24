@@ -54,7 +54,6 @@ local mappings = {
     },
     a = {
       name = "Other",
-      y = {":LLPStartPreview<CR>", "Preview Latex"},
     },
     p = {
       name = "Packer",
