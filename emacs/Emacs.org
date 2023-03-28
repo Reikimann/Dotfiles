@@ -4,12 +4,12 @@
 Things to figure out:
 - Deft-mode for school notes
 - Org-modern
+- Look for TODO: in this file
 - GCMH
 - Why doesn't org-appear evil hook work?
 - [[https://github.com/minad/corfu/wiki#configuring-corfu-for-lsp-mode=][Corfu lsp]]
-- Setup Python Development
-- Vertico, Marginalia, Consult & Orderless [[https://kristofferbalintona.me/posts/202202211546/][Blog howto]]
-- Cape
+- Customize options: Vertico, Marginalia, Consult & Orderless
+- Install and figure out Cape
 - [[https://github.com/radian-software/ctrlf][Ctrlf search plugin]]
 - Forge
   - Remember to use =:after magit= to defer forge
@@ -29,6 +29,7 @@ Just ignore the comment.
 
 #+begin_src emacs-lisp
 
+  ;; -*- lexical-binding: t -*-
   ;; Please edit the Emacs.org file instead of this. Init.el is auto-generated.
   (defvar reiki/default-font-size 130)
   (defvar reiki/default-fixed-font "Liga SFMono Nerd Font")
@@ -75,9 +76,9 @@ Just ignore the comment.
                   eshell-mode-hook))
     (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
-  ;; Sets transparency
-  ;; (set-frame-parameter (selected-frame) 'alpha '(97 . 100))
-  ;; (add-to-list 'default-frame-alist '(alpha . (90 . 90)))
+  ;; Sets transparency (v29+)
+  (set-frame-parameter (selected-frame) 'alpha-background 95)
+  ;; (add-to-list 'default-frame-alist 'alpha-background 95) ;; This screws up startup (besides, dont know what it does xD)
 
 #+end_src
 
@@ -180,6 +181,12 @@ Just ignore the comment.
   (setq window-resize-pixelwise nil)
 
 #+end_src
+*** Native-comp
+#+begin_src emacs-lisp
+
+  (setq native-comp-async-report-warnings-errors nil)
+
+#+end_src
 * Startup Performance
 
 #+begin_src emacs-lisp
@@ -256,7 +263,10 @@ Emacs has a built in package manager but it doesn't make it easy to automaticall
   (require 'use-package)
   (setq use-package-always-ensure t)
 
-  (setq use-package-verbose nil)
+  (setq use-package-verbose t)
+
+  ;; Emacs29+
+  (setq package-native-compile t)
 
 #+end_src
 
@@ -265,7 +275,7 @@ Emacs has a built in package manager but it doesn't make it easy to automaticall
 #+begin_src emacs-lisp
 
   (use-package auto-package-update
-    :defer 0.5
+    :defer t
     :custom
     (auto-package-update-interval 14)
     (auto-package-update-prompt-before-update t)
@@ -295,21 +305,21 @@ This configuration uses evil-mode for a Vi-like modal editing experience. Genera
     :global-prefix "C-SPC")
 
   (reiki/leader-keys
-    "SPC" '(counsel-M-x :which-key "M-x")
+    "SPC" '(execute-extended-command :which-key "M-x")
     ;; Nav
-    "." '(counsel-find-file :which-key "find file")
-    "," '(counsel-recentf :which-key "recent files")
+    "." '(find-file :which-key "find file")
+    "," '(consult-recent-file :which-key "recent files")
     ;; Buffers
     "q" '(kill-current-buffer :which-key "kill buff")
     "Q" '(save-buffers-kill-terminal :which-key "Quit emacs")
-    "e" #'((lambda () (interactive) (counsel-find-file (locate-user-emacs-file "Emacs.org"))) :which-key "Emacs config")
+    "e" #'((lambda () (interactive) (find-file (locate-user-emacs-file "Emacs.org"))) :which-key "Emacs config")
     "j" #'((lambda () (interactive) (switch-to-buffer (other-buffer))) :which-key "Prev buff")
     )
 
   (reiki/leader-keys
     ;; "Applications"
     "a" '(:ignore a :which-key "Apps")
-    "ad" '(counsel-dired :which-key "Dired")
+    "ad" '(dired-jump :which-key "Dired")
     ;; Hydra
     "s" '(:ignore s :which-key "Hydras")
     "ss" '(hydra-text-scale/body :which-key "Scale text")
@@ -317,28 +327,29 @@ This configuration uses evil-mode for a Vi-like modal editing experience. Genera
     "sl" '(hydra-links/body :which-key "Links")
     ;; Buffers
     "b" '(:ignore b :which-key "Buffer")
-    "bb" '(counsel-switch-buffer :which-key "Switch buffer")
+    "bb" '(consult-buffer :which-key "Switch buffer")
     "br" '(revert-buffer :which-key "Revert buffer")
     "bs" '(save-buffer :which-key "Save buffer")
-    "bk" '(all-the-icons-ivy-rich-kill-buffer :which-key "Kill buffer")
+    "bk" '(kill-buffer :which-key "Kill buffer")
     ;; Org
     "o" '(:ignore o :which-key "Org")
     "oc" '(org-capture :which-key "Capture")
-    "oi" '(counsel-imenu :which-key "IMenu")
+    "oh" '(consult-org-heading :which-key "Headings")
     "oa" '(org-agenda :which-key "Org agenda")
     "oe" '(org-export-dispatch :which-key "Org export")
     "op" '(org-present :which-key "Org present")
     ;; Help
     "h" '(:ignore h :which-key "Help/Emacs")
-    "hv" '(counsel-describe-variable :which-key "Des. variable")
-    "hb" '(counsel-descbinds :which-key "Des. bindings")
-    "hM" '(describe-mode :which-key "Des. mode")
     "hm" '(evil-lookup :which-key "Manuals")
-    "hs" '(describe-symbol :which-key "Des. symbol")
-    "hf" '(counsel-describe-function :which-key "Des. func")
-    "hF" '(counsel-describe-face :which-key "Des. face")
-    "hk" '(describe-key :which-key "Des. key")
+    "hv" '(describe-variable :which-key "Des. variable")
+  ;; TODO: Find alternative to counsel
+    "hb" '(counsel-descbinds :which-key "Des. bindings") ; Depends on counsel
+    "hf" '(describe-function :which-key "Des. func")
+    "hF" '(describe-face :which-key "Des. face")
     "hg" '(customize-group :which-key "Customize group")
+    "hM" '(describe-mode :which-key "Des. mode")
+    "hs" '(describe-symbol :which-key "Des. symbol")
+    "hk" '(describe-key :which-key "Des. key")
     ;; Modes
     "m" '(:ignore m :which-key "Modes")
     "me" '(emacs-lisp-mode :which-key "Elisp mode")
@@ -364,12 +375,14 @@ This configuration uses evil-mode for a Vi-like modal editing experience. Genera
     "tr" '(display-fill-column-indicator-mode :which-key "Fill column indicator")
     ;; Windows
     "w" '(:ignore w :which-key "Window")
-    "wN" '(make-frame :which-key "make frame")
+    "wN" '(make-frame :which-key "New frame")
+    "w|" '(split-window-right :which-key "Split right")
+    "w-" '(split-window-below :which-key "Split below")
     "wd" '(evil-window-delete :which-key "delete window")
-    "wl" '(evil-window-right :which-key "evil-window-right")
-    "wh" '(evil-window-left :which-key "evil-window-left")
-    "wj" '(evil-window-down :which-key "evil-window-down")
-    "wk" '(evil-window-up :which-key "evil-window-up")
+    "wl" '(evil-window-right :which-key "Move right")
+    "wh" '(evil-window-left :which-key "Move left")
+    "wj" '(evil-window-down :which-key "Move down")
+    "wk" '(evil-window-up :which-key "Move up")
     )
 
 #+end_src
@@ -514,7 +527,6 @@ This configuration uses [[https://evil.readthedocs.io/en/latest/index.html][evil
   (use-package all-the-icons)
 
   (use-package doom-modeline
-    :ensure t
     :init (doom-modeline-mode 1)
     :custom ((doom-modeline-height 18))
     :config
@@ -565,7 +577,7 @@ This configuration uses [[https://evil.readthedocs.io/en/latest/index.html][evil
     (corfu-scroll-margin 5)        ;; Use scroll margin
     (corfu-popupinfo-hide nil)     ;; Hides docs between candidates
     (corfu-popupinfo-delay '0.1)     ;; Hides docs between candidates
-    (corfu-popupinfo-max-width '80)
+    (corfu-popupinfo-max-width '40)
     (corfu-popupinfo-max-hight '10)
     (corfu-echo-mode nil)
     ;; Enable Corfu only for certain modes.
@@ -587,22 +599,121 @@ This configuration uses [[https://evil.readthedocs.io/en/latest/index.html][evil
 
 #+end_src
 
+** Vertico, Consult and marginalia
+*** Vertico
+#+begin_src emacs-lisp
+
+  (use-package vertico
+    :init
+    (vertico-mode)
+
+    :bind (:map vertico-map
+           ("C-j" . vertico-next)
+           ("C-k" . vertico-previous)
+           :map minibuffer-local-map
+           ("C-j" . next-line-or-history-element)
+           ("C-k" . previous-line-or-history-element))
+
+    :config
+    (setq vertico-scroll-margin 4)
+    (setq vertico-cycle t))
+
+  ;; Persist history over Emacs restarts. Vertico sorts by history position.
+  (use-package savehist
+    :init
+    (savehist-mode))
+
+#+end_src
+*** Marginalia
+https://github.com/minad/marginalia
+#+begin_src emacs-lisp
+
+  ;; Enable rich annotations using the Marginalia package
+  (use-package marginalia
+    ;; Either bind `marginalia-cycle' globally or only in the minibuffer
+    :bind (("M-A" . marginalia-cycle)
+           :map minibuffer-local-map
+           ("M-A" . marginalia-cycle))
+
+    :custom
+    (marginalia-max-relative-age 0)
+    (marginalia-align 'right)
+    ;; The :init configuration is always executed (Not lazy!)
+    :init
+    ;; Must be in the :init section of use-package such that the mode gets
+    ;; enabled right away. Note that this forces loading the package.
+    (marginalia-mode))
+
+#+end_src
+*** Consult
+[[https://github.com/minad/consult][Consult]] 
+#+begin_src emacs-lisp
+  ;; Example configuration for Consult
+  (use-package consult
+    ;; Enable automatic preview at point in the *Completions* buffer. This is
+    ;; relevant when you use the default completion UI.
+    :hook (completion-list-mode . consult-preview-at-point-mode)
+    :init
+    ;; Optionally configure the register formatting. This improves the register
+    ;; preview for `consult-register', `consult-register-load',
+    ;; `consult-register-store' and the Emacs built-ins.
+    (setq register-preview-delay 0.5
+          register-preview-function #'consult-register-format)
+
+    ;; Optionally tweak the register preview window.
+    ;; This adds thin lines, sorting and hides the mode line of the window.
+    (advice-add #'register-preview :override #'consult-register-window)
+  )
+
+#+end_src
+*** Orderless
+https://github.com/oantolin/orderless
+#+begin_src emacs-lisp
+
+  (use-package orderless
+    :custom
+    (completion-styles '(orderless basic))
+    (completion-category-overrides '((file (styles basic partial-completion)))))
+
+#+end_src
+*** Embark
+https://github.com/oantolin/embark
+#+begin_src emacs-lisp
+
+#+end_src
+*** All The Icons Completion
+Get the [[https://github.com/MintSoup/all-the-icons-completion][fork]] instead.
+#+begin_src emacs-lisp
+
+  (use-package all-the-icons
+    :if (display-graphic-p))
+
+  (use-package all-the-icons-completion
+    :after (marginalia all-the-icons)
+    :hook (marginalia-mode . all-the-icons-completion-marginalia-setup)
+    :init
+    (all-the-icons-completion-mode))
+
+#+end_src
 ** Counsel, Ivy and Prescient
 *** Counsel
 Counsel is a customized set of commands to replace =find-file= with =counsel-find-file=, etc which provide useful commands for each of the default completion commands.
 
 #+begin_src emacs-lisp
 
-  (use-package counsel
-    :bind (("M-x" . counsel-M-x)
-           ("C-x C-f" . counsel-find-file)
-           ("C-x b" . counsel-switch-buffer))
-           ;;("C-x b" . counsel-ibuffer)
-           ;:map minibuffer-local-map
-           ;("C-r" . 'counsel-minibuffer-history)
-    :config 
-    ;; Removes recentfiles/bookmarks from counsel-switch-buffer if set to nil
-    (setq counsel-switch-buffer-preview-virtual-buffers t))
+  ;; (use-package counsel
+  ;;   :bind (
+  ;;          ("M-x" . counsel-M-x)
+  ;;          ("C-x C-f" . counsel-find-file)
+  ;;          ("C-x b" . counsel-switch-buffer)
+  ;;          )
+  ;;          ;;("C-x b" . counsel-ibuffer)
+  ;;          ;:map minibuffer-local-map
+  ;;          ;("C-r" . 'counsel-minibuffer-history)
+  ;;   :config 
+  ;;   ;; Removes recentfiles/bookmarks from counsel-switch-buffer if set to nil
+  ;;   (setq counsel-switch-buffer-preview-virtual-buffers t))
+
 #+end_src
 
 *** Ivy
@@ -612,61 +723,62 @@ Counsel is a customized set of commands to replace =find-file= with =counsel-fin
 
 #+begin_src emacs-lisp
 
-  (use-package ivy
-    :diminish
-    :bind (("C-s" . swiper)
-           :map ivy-minibuffer-map
-           ("TAB" . ivy-alt-done)	
-           ("C-l" . ivy-alt-done)
-           ("C-j" . ivy-next-line)
-           ("C-k" . ivy-previous-line)
-           :map ivy-switch-buffer-map
-           ("C-k" . ivy-previous-line)
-           ("C-l" . ivy-done)
-           ("C-d" . ivy-switch-buffer-kill)
-           :map ivy-reverse-i-search-map
-           ("C-k" . ivy-previous-line)
-           ("C-d" . ivy-reverse-i-search-kill))
-    :demand
-    :config
-    (setq ivy-extra-directories nil) ;; Hides . and .. directories
-    (setq ivy-initial-inputs-alist nil) ;; Don't start searches with ^
-    (setq ivy-on-del-error-function #'ignore) ; Inhibits deletion closing the minibuffer
-    (setq ivy-wrap t) ;; Wrap around to top, when on last item
-    (ivy-mode 1)
+  ;; (use-package ivy
+  ;;   :diminish
+  ;;   :bind (("C-s" . swiper)
+  ;;          :map ivy-minibuffer-map
+  ;;          ("TAB" . ivy-alt-done)	
+  ;;          ("C-l" . ivy-alt-done)
+  ;;          ("C-j" . ivy-next-line)
+  ;;          ("C-k" . ivy-previous-line)
+  ;;          :map ivy-switch-buffer-map
+  ;;          ("C-k" . ivy-previous-line)
+  ;;          ("C-l" . ivy-done)
+  ;;          ("C-d" . ivy-switch-buffer-kill)
+  ;;          :map ivy-reverse-i-search-map
+  ;;          ("C-k" . ivy-previous-line)
+  ;;          ("C-d" . ivy-reverse-i-search-kill))
+  ;;   :demand
+  ;;   :config
+  ;;   (setq ivy-extra-directories nil) ;; Hides . and .. directories
+  ;;   (setq ivy-initial-inputs-alist nil) ;; Don't start searches with ^
+  ;;   (setq ivy-on-del-error-function #'ignore) ; Inhibits deletion closing the minibuffer
+  ;;   (setq ivy-wrap t) ;; Wrap around to top, when on last item
+  ;;   (ivy-mode 1)
 
-    ;; Shows a preview of the face in counsel-describe-face
-    (add-to-list 'ivy-format-functions-alist '(counsel-describe-face . counsel--faces-format-function)))
+  ;;   ;; Shows a preview of the face in counsel-describe-face
+  ;;   (add-to-list 'ivy-format-functions-alist '(counsel-describe-face . counsel--faces-format-function)))
 
-  ;; Nice icons in Ivy. Replaces all-the-icons-ivy.
-  (use-package all-the-icons-ivy-rich
-    :after ivy
-    :init (all-the-icons-ivy-rich-mode 1)
-    :config
-    (setq all-the-icons-ivy-rich-icon-size 1.0))
+  ;; ;; Nice icons in Ivy. Replaces all-the-icons-ivy.
+  ;; (use-package all-the-icons-ivy-rich
+  ;;   :after ivy
+  ;;   :init (all-the-icons-ivy-rich-mode 1)
+  ;;   :config
+  ;;   (setq all-the-icons-ivy-rich-icon-size 1.0))
 
-  (use-package ivy-rich
-    :after ivy
-    :init
-    (setq ivy-rich-path-style 'abbrev)
-    :config
-    (ivy-rich-mode 1))
+  ;; (use-package ivy-rich
+  ;;   :after ivy
+  ;;   :init
+  ;;   (setq ivy-rich-path-style 'abbrev)
+  ;;   :config
+  ;;   (ivy-rich-mode 1))
 
 #+end_src
 
 *** Prescient
 #+begin_src emacs-lisp
 
-  (use-package ivy-prescient
-    :after counsel
-    :config
-    ;; don't prescient sort these commands
-    (dolist (command '(counsel-find-file))
-      (setq ivy-prescient-sort-commands (append ivy-prescient-sort-commands (list command))))
-    ;(:not swiper swiper-isearch ivy-switch-buffer)
-    (setq prescient-sort-length-enable nil) ; Disables sort by length
-    (prescient-persist-mode 1)
-    (ivy-prescient-mode 1))
+  ;; (use-package ivy-prescient
+  ;;   :disabled t
+  ;;   :after counsel
+  ;;   :config
+  ;;   ;; don't prescient sort these commands
+  ;;   (dolist (command '(counsel-find-file))
+  ;;     (setq ivy-prescient-sort-commands (append ivy-prescient-sort-commands (list command))))
+  ;;   ;(:not swiper swiper-isearch ivy-switch-buffer)
+  ;;   (setq prescient-sort-length-enable nil) ; Disables sort by length
+  ;;   (prescient-persist-mode 1)
+  ;;   (ivy-prescient-mode 1))
 
 #+end_src
 
@@ -677,13 +789,11 @@ Counsel is a customized set of commands to replace =find-file= with =counsel-fin
 
   (use-package helpful
     :commands (helpful-function helpful-variable helpful-macro helpful-callable helpful-key helpful-command helpful-at-point helpful-symbol)
-    :custom
-    (counsel-describe-function-function #'helpful-callable)
-    (counsel-describe-variable-function #'helpful-variable)
     :bind
-    ([remap describe-function] . counsel-describe-function)
+    ([remap describe-function] . helpful-function)
+    ([remap describe-symbol] . helpful-symbol)
+    ([remap describe-variable] . helpful-variable)
     ([remap describe-command] . helpful-command)
-    ([remap describe-variable] . counsel-describe-variable)
     ([remap describe-key] . helpful-key))
 
 #+end_src 
@@ -910,18 +1020,18 @@ The =reiki/org-font-setup= function configures various text faces to tweak the s
     ;; (set-face-attribute (car face) nil :font reiki/default-variable-font :weight 'light :height (cdr face)))
 
   ;; Ensure that anything that should be fixed-pitch in Org files appears that way
-  (set-face-attribute 'org-block nil    :foreground nil :inherit 'fixed-pitch)
-  (set-face-attribute 'org-table nil    :inherit 'fixed-pitch)
-  (set-face-attribute 'org-formula nil  :inherit 'fixed-pitch)
-  (set-face-attribute 'org-code nil     :inherit '(shadow fixed-pitch))
-  (set-face-attribute 'org-table nil    :inherit '(shadow fixed-pitch))
-  (set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
-  (set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
-  (set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
-  (set-face-attribute 'org-checkbox nil  :inherit 'fixed-pitch)
-  (set-face-attribute 'line-number nil :inherit 'fixed-pitch)
-  (set-face-attribute 'line-number-current-line nil :inherit 'fixed-pitch)
-  )
+    (set-face-attribute 'org-block nil    :foreground nil :inherit 'fixed-pitch)
+    (set-face-attribute 'org-table nil    :inherit 'fixed-pitch)
+    (set-face-attribute 'org-formula nil  :inherit 'fixed-pitch)
+    (set-face-attribute 'org-code nil     :inherit '(shadow fixed-pitch))
+    (set-face-attribute 'org-table nil    :inherit '(shadow fixed-pitch))
+    (set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
+    (set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
+    (set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
+    (set-face-attribute 'org-checkbox nil  :inherit 'fixed-pitch)
+    (set-face-attribute 'line-number nil :inherit 'fixed-pitch)
+    (set-face-attribute 'line-number-current-line nil :inherit 'fixed-pitch)
+    )
 
 #+end_src
 
@@ -972,6 +1082,14 @@ E.g type =<el= and press =<tab>= to make a elisp source block.
     (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
     (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
     (add-to-list 'org-structure-template-alist '("py" . "src python")))
+
+#+end_src
+
+** Org export
+
+#+begin_src emacs-lisp
+
+  (setq org-latex-compiler "lualatex")
 
 #+end_src
 
@@ -1048,20 +1166,6 @@ This snippet adds a hook to =org-mode= buffers so that =reiki/org-babel-tangle-c
 
 #+end_src
 
-**** Lsp Ivy
-#+begin_src emacs-lisp
-  
-  (use-package lsp-ivy
-    :after lsp)
-
-#+end_src
-
-*** Python
-
-#+begin_src emacs-lisp
-
-#+end_src
-
 ** Debugging with dap-mode
 #+begin_src emacs-lisp
 
@@ -1097,20 +1201,17 @@ This snippet adds a hook to =org-mode= buffers so that =reiki/org-babel-tangle-c
   (use-package projectile
     :diminish projectile-mode
     :config (projectile-mode)
-    :custom ((projectile-completion-system 'ivy))
+    ;; :custom ((projectile-completion-system 'ivy))
     :bind-keymap
     ("C-c p" . projectile-command-map)
     :init
     ;; NOTE: Set this to the folder where you keep your Git repos!
-    (when (file-directory-p "~/dox/coding")
-      (setq projectile-project-search-path '("~/dox/coding")))
+    (when (file-directory-p "~/coding")
+      (setq projectile-project-search-path '("~/coding")))
     (setq projectile-switch-project-action #'projectile-dired))
 
-  (use-package counsel-projectile
-    :after projectile
-    :config (counsel-projectile-mode))
-
 #+end_src
+
 ** Magit
 #+begin_src emacs-lisp
 
@@ -1136,8 +1237,7 @@ Do =M-x sp-cheat-sheet= to show all available commands with examples.
   (use-package smartparens
     :defer 0
     ;; :hook (prog-mode . smartparens-mode)
-    :config (smartparens-mode)
-    )
+    :init (smartparens-mode))
 
 #+end_src
 
@@ -1147,19 +1247,6 @@ Following text is a comment from a [[https://www.youtube.com/watch?v=SCPoF1PTZpI
 Depending on your workflow another method of typing LaTeX is AucTex and Org Latex Preview which allows you to display LaTeX within an Org document without having to split the window into two panes and use Org-LaTex-Export to generate a PDF in the end if you need it. Org Fragtog is a must if you go in this direction. 
 
 Personally I enjoy this second method more due to the LaTeX being held within Org meaning you can use a lot of the power of Org Mode with your LaTeX documents. E.g. Turn Math definitions into Flashcards with Org-FC, Create mindmaps / graphs of theorems using Org-Roam, turn your personal notes into a website blog post using Org HTML export etc.
-
-*** Fragtog
-[[https://github.com/io12/org-fragtog#org-fragtog][Org fragtog]] automatically toggles Org mode LaTeX fragment previews as the cursor enters and exits them
-
-#+begin_src emacs-lisp
-
-  (use-package org-fragtog
-    :hook (org-mode . org-fragtog-mode)
-    :config
-    (setq org-fragtog-preview-delay 0.3)
-    )
-
-#+end_src
 
 *** AucTex
 
@@ -1171,7 +1258,7 @@ Personally I enjoy this second method more due to the LaTeX being held within Or
     :ensure auctex
     :config
     (setq TeX-ignore-warnings t
-          latex-run-command "pdflatex"
+          latex-run-command "latexmk" ;TODO: change to latexmk
           tex-directory (concat user-emacs-directory "tex-tmp")
 
           TeX-parse-self t ; parse on load
@@ -1218,17 +1305,19 @@ Personally I enjoy this second method more due to the LaTeX being held within Or
 
 #+end_src
 
-*** Procress
-[[https://github.com/haji-ali/procress][Procress]]
+*** Fragtog
+[[https://github.com/io12/org-fragtog#org-fragtog][Org fragtog]] automatically toggles Org mode LaTeX fragment previews as the cursor enters and exits them
 
 #+begin_src emacs-lisp
 
-  ;; (add-to-list 'load-path (concat user-emacs-directory "procress/"))
-  ;; (require 'procress)
-  ;; (add-hook 'LaTeX-mode-hook #'procress-auctex-mode)
-  ;; (procress-load-default-svg-images)
+  (use-package org-fragtog
+    :hook (org-mode . org-fragtog-mode)
+    :config
+    (setq org-fragtog-preview-delay 0.3)
+    )
 
 #+end_src
+
 ** Markdown
 
 #+begin_src emacs-lisp
@@ -1259,9 +1348,9 @@ Arch packages required:
 #+begin_src emacs-lisp
 
   (use-package pdf-tools
-    :defer 0
-    :config
+    :init
     (pdf-loader-install)
+    :config
     (setq-default pdf-view-display-size 'fit-height)
     (setq pdf-view-continous nil)
     (setq pdf-view-midnight-colors '("#ffffff" . "#121212" ))
@@ -1453,6 +1542,17 @@ Dired is a built-in file manager for Emacs that does some pretty amazing things!
     :custom ((dired-listing-switches "-agho -A --group-directories-first"))
     :config
     (setq dired-kill-when-opening-new-dired-buffer t)
+    ;; TODO: Figure out how this works
+    ;; (setq dired-guess-shell-alist-user '(
+    ;;                                      ;; ("\\.pdf\\'" "zathura")
+    ;;                                      ("\\.doc\\'" "libreoffice")
+    ;;                                      ("\\.docx\\'" "libreoffice")
+    ;;                                      ("\\.ppt\\'" "libreoffice")
+    ;;                                      ("\\.pptx\\'" "libreoffice")
+    ;;                                      ("\\.xls\\'" "libreoffice")
+    ;;                                      ("\\.xlsx\\'" "libreoffice")
+    ;;                                      ("\\.jpg\\'" "nsxiv")
+    ;;                                      ("\\.png\\'" "nsxiv")))
     (evil-collection-define-key 'normal 'dired-mode-map
       "h" 'dired-up-directory
       "l" 'dired-find-file))
@@ -1464,12 +1564,6 @@ Dired is a built-in file manager for Emacs that does some pretty amazing things!
     :hook (dired-mode . all-the-icons-dired-mode)
     :config
     (setq all-the-icons-dired-monochrome nil))
-
-  (use-package dired-open
-    :after dired
-    :config
-    (setq dired-open-extensions '(("png" . "feh")
-                                  ("mkv" . "mpv"))))
 
   (use-package dired-hide-dotfiles
     :hook (dired-mode . dired-hide-dotfiles-mode)

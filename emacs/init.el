@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t -*-
 ;; Please edit the Emacs.org file instead of this. Init.el is auto-generated.
 (defvar reiki/default-font-size 130)
 (defvar reiki/default-fixed-font "Liga SFMono Nerd Font")
@@ -39,9 +40,9 @@
                 eshell-mode-hook))
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
-;; Sets transparency
-;; (set-frame-parameter (selected-frame) 'alpha '(97 . 100))
-;; (add-to-list 'default-frame-alist '(alpha . (90 . 90)))
+;; Sets transparency (v29+)
+(set-frame-parameter (selected-frame) 'alpha-background 95)
+;; (add-to-list 'default-frame-alist 'alpha-background 95) ;; This screws up startup (besides, dont know what it does xD)
 
 (set-face-attribute 'default nil
                     :font reiki/default-fixed-font
@@ -98,6 +99,7 @@
 ;; Smooth scrolling (kinda)
 (setq scroll-margin 10)
 (setq scroll-step 1)
+(setq scroll-conservatively 101)
 
 ;; More performant rapid scrolling over unfontified regions. May cause brief
 ;; spells of inaccurate syntax highlighting right after scrolling, which should
@@ -111,6 +113,8 @@
 ;; But do not resize windows pixelwise, this can cause crashes in some cases
 ;; when resizing too many windows at once or rapidly.
 (setq window-resize-pixelwise nil)
+
+(setq native-comp-async-report-warnings-errors nil)
 
 (defun reiki/display-startup-time ()
   (message "Emacs loaded in %s with %d garbage collections."
@@ -144,12 +148,15 @@
 (require 'use-package)
 (setq use-package-always-ensure t)
 
-(setq use-package-verbose nil)
+(setq use-package-verbose t)
+
+;; Emacs29+
+(setq package-native-compile t)
 
 (use-package auto-package-update
-  :defer 0.5
+  :defer t
   :custom
-  (auto-package-update-interval 7)
+  (auto-package-update-interval 14)
   (auto-package-update-prompt-before-update t)
   (auto-package-update-hide-results t)
   :config
@@ -167,21 +174,21 @@
   :global-prefix "C-SPC")
 
 (reiki/leader-keys
-  "SPC" '(counsel-M-x :which-key "M-x")
+  "SPC" '(execute-extended-command :which-key "M-x")
   ;; Nav
-  "." '(counsel-find-file :which-key "find file")
-  "," '(counsel-recentf :which-key "recent files")
+  "." '(find-file :which-key "find file")
+  "," '(consult-recent-file :which-key "recent files")
   ;; Buffers
   "q" '(kill-current-buffer :which-key "kill buff")
   "Q" '(save-buffers-kill-terminal :which-key "Quit emacs")
-  "e" #'((lambda () (interactive) (counsel-find-file (locate-user-emacs-file "Emacs.org"))) :which-key "Emacs config")
+  "e" #'((lambda () (interactive) (find-file (locate-user-emacs-file "Emacs.org"))) :which-key "Emacs config")
   "j" #'((lambda () (interactive) (switch-to-buffer (other-buffer))) :which-key "Prev buff")
   )
 
 (reiki/leader-keys
   ;; "Applications"
   "a" '(:ignore a :which-key "Apps")
-  "ad" '(counsel-dired :which-key "Dired")
+  "ad" '(dired-jump :which-key "Dired")
   ;; Hydra
   "s" '(:ignore s :which-key "Hydras")
   "ss" '(hydra-text-scale/body :which-key "Scale text")
@@ -189,28 +196,29 @@
   "sl" '(hydra-links/body :which-key "Links")
   ;; Buffers
   "b" '(:ignore b :which-key "Buffer")
-  "bb" '(counsel-switch-buffer :which-key "Switch buffer")
+  "bb" '(consult-buffer :which-key "Switch buffer")
   "br" '(revert-buffer :which-key "Revert buffer")
   "bs" '(save-buffer :which-key "Save buffer")
-  "bk" '(all-the-icons-ivy-rich-kill-buffer :which-key "Kill buffer")
+  "bk" '(kill-buffer :which-key "Kill buffer")
   ;; Org
   "o" '(:ignore o :which-key "Org")
   "oc" '(org-capture :which-key "Capture")
-  "oi" '(counsel-imenu :which-key "IMenu")
+  "oh" '(consult-org-heading :which-key "Headings")
   "oa" '(org-agenda :which-key "Org agenda")
   "oe" '(org-export-dispatch :which-key "Org export")
   "op" '(org-present :which-key "Org present")
   ;; Help
   "h" '(:ignore h :which-key "Help/Emacs")
-  "hv" '(counsel-describe-variable :which-key "Des. variable")
-  "hb" '(counsel-descbinds :which-key "Des. bindings")
-  "hM" '(describe-mode :which-key "Des. mode")
   "hm" '(evil-lookup :which-key "Manuals")
-  "hs" '(describe-symbol :which-key "Des. symbol")
-  "hf" '(counsel-describe-function :which-key "Des. func")
-  "hF" '(counsel-describe-face :which-key "Des. face")
-  "hk" '(describe-key :which-key "Des. key")
+  "hv" '(describe-variable :which-key "Des. variable")
+;; TODO: Find alternative to counsel
+  "hb" '(counsel-descbinds :which-key "Des. bindings") ; Depends on counsel
+  "hf" '(describe-function :which-key "Des. func")
+  "hF" '(describe-face :which-key "Des. face")
   "hg" '(customize-group :which-key "Customize group")
+  "hM" '(describe-mode :which-key "Des. mode")
+  "hs" '(describe-symbol :which-key "Des. symbol")
+  "hk" '(describe-key :which-key "Des. key")
   ;; Modes
   "m" '(:ignore m :which-key "Modes")
   "me" '(emacs-lisp-mode :which-key "Elisp mode")
@@ -236,12 +244,14 @@
   "tr" '(display-fill-column-indicator-mode :which-key "Fill column indicator")
   ;; Windows
   "w" '(:ignore w :which-key "Window")
-  "wN" '(make-frame :which-key "make frame")
+  "wN" '(make-frame :which-key "New frame")
+  "w|" '(split-window-right :which-key "Split right")
+  "w-" '(split-window-below :which-key "Split below")
   "wd" '(evil-window-delete :which-key "delete window")
-  "wl" '(evil-window-right :which-key "evil-window-right")
-  "wh" '(evil-window-left :which-key "evil-window-left")
-  "wj" '(evil-window-down :which-key "evil-window-down")
-  "wk" '(evil-window-up :which-key "evil-window-up")
+  "wl" '(evil-window-right :which-key "Move right")
+  "wh" '(evil-window-left :which-key "Move left")
+  "wj" '(evil-window-down :which-key "Move down")
+  "wk" '(evil-window-up :which-key "Move up")
   )
 
 ;; Vim like modal editting
@@ -350,7 +360,6 @@ _q_ Quit             Current: %`custom-enabled-themes
 (use-package all-the-icons)
 
 (use-package doom-modeline
-  :ensure t
   :init (doom-modeline-mode 1)
   :custom ((doom-modeline-height 18))
   :config
@@ -375,68 +384,6 @@ _q_ Quit             Current: %`custom-enabled-themes
   (setq which-key-prefix-prefix "◉")
   (setq which-key-idle-delay 0.2))
 
-(use-package counsel
-  :bind (("M-x" . counsel-M-x)
-         ("C-x C-f" . counsel-find-file)
-         ("C-x b" . counsel-switch-buffer))
-         ;;("C-x b" . counsel-ibuffer)
-         ;:map minibuffer-local-map
-         ;("C-r" . 'counsel-minibuffer-history)
-  :config 
-  ;; Removes recentfiles/bookmarks from counsel-switch-buffer if set to nil
-  (setq counsel-switch-buffer-preview-virtual-buffers t))
-
-(use-package ivy
-  :diminish
-  :bind (("C-s" . swiper)
-         :map ivy-minibuffer-map
-         ("TAB" . ivy-alt-done)	
-         ("C-l" . ivy-alt-done)
-         ("C-j" . ivy-next-line)
-         ("C-k" . ivy-previous-line)
-         :map ivy-switch-buffer-map
-         ("C-k" . ivy-previous-line)
-         ("C-l" . ivy-done)
-         ("C-d" . ivy-switch-buffer-kill)
-         :map ivy-reverse-i-search-map
-         ("C-k" . ivy-previous-line)
-         ("C-d" . ivy-reverse-i-search-kill))
-  :demand
-  :config
-  (setq ivy-extra-directories nil) ;; Hides . and .. directories
-  (setq ivy-initial-inputs-alist nil) ;; Don't start searches with ^
-  (setq ivy-on-del-error-function #'ignore) ; Inhibits deletion closing the minibuffer
-  (setq ivy-wrap t) ;; Wrap around to top, when on last item
-  (ivy-mode 1)
-
-  ;; Shows a preview of the face in counsel-describe-face
-  (add-to-list 'ivy-format-functions-alist '(counsel-describe-face . counsel--faces-format-function)))
-
-;; Nice icons in Ivy. Replaces all-the-icons-ivy.
-(use-package all-the-icons-ivy-rich
-  :after ivy
-  :init (all-the-icons-ivy-rich-mode 1)
-  :config
-  (setq all-the-icons-ivy-rich-icon-size 1.0))
-
-(use-package ivy-rich
-  :after ivy
-  :init
-  (setq ivy-rich-path-style 'abbrev)
-  :config
-  (ivy-rich-mode 1))
-
-(use-package ivy-prescient
-  :after counsel
-  :config
-  ;; don't prescient sort these commands
-  (dolist (command '(counsel-find-file))
-    (setq ivy-prescient-sort-commands (append ivy-prescient-sort-commands (list command))))
-  ;(:not swiper swiper-isearch ivy-switch-buffer)
-  (setq prescient-sort-length-enable nil) ; Disables sort by length
-  (prescient-persist-mode 1)
-  (ivy-prescient-mode 1))
-
 (use-package corfu
   :bind
   (:map corfu-map ("RET" . nil)) ;; Return key is for newline not completions 
@@ -448,34 +395,169 @@ _q_ Quit             Current: %`custom-enabled-themes
   (corfu-auto-prefix 0)          ;; Minimum length before showing auto completion
   (corfu-count 10)               ;; Number of candidates to show
   (corfu-scroll-margin 5)        ;; Use scroll margin
+  (corfu-popupinfo-hide nil)     ;; Hides docs between candidates
+  (corfu-popupinfo-delay '0.1)     ;; Hides docs between candidates
+  (corfu-popupinfo-max-width '40)
+  (corfu-popupinfo-max-hight '10)
+  (corfu-echo-mode nil)
   ;; Enable Corfu only for certain modes.
   ;; :hook ((prog-mode . corfu-mode)
   ;;        (shell-mode . corfu-mode)
   ;;        (eshell-mode . corfu-mode))
-  (corfu-popupinfo-mode t)
-  (corfu-popupinfo-hide nil)     ;; Hides popup between candidates
-  (corfu-popupinfo-delay '0.1)
 
-  (corfu-echo-mode t)            ;; Displays oneline documentation in echo area
-
-  (corfu-history-mode t)
-  (corfu-history-length 200)     ;; Sets history-length
+  ;; Recommended: Enable Corfu globally.
+  ;; This is recommended since Dabbrev can be used globally (M-/).
+  ;; See also `corfu-excluded-modes'.
   :config
-  (define-key corfu-popupinfo-map (kbd "M-n") #'corfu-popupinfo-scroll-up)
-  (define-key corfu-popupinfo-map (kbd "M-p") #'corfu-popupinfo-scroll-down)
-  (define-key corfu-popupinfo-map (kbd "M-d") #'corfu-popupinfo-toggle)
+  (define-key corfu-map (kbd "M-p") #'corfu-popupinfo-scroll-down)
+  (define-key corfu-map (kbd "M-n") #'corfu-popupinfo-scroll-up)
+  (define-key corfu-map (kbd "M-d") #'corfu-popupinfo-toggle)
   :init
+  (corfu-popupinfo-mode)
+  (corfu-history-mode)
   (global-corfu-mode))
+
+(use-package vertico
+  :init
+  (vertico-mode)
+
+  :bind (:map vertico-map
+         ("C-j" . vertico-next)
+         ("C-k" . vertico-previous)
+         :map minibuffer-local-map
+         ("C-j" . next-line-or-history-element)
+         ("C-k" . previous-line-or-history-element))
+
+  :config
+  (setq vertico-scroll-margin 4)
+  (setq vertico-cycle t))
+
+;; Persist history over Emacs restarts. Vertico sorts by history position.
+(use-package savehist
+  :init
+  (savehist-mode))
+
+;; Enable rich annotations using the Marginalia package
+(use-package marginalia
+  ;; Either bind `marginalia-cycle' globally or only in the minibuffer
+  :bind (("M-A" . marginalia-cycle)
+         :map minibuffer-local-map
+         ("M-A" . marginalia-cycle))
+
+  :custom
+  (marginalia-max-relative-age 0)
+  (marginalia-align 'right)
+  ;; The :init configuration is always executed (Not lazy!)
+  :init
+  ;; Must be in the :init section of use-package such that the mode gets
+  ;; enabled right away. Note that this forces loading the package.
+  (marginalia-mode))
+
+;; Example configuration for Consult
+(use-package consult
+  ;; Enable automatic preview at point in the *Completions* buffer. This is
+  ;; relevant when you use the default completion UI.
+  :hook (completion-list-mode . consult-preview-at-point-mode)
+  :init
+  ;; Optionally configure the register formatting. This improves the register
+  ;; preview for `consult-register', `consult-register-load',
+  ;; `consult-register-store' and the Emacs built-ins.
+  (setq register-preview-delay 0.5
+        register-preview-function #'consult-register-format)
+
+  ;; Optionally tweak the register preview window.
+  ;; This adds thin lines, sorting and hides the mode line of the window.
+  (advice-add #'register-preview :override #'consult-register-window)
+)
+
+(use-package orderless
+  :custom
+  (completion-styles '(orderless basic))
+  (completion-category-overrides '((file (styles basic partial-completion)))))
+
+
+
+(use-package all-the-icons
+  :if (display-graphic-p))
+
+(use-package all-the-icons-completion
+  :after (marginalia all-the-icons)
+  :hook (marginalia-mode . all-the-icons-completion-marginalia-setup)
+  :init
+  (all-the-icons-completion-mode))
+
+;; (use-package counsel
+;;   :bind (
+;;          ("M-x" . counsel-M-x)
+;;          ("C-x C-f" . counsel-find-file)
+;;          ("C-x b" . counsel-switch-buffer)
+;;          )
+;;          ;;("C-x b" . counsel-ibuffer)
+;;          ;:map minibuffer-local-map
+;;          ;("C-r" . 'counsel-minibuffer-history)
+;;   :config 
+;;   ;; Removes recentfiles/bookmarks from counsel-switch-buffer if set to nil
+;;   (setq counsel-switch-buffer-preview-virtual-buffers t))
+
+;; (use-package ivy
+;;   :diminish
+;;   :bind (("C-s" . swiper)
+;;          :map ivy-minibuffer-map
+;;          ("TAB" . ivy-alt-done)	
+;;          ("C-l" . ivy-alt-done)
+;;          ("C-j" . ivy-next-line)
+;;          ("C-k" . ivy-previous-line)
+;;          :map ivy-switch-buffer-map
+;;          ("C-k" . ivy-previous-line)
+;;          ("C-l" . ivy-done)
+;;          ("C-d" . ivy-switch-buffer-kill)
+;;          :map ivy-reverse-i-search-map
+;;          ("C-k" . ivy-previous-line)
+;;          ("C-d" . ivy-reverse-i-search-kill))
+;;   :demand
+;;   :config
+;;   (setq ivy-extra-directories nil) ;; Hides . and .. directories
+;;   (setq ivy-initial-inputs-alist nil) ;; Don't start searches with ^
+;;   (setq ivy-on-del-error-function #'ignore) ; Inhibits deletion closing the minibuffer
+;;   (setq ivy-wrap t) ;; Wrap around to top, when on last item
+;;   (ivy-mode 1)
+
+;;   ;; Shows a preview of the face in counsel-describe-face
+;;   (add-to-list 'ivy-format-functions-alist '(counsel-describe-face . counsel--faces-format-function)))
+
+;; ;; Nice icons in Ivy. Replaces all-the-icons-ivy.
+;; (use-package all-the-icons-ivy-rich
+;;   :after ivy
+;;   :init (all-the-icons-ivy-rich-mode 1)
+;;   :config
+;;   (setq all-the-icons-ivy-rich-icon-size 1.0))
+
+;; (use-package ivy-rich
+;;   :after ivy
+;;   :init
+;;   (setq ivy-rich-path-style 'abbrev)
+;;   :config
+;;   (ivy-rich-mode 1))
+
+;; (use-package ivy-prescient
+;;   :disabled t
+;;   :after counsel
+;;   :config
+;;   ;; don't prescient sort these commands
+;;   (dolist (command '(counsel-find-file))
+;;     (setq ivy-prescient-sort-commands (append ivy-prescient-sort-commands (list command))))
+;;   ;(:not swiper swiper-isearch ivy-switch-buffer)
+;;   (setq prescient-sort-length-enable nil) ; Disables sort by length
+;;   (prescient-persist-mode 1)
+;;   (ivy-prescient-mode 1))
 
 (use-package helpful
   :commands (helpful-function helpful-variable helpful-macro helpful-callable helpful-key helpful-command helpful-at-point helpful-symbol)
-  :custom
-  (counsel-describe-function-function #'helpful-callable)
-  (counsel-describe-variable-function #'helpful-variable)
   :bind
-  ([remap describe-function] . counsel-describe-function)
+  ([remap describe-function] . helpful-function)
+  ([remap describe-symbol] . helpful-symbol)
+  ([remap describe-variable] . helpful-variable)
   ([remap describe-command] . helpful-command)
-  ([remap describe-variable] . counsel-describe-variable)
   ([remap describe-key] . helpful-key))
 
 (use-package kind-icon
@@ -661,18 +743,18 @@ _q_ Quit             Current: %`custom-enabled-themes
   ;; (set-face-attribute (car face) nil :font reiki/default-variable-font :weight 'light :height (cdr face)))
 
 ;; Ensure that anything that should be fixed-pitch in Org files appears that way
-(set-face-attribute 'org-block nil    :foreground nil :inherit 'fixed-pitch)
-(set-face-attribute 'org-table nil    :inherit 'fixed-pitch)
-(set-face-attribute 'org-formula nil  :inherit 'fixed-pitch)
-(set-face-attribute 'org-code nil     :inherit '(shadow fixed-pitch))
-(set-face-attribute 'org-table nil    :inherit '(shadow fixed-pitch))
-(set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
-(set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
-(set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
-(set-face-attribute 'org-checkbox nil  :inherit 'fixed-pitch)
-(set-face-attribute 'line-number nil :inherit 'fixed-pitch)
-(set-face-attribute 'line-number-current-line nil :inherit 'fixed-pitch)
-)
+  (set-face-attribute 'org-block nil    :foreground nil :inherit 'fixed-pitch)
+  (set-face-attribute 'org-table nil    :inherit 'fixed-pitch)
+  (set-face-attribute 'org-formula nil  :inherit 'fixed-pitch)
+  (set-face-attribute 'org-code nil     :inherit '(shadow fixed-pitch))
+  (set-face-attribute 'org-table nil    :inherit '(shadow fixed-pitch))
+  (set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
+  (set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
+  (set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
+  (set-face-attribute 'org-checkbox nil  :inherit 'fixed-pitch)
+  (set-face-attribute 'line-number nil :inherit 'fixed-pitch)
+  (set-face-attribute 'line-number-current-line nil :inherit 'fixed-pitch)
+  )
 
 (use-package org-appear
   :hook (org-mode . org-appear-mode)
@@ -708,6 +790,8 @@ _q_ Quit             Current: %`custom-enabled-themes
   (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
   (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
   (add-to-list 'org-structure-template-alist '("py" . "src python")))
+
+(setq org-latex-compiler "lualatex")
 
 (use-package org-present
   :defer
@@ -751,11 +835,6 @@ _q_ Quit             Current: %`custom-enabled-themes
 (use-package lsp-treemacs
   :after lsp)
 
-(use-package lsp-ivy
-  :after lsp)
-
-
-
 (use-package dap-mode
   ;; Uncomment the config below if you want all UI panes to be hidden by default!
   ;; :custom
@@ -778,18 +857,14 @@ _q_ Quit             Current: %`custom-enabled-themes
 (use-package projectile
   :diminish projectile-mode
   :config (projectile-mode)
-  :custom ((projectile-completion-system 'ivy))
+  ;; :custom ((projectile-completion-system 'ivy))
   :bind-keymap
   ("C-c p" . projectile-command-map)
   :init
   ;; NOTE: Set this to the folder where you keep your Git repos!
-  (when (file-directory-p "~/dox/coding")
-    (setq projectile-project-search-path '("~/dox/coding")))
+  (when (file-directory-p "~/coding")
+    (setq projectile-project-search-path '("~/coding")))
   (setq projectile-switch-project-action #'projectile-dired))
-
-(use-package counsel-projectile
-  :after projectile
-  :config (counsel-projectile-mode))
 
 (use-package magit
   :commands magit-status)
@@ -800,14 +875,7 @@ _q_ Quit             Current: %`custom-enabled-themes
 (use-package smartparens
   :defer 0
   ;; :hook (prog-mode . smartparens-mode)
-  :config (smartparens-mode)
-  )
-
-(use-package org-fragtog
-  :hook (org-mode . org-fragtog-mode)
-  :config
-  (setq org-fragtog-preview-delay 0.3)
-  )
+  :init (smartparens-mode))
 
 (use-package tex
   :mode ("\\.tex\\'" . latex-mode)
@@ -815,7 +883,7 @@ _q_ Quit             Current: %`custom-enabled-themes
   :ensure auctex
   :config
   (setq TeX-ignore-warnings t
-        latex-run-command "pdflatex"
+        latex-run-command "latexmk" ;TODO: change to latexmk
         tex-directory (concat user-emacs-directory "tex-tmp")
 
         TeX-parse-self t ; parse on load
@@ -860,10 +928,11 @@ _q_ Quit             Current: %`custom-enabled-themes
    )
   )
 
-;; (add-to-list 'load-path (concat user-emacs-directory "procress/"))
-;; (require 'procress)
-;; (add-hook 'LaTeX-mode-hook #'procress-auctex-mode)
-;; (procress-load-default-svg-images)
+(use-package org-fragtog
+  :hook (org-mode . org-fragtog-mode)
+  :config
+  (setq org-fragtog-preview-delay 0.3)
+  )
 
 (use-package markdown-mode
   :mode ("\\.md\\'" . markdown-mode)
@@ -880,9 +949,9 @@ _q_ Quit             Current: %`custom-enabled-themes
 )
 
 (use-package pdf-tools
-  :defer 0
-  :config
+  :init
   (pdf-loader-install)
+  :config
   (setq-default pdf-view-display-size 'fit-height)
   (setq pdf-view-continous nil)
   (setq pdf-view-midnight-colors '("#ffffff" . "#121212" ))
@@ -982,6 +1051,17 @@ _q_ Quit             Current: %`custom-enabled-themes
   :custom ((dired-listing-switches "-agho -A --group-directories-first"))
   :config
   (setq dired-kill-when-opening-new-dired-buffer t)
+  ;; TODO: Figure out how this works
+  ;; (setq dired-guess-shell-alist-user '(
+  ;;                                      ;; ("\\.pdf\\'" "zathura")
+  ;;                                      ("\\.doc\\'" "libreoffice")
+  ;;                                      ("\\.docx\\'" "libreoffice")
+  ;;                                      ("\\.ppt\\'" "libreoffice")
+  ;;                                      ("\\.pptx\\'" "libreoffice")
+  ;;                                      ("\\.xls\\'" "libreoffice")
+  ;;                                      ("\\.xlsx\\'" "libreoffice")
+  ;;                                      ("\\.jpg\\'" "nsxiv")
+  ;;                                      ("\\.png\\'" "nsxiv")))
   (evil-collection-define-key 'normal 'dired-mode-map
     "h" 'dired-up-directory
     "l" 'dired-find-file))
@@ -993,12 +1073,6 @@ _q_ Quit             Current: %`custom-enabled-themes
   :hook (dired-mode . all-the-icons-dired-mode)
   :config
   (setq all-the-icons-dired-monochrome nil))
-
-(use-package dired-open
-  :after dired
-  :config
-  (setq dired-open-extensions '(("png" . "feh")
-                                ("mkv" . "mpv"))))
 
 (use-package dired-hide-dotfiles
   :hook (dired-mode . dired-hide-dotfiles-mode)
