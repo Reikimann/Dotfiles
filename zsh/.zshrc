@@ -1,16 +1,24 @@
 # Misc
 unsetopt beep
-setopt autocd		# Automatically cd into typed directory.
-stty stop undef		# Disable ctrl-s to freeze terminal.
+setopt autocd # Automatically cd into typed directory.
+setopt menu_complete # Automatically highlight first element of completion menu
+setopt list_packed # The completion menu takes less space.
+setopt auto_list # Automatically list choices on ambiguous completion.
+setopt hist_ignore_dups # Do not write events to history that are duplicates of previous events
+setopt hist_find_no_dups # When searching history don't display results already cycled through twice
+setopt list_rows_first
+setopt share_history
 setopt interactive_comments
+
+stty stop undef		# Disable ctrl-s to freeze terminal.
 
 # Enable colors
 autoload -U colors && colors
 
 # History in state directory:
-HISTFILE="${XDG_STATE_HOME}"/zsh/history
-HISTSIZE=1000
-SAVEHIST=1000
+export HISTFILE="${XDG_STATE_HOME}"/zsh/zhistory
+export HISTSIZE=1000
+export SAVEHIST=1000
 
 # comp
 zstyle :compinstall filename '$ZDOTDIR/.zshrc'
@@ -152,9 +160,6 @@ ctrlz() {
 zle -N ctrlz
 bindkey '^Z' ctrlz
 
-
-
-
 bindkey -s '^p' 'project\n'
 bindkey -s '^n' 'configs\n'
 bindkey -s '^s' 'school\n'
@@ -172,14 +177,8 @@ alias exa="exa --sort=type --icons"
 alias exal="exa -lah --sort=type --icons"
 alias v="nvim"
 alias lf="lfub"
-alias ..="cd .."
 alias ls="ls --group-directories-first --color=always"
-alias ls="ls -lah --group-directories-first --color=always"
 alias fzff="fzf --preview 'bat --style=numbers --color=always --line-range :500 {}'"
-alias py="python3"
-
-alias rtfm='man'
-alias nomnom='killall'
 alias yolo='git commit -m "$(curl -s http://whatthecommit.com/index.txt)"'
 alias standalone="convert -density 300 -alpha remove"
 

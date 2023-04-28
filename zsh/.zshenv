@@ -2,6 +2,9 @@ typeset -U path PATH
 path=(~/.local/bin $path)
 export PATH
 
+export HISTORY_IGNORE="(ls|cd|pwd|exit|sudo reboot|history|cd -|cd ..)"
+export HISTFILE="${XDG_STATE_HOME}/history"
+
 export XDG_DATA_HOME=${XDG_DATA_HOME:="$HOME/.local/share"}
 export XDG_STATE_HOME=${XDG_STATE_HOME:="$HOME/.local/state"}
 export XDG_CONFIG_HOME=${XDG_CONFIG_HOME:="$HOME/.config"}
@@ -20,7 +23,6 @@ export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border --info=inline --
 
 #############Home Fixes#################
 
-export HISTFILE="${XDG_STATE_HOME}/history"
 export GNUPGHOME="$XDG_DATA_HOME/gnupg"
 export GOPATH="$XDG_DATA_HOME/go"
 export GRADLE_USER_HOME="$XDG_DATA_HOME/gradle"
