@@ -38,7 +38,6 @@
   - Flameshot
   - Discord
   - Waterfox-g4
-  - Rofi
   - Spotify
 - Nvim
   - Pdflatex
@@ -75,6 +74,22 @@
   - Exa
   - Lf
   - nsxiv
+- Wayland
+  - Hyprland
+  - Waybar-hyprland-git
+  - Swayidle
+  - Swaylock-effects-git
+  - wlogout
+  - Hyprpaper-git
+  - Hyprpicker-git
+  - Rofi-lbon-wayland-git
+  - Slurp
+  - Clipman
+  - Swww
+  - Wofi
+  - wev
+  - Foot
+  - Wlsunset
 - Xdg-user-dirs
 
 ** Other programs
@@ -133,14 +148,3 @@
 - Cbonsai-git
 - Cava
 - Tspreed
-
-
-
-
-
-
-
-
-
-
-
