@@ -1,15 +1,19 @@
 clock
-image=~/pix/wallpapers/rose_flower.png
+datestr=%d/%m
+screenshots
 daemonize
+fade-in=0.1
 
 grace=2
+grace-no-mouse
+grace-no-touch
 ignore-empty-password
 
 indicator
-indicator-radius=100
-indicator-thickness=7
+indicator-radius=180
+indicator-thickness=18
 
-effect-blur=7x5
+effect-blur=9x9
 effect-vignette=0.5:0.5
 
 ring-color=3C4360
@@ -17,7 +21,8 @@ line-color=00000000
 inside-color=00000088
 separator-color=00000000
 
-text-color=5D00BA
+text-color=cdd6f4
+#text-color=5D00BA
 key-hl-color=5D00BA
 bs-hl-color=880033
 
