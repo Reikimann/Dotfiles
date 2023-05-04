@@ -17,6 +17,7 @@ require("mason-lspconfig").setup({
     "rust_analyzer",
     "ltex",
     "texlab",
+    "arduino_language_server",
   }
 })
 
@@ -46,6 +47,7 @@ local langservers = {
   "rust_analyzer",
   "ltex",
   "texlab",
+  "arduino_language_server",
 }
 
 for _, server in ipairs(langservers) do
