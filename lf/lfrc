@@ -158,6 +158,8 @@ cmd extract ${{
     esac
 }}
 
+map ze extract
+
 # compress current file or selected files with tar and gunzip
 cmd tar ${{
     set -f
