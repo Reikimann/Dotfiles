@@ -1,0 +1,11 @@
+[Unit]
+Description=On power notifier
+After=graphical-session.target
+PartOf=graphical-session.target
+
+[Service]
+Type=oneshot
+ExecStart=%h/.local/bin/on_power.sh
+
+[Install]
+WantedBy=graphical-session.target
