@@ -1,0 +1,2 @@
+# Rule for when switching to battery
+ACTION=="change",SUBSYSTEM=="power_supply",ENV{POWER_SUPPLY_ONLINE}=="1",TAG+="systemd", ENV{SYSTEMD_USER_WANTS}+="battery_notify_on_power.service"
