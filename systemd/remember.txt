@@ -1,0 +1,2 @@
+Use "systemctl --user daemon-reload"
+and "sudo udevadm control --reload"

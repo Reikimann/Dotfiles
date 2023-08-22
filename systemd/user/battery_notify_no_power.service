@@ -1,0 +1,11 @@
+[Unit]
+Description=On battery notifier
+After=graphical-session.target
+PartOf=graphical-session.target
+
+[Service]
+Type=oneshot
+ExecStart=%h/.local/bin/no_power.sh
+
+[Install]
+WantedBy=graphical-session.target
