@@ -562,235 +562,6 @@ This configuration uses [[https://evil.readthedocs.io/en/latest/index.html][evil
 
 #+end_src
 
-** Corfu
-
-#+BEGIN_src emacs-lisp
-
-  (use-package corfu
-    :bind
-    (:map corfu-map ("RET" . nil)) ;; Return key is for newline not completions 
-    :custom
-    (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
-    (corfu-auto t)                 ;; Enable auto completion
-    (corfu-auto-delay 0.2)         ;; Seconds to wait before showing auto completion
-    (corfu-on-exact-match nil)
-    (corfu-auto-prefix 0)          ;; Minimum length before showing auto completion
-    (corfu-count 10)               ;; Number of candidates to show
-    (corfu-scroll-margin 5)        ;; Use scroll margin
-    (corfu-popupinfo-hide nil)     ;; Hides docs between candidates
-    (corfu-popupinfo-delay '0.1)     ;; Hides docs between candidates
-    (corfu-popupinfo-max-width '40)
-    (corfu-popupinfo-max-hight '10)
-    (corfu-echo-mode nil)
-    ;; Enable Corfu only for certain modes.
-    ;; :hook ((prog-mode . corfu-mode)
-    ;;        (shell-mode . corfu-mode)
-    ;;        (eshell-mode . corfu-mode))
-
-    ;; Recommended: Enable Corfu globally.
-    ;; This is recommended since Dabbrev can be used globally (M-/).
-    ;; See also `corfu-excluded-modes'.
-    :config
-    (define-key corfu-map (kbd "M-p") #'corfu-popupinfo-scroll-down)
-    (define-key corfu-map (kbd "M-n") #'corfu-popupinfo-scroll-up)
-    (define-key corfu-map (kbd "M-d") #'corfu-popupinfo-toggle)
-    :init
-    (corfu-popupinfo-mode)
-    (corfu-history-mode)
-    (global-corfu-mode))
-
-#+end_src
-
-** Vertico, Consult and marginalia
-*** Vertico
-#+begin_src emacs-lisp
-
-  (use-package vertico
-    :init
-    (vertico-mode)
-
-    :bind (:map vertico-map
-           ("C-j" . vertico-next)
-           ("C-k" . vertico-previous)
-           :map minibuffer-local-map
-           ("C-j" . next-line-or-history-element)
-           ("C-k" . previous-line-or-history-element))
-
-    :config
-    (setq vertico-scroll-margin 4)
-    (setq vertico-cycle t))
-
-  ;; Persist history over Emacs restarts. Vertico sorts by history position.
-  (use-package savehist
-    :init
-    (savehist-mode))
-
-#+end_src
-*** Marginalia
-https://github.com/minad/marginalia
-#+begin_src emacs-lisp
-
-  ;; Enable rich annotations using the Marginalia package
-  (use-package marginalia
-    ;; Either bind `marginalia-cycle' globally or only in the minibuffer
-    :bind (("M-A" . marginalia-cycle)
-           :map minibuffer-local-map
-           ("M-A" . marginalia-cycle))
-
-    :custom
-    (marginalia-max-relative-age 0)
-    (marginalia-align 'right)
-    ;; The :init configuration is always executed (Not lazy!)
-    :init
-    ;; Must be in the :init section of use-package such that the mode gets
-    ;; enabled right away. Note that this forces loading the package.
-    (marginalia-mode))
-
-#+end_src
-*** Consult
-[[https://github.com/minad/consult][Consult]] 
-#+begin_src emacs-lisp
-  ;; Example configuration for Consult
-  (use-package consult
-    ;; Enable automatic preview at point in the *Completions* buffer. This is
-    ;; relevant when you use the default completion UI.
-    :hook (completion-list-mode . consult-preview-at-point-mode)
-    :init
-    ;; Optionally configure the register formatting. This improves the register
-    ;; preview for `consult-register', `consult-register-load',
-    ;; `consult-register-store' and the Emacs built-ins.
-    (setq register-preview-delay 0.5
-          register-preview-function #'consult-register-format)
-
-    ;; Optionally tweak the register preview window.
-    ;; This adds thin lines, sorting and hides the mode line of the window.
-    (advice-add #'register-preview :override #'consult-register-window)
-    :config
-    (consult-customize
-     consult-theme :preview-key '(:debounce 0.2 any)
-     consult-ripgrep consult-git-grep consult-grep consult-recent-file
-     :preview-key (:debounce 0.4 any)
-     consult-buffer :preview-key "C-l"
-     )
-  )
-
-#+end_src
-*** Orderless
-https://github.com/oantolin/orderless
-#+begin_src emacs-lisp
-
-  (use-package orderless
-    :custom
-    (completion-styles '(orderless basic))
-    (completion-category-overrides '((file (styles basic partial-completion)))))
-
-#+end_src
-*** Embark
-https://github.com/oantolin/embark
-#+begin_src emacs-lisp
-
-#+end_src
-*** All The Icons Completion
-Get the [[https://github.com/MintSoup/all-the-icons-completion][fork]] instead.
-#+begin_src emacs-lisp
-
-  (use-package all-the-icons
-    :if (display-graphic-p))
-
-  (use-package all-the-icons-completion
-    :after (marginalia all-the-icons)
-    :hook (marginalia-mode . all-the-icons-completion-marginalia-setup)
-    :init
-    (all-the-icons-completion-mode))
-
-#+end_src
-** Counsel, Ivy and Prescient
-*** Counsel
-Counsel is a customized set of commands to replace =find-file= with =counsel-find-file=, etc which provide useful commands for each of the default completion commands.
-
-#+begin_src emacs-lisp
-
-  ;; (use-package counsel
-  ;;   :bind (
-  ;;          ("M-x" . counsel-M-x)
-  ;;          ("C-x C-f" . counsel-find-file)
-  ;;          ("C-x b" . counsel-switch-buffer)
-  ;;          )
-  ;;          ;;("C-x b" . counsel-ibuffer)
-  ;;          ;:map minibuffer-local-map
-  ;;          ;("C-r" . 'counsel-minibuffer-history)
-  ;;   :config 
-  ;;   ;; Removes recentfiles/bookmarks from counsel-switch-buffer if set to nil
-  ;;   (setq counsel-switch-buffer-preview-virtual-buffers t))
-
-#+end_src
-
-*** Ivy
-[[https://oremacs.com/swiper/][Ivy]] is an excellent completion framework for Emacs.  It provides a minimal yet powerful selection menu that appears when you open files, switch buffers, and for many other tasks in Emacs.
- 
-[[https://github.com/Yevgnen/ivy-rich][Ivy-rich]] adds extra columns to a few of the Counsel commands to provide more information about each item.
-
-#+begin_src emacs-lisp
-
-  ;; (use-package ivy
-  ;;   :diminish
-  ;;   :bind (("C-s" . swiper)
-  ;;          :map ivy-minibuffer-map
-  ;;          ("TAB" . ivy-alt-done)	
-  ;;          ("C-l" . ivy-alt-done)
-  ;;          ("C-j" . ivy-next-line)
-  ;;          ("C-k" . ivy-previous-line)
-  ;;          :map ivy-switch-buffer-map
-  ;;          ("C-k" . ivy-previous-line)
-  ;;          ("C-l" . ivy-done)
-  ;;          ("C-d" . ivy-switch-buffer-kill)
-  ;;          :map ivy-reverse-i-search-map
-  ;;          ("C-k" . ivy-previous-line)
-  ;;          ("C-d" . ivy-reverse-i-search-kill))
-  ;;   :demand
-  ;;   :config
-  ;;   (setq ivy-extra-directories nil) ;; Hides . and .. directories
-  ;;   (setq ivy-initial-inputs-alist nil) ;; Don't start searches with ^
-  ;;   (setq ivy-on-del-error-function #'ignore) ; Inhibits deletion closing the minibuffer
-  ;;   (setq ivy-wrap t) ;; Wrap around to top, when on last item
-  ;;   (ivy-mode 1)
-
-  ;;   ;; Shows a preview of the face in counsel-describe-face
-  ;;   (add-to-list 'ivy-format-functions-alist '(counsel-describe-face . counsel--faces-format-function)))
-
-  ;; ;; Nice icons in Ivy. Replaces all-the-icons-ivy.
-  ;; (use-package all-the-icons-ivy-rich
-  ;;   :after ivy
-  ;;   :init (all-the-icons-ivy-rich-mode 1)
-  ;;   :config
-  ;;   (setq all-the-icons-ivy-rich-icon-size 1.0))
-
-  ;; (use-package ivy-rich
-  ;;   :after ivy
-  ;;   :init
-  ;;   (setq ivy-rich-path-style 'abbrev)
-  ;;   :config
-  ;;   (ivy-rich-mode 1))
-
-#+end_src
-
-*** Prescient
-#+begin_src emacs-lisp
-
-  ;; (use-package ivy-prescient
-  ;;   :disabled t
-  ;;   :after counsel
-  ;;   :config
-  ;;   ;; don't prescient sort these commands
-  ;;   (dolist (command '(counsel-find-file))
-  ;;     (setq ivy-prescient-sort-commands (append ivy-prescient-sort-commands (list command))))
-  ;;   ;(:not swiper swiper-isearch ivy-switch-buffer)
-  ;;   (setq prescient-sort-length-enable nil) ; Disables sort by length
-  ;;   (prescient-persist-mode 1)
-  ;;   (ivy-prescient-mode 1))
-
-#+end_src
-
 ** Helpful Help Commands
 [[https://github.com/Wilfred/helpful][Helpful]] adds a lot of very helpful information to Emacs' =describe-= command buffers.  For example, if you use =describe-function=, you will not only get the documentation about the function, you will also see the source code of the function and where it gets used in other places in the Emacs configuration.  It is very useful for figuring out how things work in Emacs.
 
@@ -809,13 +580,17 @@ Counsel is a customized set of commands to replace =find-file= with =counsel-fin
 ** Visuals
 *** Kind Icons
 #+begin_src emacs-lisp
-  
+
   (use-package kind-icon
     :after corfu
-    :custom
-    (kind-icon-default-face 'corfu-default)
     :config
-    (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
+    (setq kind-icon-default-face 'corfu-default)
+
+    (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter)
+
+    (add-hook 'counsel-load-theme #'(lambda () (interactive) (kind-icon-reset-cache)))
+    (add-hook 'load-theme         #'(lambda () (interactive) (kind-icon-reset-cache)))
+  )
 
 #+end_src
 
@@ -1133,6 +908,11 @@ This snippet adds a hook to =org-mode= buffers so that =reiki/org-babel-tangle-c
 
 #+end_src
 
+** Spellchecking
+[[https://github.com/minad/jinx][Jinx-Git]]
+#+begin_src emacs-lisp
+  (use-package jinx)
+#+end_src
 * Development
 ** Languages
 *** IDE Features with lsp-mode
@@ -1185,6 +965,262 @@ This snippet adds a hook to =org-mode= buffers so that =reiki/org-babel-tangle-c
     )
 
   (use-package tree-sitter-langs)
+
+#+end_src
+
+** Savehist
+#+begin_src emacs-lisp
+
+  ;; Persist history over Emacs restarts. Vertico sorts by history position.
+  (use-package savehist
+    :init
+    (savehist-mode))
+
+#+end_src
+** Corfu
+#+BEGIN_src emacs-lisp
+
+  (use-package corfu
+    :init
+    (global-corfu-mode)
+    (corfu-popupinfo-mode)
+    (corfu-history-mode)
+    :bind
+    (:map corfu-map ("RET" . nil)) ;; Return key is for newline not completions 
+    :config
+    (setq corfu-cycle t                ;; Enable cycling for `corfu-next/previous'
+          corfu-auto t                 ;; Enable auto completion
+          corfu-auto-delay 0.2         ;; Seconds to wait before showing auto completion
+          corfu-on-exact-match nil
+          corfu-auto-prefix 2          ;; Minimum length before showing auto completion
+          corfu-count 10               ;; Number of candidates to show
+          corfu-scroll-margin 5        ;; Use scroll margin
+          corfu-popupinfo-hide nil     ;; Hides docs between candidates
+          corfu-popupinfo-delay '0.1     ;; Hides docs between candidates
+          corfu-popupinfo-max-width '40
+          corfu-popupinfo-max-hight '10
+          corfu-echo-mode nil)
+    (corfu-history-mode 1)
+    (add-to-list 'savehist-additional-variables 'corfu-history)
+
+    ;; Make Evil and Corfu play nice
+    (evil-make-overriding-map corfu-map)
+    (advice-add 'corfu--setup :after 'evil-normalize-keymaps)
+    (advice-add 'corfu--teardown :after 'evil-normalize-keymaps)
+
+    :general
+    (:keymaps 'corfu-map
+              :states 'insert
+              "<escpae>" 'corfu-quit
+              "M-n" 'corfu-popupinfo-scroll-up
+              "M-p" 'corfu-popupinfo-scroll-down
+              "M-d" 'corfu-popupinfo-toggle
+              "S-SPC" 'corfu-insert-separator
+              ))
+  ;; Enable Corfu only for certain modes.
+  ;; :hook ((prog-mode . corfu-mode)
+  ;;        (shell-mode . corfu-mode)
+  ;;        (eshell-mode . corfu-mode))
+
+  ;; Recommended: Enable Corfu globally.
+  ;; This is recommended since Dabbrev can be used globally (M-/).
+  ;; See also `corfu-excluded-modes'.
+
+#+end_src
+** Cape
+
+#+begin_src emacs-lisp
+
+  (use-package cape
+    :init
+    (add-to-list 'completion-at-point-functions #'cape-file)
+    (add-to-list 'completion-at-point-functions #'cape-keyword)
+    )
+
+#+end_src
+
+** Vertico, Consult and marginalia
+*** Vertico
+#+begin_src emacs-lisp
+
+  (use-package vertico
+    :init
+    (vertico-mode)
+
+    :bind (:map vertico-map
+           ("C-j" . vertico-next)
+           ("C-k" . vertico-previous)
+           :map minibuffer-local-map
+           ("C-j" . next-line-or-history-element)
+           ("C-k" . previous-line-or-history-element))
+
+    :config
+    (setq vertico-scroll-margin 4)
+    (setq vertico-cycle t))
+
+#+end_src
+*** Marginalia
+https://github.com/minad/marginalia
+#+begin_src emacs-lisp
+
+  ;; Enable rich annotations using the Marginalia package
+  (use-package marginalia
+    ;; Either bind `marginalia-cycle' globally or only in the minibuffer
+    :bind (("M-A" . marginalia-cycle)
+           :map minibuffer-local-map
+           ("M-A" . marginalia-cycle))
+
+    :custom
+    (marginalia-max-relative-age 0)
+    (marginalia-align 'right)
+    ;; The :init configuration is always executed (Not lazy!)
+    :init
+    ;; Must be in the :init section of use-package such that the mode gets
+    ;; enabled right away. Note that this forces loading the package.
+    (marginalia-mode))
+
+#+end_src
+*** Consult
+[[https://github.com/minad/consult][Consult]] 
+#+begin_src emacs-lisp
+  ;; Example configuration for Consult
+  (use-package consult
+    ;; Enable automatic preview at point in the *Completions* buffer. This is
+    ;; relevant when you use the default completion UI.
+    :hook (completion-list-mode . consult-preview-at-point-mode)
+    :init
+    ;; Optionally configure the register formatting. This improves the register
+    ;; preview for `consult-register', `consult-register-load',
+    ;; `consult-register-store' and the Emacs built-ins.
+    (setq register-preview-delay 0.5
+          register-preview-function #'consult-register-format)
+
+    ;; Optionally tweak the register preview window.
+    ;; This adds thin lines, sorting and hides the mode line of the window.
+    (advice-add #'register-preview :override #'consult-register-window)
+    :config
+    (consult-customize
+     consult-theme :preview-key '(:debounce 0.2 any)
+     consult-ripgrep consult-git-grep consult-grep consult-recent-file
+     :preview-key '(:debounce 0.4 any)
+     consult-buffer :preview-key "C-l"
+     )
+  )
+
+#+end_src
+*** Orderless
+https://github.com/oantolin/orderless
+#+begin_src emacs-lisp
+  (use
+  (use-package orderless
+    :custom
+    (completion-styles '(orderless basic))
+    (completion-category-overrides '((file (styles basic partial-completion)))))
+
+#+end_src
+*** Embark
+https://github.com/oantolin/embark
+#+begin_src emacs-lisp
+
+#+end_src
+*** All The Icons Completion
+TODO: [[https://github.com/domtronn/all-the-icons.el/tree/svg][Migrate to svg]]
+#+begin_src emacs-lisp
+
+    (use-package all-the-icons
+      :if (display-graphic-p))
+
+    (use-package all-the-icons-completion
+      :after (marginalia all-the-icons)
+      :hook (marginalia-mode . all-the-icons-completion-marginalia-setup)
+      :init
+      (all-the-icons-completion-mode))
+
+#+end_src
+** Counsel, Ivy and Prescient
+*** Counsel
+Counsel is a customized set of commands to replace =find-file= with =counsel-find-file=, etc which provide useful commands for each of the default completion commands.
+
+#+begin_src emacs-lisp
+
+  ;; (use-package counsel
+  ;;   :bind (
+  ;;          ("M-x" . counsel-M-x)
+  ;;          ("C-x C-f" . counsel-find-file)
+  ;;          ("C-x b" . counsel-switch-buffer)
+  ;;          )
+  ;;          ;;("C-x b" . counsel-ibuffer)
+  ;;          ;:map minibuffer-local-map
+  ;;          ;("C-r" . 'counsel-minibuffer-history)
+  ;;   :config 
+  ;;   ;; Removes recentfiles/bookmarks from counsel-switch-buffer if set to nil
+  ;;   (setq counsel-switch-buffer-preview-virtual-buffers t))
+
+#+end_src
+
+*** Ivy
+[[https://oremacs.com/swiper/][Ivy]] is an excellent completion framework for Emacs.  It provides a minimal yet powerful selection menu that appears when you open files, switch buffers, and for many other tasks in Emacs.
+ 
+[[https://github.com/Yevgnen/ivy-rich][Ivy-rich]] adds extra columns to a few of the Counsel commands to provide more information about each item.
+
+#+begin_src emacs-lisp
+
+  ;; (use-package ivy
+  ;;   :diminish
+  ;;   :bind (("C-s" . swiper)
+  ;;          :map ivy-minibuffer-map
+  ;;          ("TAB" . ivy-alt-done)	
+  ;;          ("C-l" . ivy-alt-done)
+  ;;          ("C-j" . ivy-next-line)
+  ;;          ("C-k" . ivy-previous-line)
+  ;;          :map ivy-switch-buffer-map
+  ;;          ("C-k" . ivy-previous-line)
+  ;;          ("C-l" . ivy-done)
+  ;;          ("C-d" . ivy-switch-buffer-kill)
+  ;;          :map ivy-reverse-i-search-map
+  ;;          ("C-k" . ivy-previous-line)
+  ;;          ("C-d" . ivy-reverse-i-search-kill))
+  ;;   :demand
+  ;;   :config
+  ;;   (setq ivy-extra-directories nil) ;; Hides . and .. directories
+  ;;   (setq ivy-initial-inputs-alist nil) ;; Don't start searches with ^
+  ;;   (setq ivy-on-del-error-function #'ignore) ; Inhibits deletion closing the minibuffer
+  ;;   (setq ivy-wrap t) ;; Wrap around to top, when on last item
+  ;;   (ivy-mode 1)
+
+  ;;   ;; Shows a preview of the face in counsel-describe-face
+  ;;   (add-to-list 'ivy-format-functions-alist '(counsel-describe-face . counsel--faces-format-function)))
+
+  ;; ;; Nice icons in Ivy. Replaces all-the-icons-ivy.
+  ;; (use-package all-the-icons-ivy-rich
+  ;;   :after ivy
+  ;;   :init (all-the-icons-ivy-rich-mode 1)
+  ;;   :config
+  ;;   (setq all-the-icons-ivy-rich-icon-size 1.0))
+
+  ;; (use-package ivy-rich
+  ;;   :after ivy
+  ;;   :init
+  ;;   (setq ivy-rich-path-style 'abbrev)
+  ;;   :config
+  ;;   (ivy-rich-mode 1))
+
+#+end_src
+
+*** Prescient
+#+begin_src emacs-lisp
+
+  ;; (use-package ivy-prescient
+  ;;   :disabled t
+  ;;   :after counsel
+  ;;   :config
+  ;;   ;; don't prescient sort these commands
+  ;;   (dolist (command '(counsel-find-file))
+  ;;     (setq ivy-prescient-sort-commands (append ivy-prescient-sort-commands (list command))))
+  ;;   ;(:not swiper swiper-isearch ivy-switch-buffer)
+  ;;   (setq prescient-sort-length-enable nil) ; Disables sort by length
+  ;;   (prescient-persist-mode 1)
+  ;;   (ivy-prescient-mode 1))
 
 #+end_src
 

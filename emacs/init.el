@@ -148,7 +148,7 @@
 (require 'use-package)
 (setq use-package-always-ensure t)
 
-(setq use-package-verbose t)
+(setq use-package-verbose nil)
 
 ;; Emacs29+
 (setq package-native-compile t)
@@ -384,173 +384,6 @@ _q_ Quit             Current: %`custom-enabled-themes
   (setq which-key-prefix-prefix "◉")
   (setq which-key-idle-delay 0.2))
 
-(use-package corfu
-  :bind
-  (:map corfu-map ("RET" . nil)) ;; Return key is for newline not completions 
-  :custom
-  (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
-  (corfu-auto t)                 ;; Enable auto completion
-  (corfu-auto-delay 0.2)         ;; Seconds to wait before showing auto completion
-  (corfu-on-exact-match nil)
-  (corfu-auto-prefix 0)          ;; Minimum length before showing auto completion
-  (corfu-count 10)               ;; Number of candidates to show
-  (corfu-scroll-margin 5)        ;; Use scroll margin
-  (corfu-popupinfo-hide nil)     ;; Hides docs between candidates
-  (corfu-popupinfo-delay '0.1)     ;; Hides docs between candidates
-  (corfu-popupinfo-max-width '40)
-  (corfu-popupinfo-max-hight '10)
-  (corfu-echo-mode nil)
-  ;; Enable Corfu only for certain modes.
-  ;; :hook ((prog-mode . corfu-mode)
-  ;;        (shell-mode . corfu-mode)
-  ;;        (eshell-mode . corfu-mode))
-
-  ;; Recommended: Enable Corfu globally.
-  ;; This is recommended since Dabbrev can be used globally (M-/).
-  ;; See also `corfu-excluded-modes'.
-  :config
-  (define-key corfu-map (kbd "M-p") #'corfu-popupinfo-scroll-down)
-  (define-key corfu-map (kbd "M-n") #'corfu-popupinfo-scroll-up)
-  (define-key corfu-map (kbd "M-d") #'corfu-popupinfo-toggle)
-  :init
-  (corfu-popupinfo-mode)
-  (corfu-history-mode)
-  (global-corfu-mode))
-
-(use-package vertico
-  :init
-  (vertico-mode)
-
-  :bind (:map vertico-map
-         ("C-j" . vertico-next)
-         ("C-k" . vertico-previous)
-         :map minibuffer-local-map
-         ("C-j" . next-line-or-history-element)
-         ("C-k" . previous-line-or-history-element))
-
-  :config
-  (setq vertico-scroll-margin 4)
-  (setq vertico-cycle t))
-
-;; Persist history over Emacs restarts. Vertico sorts by history position.
-(use-package savehist
-  :init
-  (savehist-mode))
-
-;; Enable rich annotations using the Marginalia package
-(use-package marginalia
-  ;; Either bind `marginalia-cycle' globally or only in the minibuffer
-  :bind (("M-A" . marginalia-cycle)
-         :map minibuffer-local-map
-         ("M-A" . marginalia-cycle))
-
-  :custom
-  (marginalia-max-relative-age 0)
-  (marginalia-align 'right)
-  ;; The :init configuration is always executed (Not lazy!)
-  :init
-  ;; Must be in the :init section of use-package such that the mode gets
-  ;; enabled right away. Note that this forces loading the package.
-  (marginalia-mode))
-
-;; Example configuration for Consult
-(use-package consult
-  ;; Enable automatic preview at point in the *Completions* buffer. This is
-  ;; relevant when you use the default completion UI.
-  :hook (completion-list-mode . consult-preview-at-point-mode)
-  :init
-  ;; Optionally configure the register formatting. This improves the register
-  ;; preview for `consult-register', `consult-register-load',
-  ;; `consult-register-store' and the Emacs built-ins.
-  (setq register-preview-delay 0.5
-        register-preview-function #'consult-register-format)
-
-  ;; Optionally tweak the register preview window.
-  ;; This adds thin lines, sorting and hides the mode line of the window.
-  (advice-add #'register-preview :override #'consult-register-window)
-)
-
-(use-package orderless
-  :custom
-  (completion-styles '(orderless basic))
-  (completion-category-overrides '((file (styles basic partial-completion)))))
-
-
-
-(use-package all-the-icons
-  :if (display-graphic-p))
-
-(use-package all-the-icons-completion
-  :after (marginalia all-the-icons)
-  :hook (marginalia-mode . all-the-icons-completion-marginalia-setup)
-  :init
-  (all-the-icons-completion-mode))
-
-;; (use-package counsel
-;;   :bind (
-;;          ("M-x" . counsel-M-x)
-;;          ("C-x C-f" . counsel-find-file)
-;;          ("C-x b" . counsel-switch-buffer)
-;;          )
-;;          ;;("C-x b" . counsel-ibuffer)
-;;          ;:map minibuffer-local-map
-;;          ;("C-r" . 'counsel-minibuffer-history)
-;;   :config 
-;;   ;; Removes recentfiles/bookmarks from counsel-switch-buffer if set to nil
-;;   (setq counsel-switch-buffer-preview-virtual-buffers t))
-
-;; (use-package ivy
-;;   :diminish
-;;   :bind (("C-s" . swiper)
-;;          :map ivy-minibuffer-map
-;;          ("TAB" . ivy-alt-done)	
-;;          ("C-l" . ivy-alt-done)
-;;          ("C-j" . ivy-next-line)
-;;          ("C-k" . ivy-previous-line)
-;;          :map ivy-switch-buffer-map
-;;          ("C-k" . ivy-previous-line)
-;;          ("C-l" . ivy-done)
-;;          ("C-d" . ivy-switch-buffer-kill)
-;;          :map ivy-reverse-i-search-map
-;;          ("C-k" . ivy-previous-line)
-;;          ("C-d" . ivy-reverse-i-search-kill))
-;;   :demand
-;;   :config
-;;   (setq ivy-extra-directories nil) ;; Hides . and .. directories
-;;   (setq ivy-initial-inputs-alist nil) ;; Don't start searches with ^
-;;   (setq ivy-on-del-error-function #'ignore) ; Inhibits deletion closing the minibuffer
-;;   (setq ivy-wrap t) ;; Wrap around to top, when on last item
-;;   (ivy-mode 1)
-
-;;   ;; Shows a preview of the face in counsel-describe-face
-;;   (add-to-list 'ivy-format-functions-alist '(counsel-describe-face . counsel--faces-format-function)))
-
-;; ;; Nice icons in Ivy. Replaces all-the-icons-ivy.
-;; (use-package all-the-icons-ivy-rich
-;;   :after ivy
-;;   :init (all-the-icons-ivy-rich-mode 1)
-;;   :config
-;;   (setq all-the-icons-ivy-rich-icon-size 1.0))
-
-;; (use-package ivy-rich
-;;   :after ivy
-;;   :init
-;;   (setq ivy-rich-path-style 'abbrev)
-;;   :config
-;;   (ivy-rich-mode 1))
-
-;; (use-package ivy-prescient
-;;   :disabled t
-;;   :after counsel
-;;   :config
-;;   ;; don't prescient sort these commands
-;;   (dolist (command '(counsel-find-file))
-;;     (setq ivy-prescient-sort-commands (append ivy-prescient-sort-commands (list command))))
-;;   ;(:not swiper swiper-isearch ivy-switch-buffer)
-;;   (setq prescient-sort-length-enable nil) ; Disables sort by length
-;;   (prescient-persist-mode 1)
-;;   (ivy-prescient-mode 1))
-
 (use-package helpful
   :commands (helpful-function helpful-variable helpful-macro helpful-callable helpful-key helpful-command helpful-at-point helpful-symbol)
   :bind
@@ -562,10 +395,14 @@ _q_ Quit             Current: %`custom-enabled-themes
 
 (use-package kind-icon
   :after corfu
-  :custom
-  (kind-icon-default-face 'corfu-default)
   :config
-  (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
+  (setq kind-icon-default-face 'corfu-default)
+
+  (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter)
+
+  (add-hook 'counsel-load-theme #'(lambda () (interactive) (kind-icon-reset-cache)))
+  (add-hook 'load-theme         #'(lambda () (interactive) (kind-icon-reset-cache)))
+)
 
 (use-package minimap
   :commands minimap-mode
@@ -743,7 +580,7 @@ _q_ Quit             Current: %`custom-enabled-themes
   ;; (set-face-attribute (car face) nil :font reiki/default-variable-font :weight 'light :height (cdr face)))
 
 ;; Ensure that anything that should be fixed-pitch in Org files appears that way
-  (set-face-attribute 'org-block nil    :foreground nil :inherit 'fixed-pitch)
+  (set-face-attribute 'org-block nil    :foreground 'unspecified :inherit 'fixed-pitch)
   (set-face-attribute 'org-table nil    :inherit 'fixed-pitch)
   (set-face-attribute 'org-formula nil  :inherit 'fixed-pitch)
   (set-face-attribute 'org-code nil     :inherit '(shadow fixed-pitch))
@@ -753,7 +590,7 @@ _q_ Quit             Current: %`custom-enabled-themes
   (set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
   (set-face-attribute 'org-checkbox nil  :inherit 'fixed-pitch)
   (set-face-attribute 'line-number nil :inherit 'fixed-pitch)
-  (set-face-attribute 'line-number-current-line nil :inherit 'fixed-pitch)
+  (set-face-attribute 'line-number-current-line 'unspecified :inherit 'fixed-pitch)
   )
 
 (use-package org-appear
@@ -811,6 +648,8 @@ _q_ Quit             Current: %`custom-enabled-themes
 
 (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'reiki/org-babel-tangle-config)))
 
+(use-package jinx)
+
 (defun reiki/lsp-mode-setup ()
   (setq lsp-headerlined-breadcrumb-segments '(path-up-to-project file symbols))
   (lsp-headerline-breadcrumb-mode))
@@ -834,6 +673,207 @@ _q_ Quit             Current: %`custom-enabled-themes
 
 (use-package lsp-treemacs
   :after lsp)
+
+(use-package tree-sitter
+  :init
+  (global-tree-sitter-mode)
+  )
+
+(use-package tree-sitter-langs)
+
+;; Persist history over Emacs restarts. Vertico sorts by history position.
+(use-package savehist
+  :init
+  (savehist-mode))
+
+(use-package corfu
+  :init
+  (global-corfu-mode)
+  (corfu-popupinfo-mode)
+  (corfu-history-mode)
+  :bind
+  (:map corfu-map ("RET" . nil)) ;; Return key is for newline not completions 
+  :config
+  (setq corfu-cycle t                ;; Enable cycling for `corfu-next/previous'
+        corfu-auto t                 ;; Enable auto completion
+        corfu-auto-delay 0.2         ;; Seconds to wait before showing auto completion
+        corfu-on-exact-match nil
+        corfu-auto-prefix 2          ;; Minimum length before showing auto completion
+        corfu-count 10               ;; Number of candidates to show
+        corfu-scroll-margin 5        ;; Use scroll margin
+        corfu-popupinfo-hide nil     ;; Hides docs between candidates
+        corfu-popupinfo-delay '0.1     ;; Hides docs between candidates
+        corfu-popupinfo-max-width '40
+        corfu-popupinfo-max-hight '10
+        corfu-echo-mode nil)
+  (corfu-history-mode 1)
+  (add-to-list 'savehist-additional-variables 'corfu-history)
+
+  ;; Make Evil and Corfu play nice
+  (evil-make-overriding-map corfu-map)
+  (advice-add 'corfu--setup :after 'evil-normalize-keymaps)
+  (advice-add 'corfu--teardown :after 'evil-normalize-keymaps)
+
+  :general
+  (:keymaps 'corfu-map
+            :states 'insert
+            "<escpae>" 'corfu-quit
+            "M-n" 'corfu-popupinfo-scroll-up
+            "M-p" 'corfu-popupinfo-scroll-down
+            "M-d" 'corfu-popupinfo-toggle
+            "S-SPC" 'corfu-insert-separator
+            ))
+;; Enable Corfu only for certain modes.
+;; :hook ((prog-mode . corfu-mode)
+;;        (shell-mode . corfu-mode)
+;;        (eshell-mode . corfu-mode))
+
+;; Recommended: Enable Corfu globally.
+;; This is recommended since Dabbrev can be used globally (M-/).
+;; See also `corfu-excluded-modes'.
+
+(use-package cape
+  :init
+  (add-to-list 'completion-at-point-functions #'cape-file)
+  (add-to-list 'completion-at-point-functions #'cape-keyword)
+  )
+
+(use-package vertico
+  :init
+  (vertico-mode)
+
+  :bind (:map vertico-map
+         ("C-j" . vertico-next)
+         ("C-k" . vertico-previous)
+         :map minibuffer-local-map
+         ("C-j" . next-line-or-history-element)
+         ("C-k" . previous-line-or-history-element))
+
+  :config
+  (setq vertico-scroll-margin 4)
+  (setq vertico-cycle t))
+
+;; Enable rich annotations using the Marginalia package
+(use-package marginalia
+  ;; Either bind `marginalia-cycle' globally or only in the minibuffer
+  :bind (("M-A" . marginalia-cycle)
+         :map minibuffer-local-map
+         ("M-A" . marginalia-cycle))
+
+  :custom
+  (marginalia-max-relative-age 0)
+  (marginalia-align 'right)
+  ;; The :init configuration is always executed (Not lazy!)
+  :init
+  ;; Must be in the :init section of use-package such that the mode gets
+  ;; enabled right away. Note that this forces loading the package.
+  (marginalia-mode))
+
+;; Example configuration for Consult
+(use-package consult
+  ;; Enable automatic preview at point in the *Completions* buffer. This is
+  ;; relevant when you use the default completion UI.
+  :hook (completion-list-mode . consult-preview-at-point-mode)
+  :init
+  ;; Optionally configure the register formatting. This improves the register
+  ;; preview for `consult-register', `consult-register-load',
+  ;; `consult-register-store' and the Emacs built-ins.
+  (setq register-preview-delay 0.5
+        register-preview-function #'consult-register-format)
+
+  ;; Optionally tweak the register preview window.
+  ;; This adds thin lines, sorting and hides the mode line of the window.
+  (advice-add #'register-preview :override #'consult-register-window)
+  :config
+  (consult-customize
+   consult-theme :preview-key '(:debounce 0.2 any)
+   consult-ripgrep consult-git-grep consult-grep consult-recent-file
+   :preview-key '(:debounce 0.4 any)
+   consult-buffer :preview-key "C-l"
+   )
+)
+
+(use
+(use-package orderless
+  :custom
+  (completion-styles '(orderless basic))
+  (completion-category-overrides '((file (styles basic partial-completion)))))
+
+
+
+(use-package all-the-icons
+  :if (display-graphic-p))
+
+(use-package all-the-icons-completion
+  :after (marginalia all-the-icons)
+  :hook (marginalia-mode . all-the-icons-completion-marginalia-setup)
+  :init
+  (all-the-icons-completion-mode))
+
+;; (use-package counsel
+;;   :bind (
+;;          ("M-x" . counsel-M-x)
+;;          ("C-x C-f" . counsel-find-file)
+;;          ("C-x b" . counsel-switch-buffer)
+;;          )
+;;          ;;("C-x b" . counsel-ibuffer)
+;;          ;:map minibuffer-local-map
+;;          ;("C-r" . 'counsel-minibuffer-history)
+;;   :config 
+;;   ;; Removes recentfiles/bookmarks from counsel-switch-buffer if set to nil
+;;   (setq counsel-switch-buffer-preview-virtual-buffers t))
+
+;; (use-package ivy
+;;   :diminish
+;;   :bind (("C-s" . swiper)
+;;          :map ivy-minibuffer-map
+;;          ("TAB" . ivy-alt-done)	
+;;          ("C-l" . ivy-alt-done)
+;;          ("C-j" . ivy-next-line)
+;;          ("C-k" . ivy-previous-line)
+;;          :map ivy-switch-buffer-map
+;;          ("C-k" . ivy-previous-line)
+;;          ("C-l" . ivy-done)
+;;          ("C-d" . ivy-switch-buffer-kill)
+;;          :map ivy-reverse-i-search-map
+;;          ("C-k" . ivy-previous-line)
+;;          ("C-d" . ivy-reverse-i-search-kill))
+;;   :demand
+;;   :config
+;;   (setq ivy-extra-directories nil) ;; Hides . and .. directories
+;;   (setq ivy-initial-inputs-alist nil) ;; Don't start searches with ^
+;;   (setq ivy-on-del-error-function #'ignore) ; Inhibits deletion closing the minibuffer
+;;   (setq ivy-wrap t) ;; Wrap around to top, when on last item
+;;   (ivy-mode 1)
+
+;;   ;; Shows a preview of the face in counsel-describe-face
+;;   (add-to-list 'ivy-format-functions-alist '(counsel-describe-face . counsel--faces-format-function)))
+
+;; ;; Nice icons in Ivy. Replaces all-the-icons-ivy.
+;; (use-package all-the-icons-ivy-rich
+;;   :after ivy
+;;   :init (all-the-icons-ivy-rich-mode 1)
+;;   :config
+;;   (setq all-the-icons-ivy-rich-icon-size 1.0))
+
+;; (use-package ivy-rich
+;;   :after ivy
+;;   :init
+;;   (setq ivy-rich-path-style 'abbrev)
+;;   :config
+;;   (ivy-rich-mode 1))
+
+;; (use-package ivy-prescient
+;;   :disabled t
+;;   :after counsel
+;;   :config
+;;   ;; don't prescient sort these commands
+;;   (dolist (command '(counsel-find-file))
+;;     (setq ivy-prescient-sort-commands (append ivy-prescient-sort-commands (list command))))
+;;   ;(:not swiper swiper-isearch ivy-switch-buffer)
+;;   (setq prescient-sort-length-enable nil) ; Disables sort by length
+;;   (prescient-persist-mode 1)
+;;   (ivy-prescient-mode 1))
 
 (use-package dap-mode
   ;; Uncomment the config below if you want all UI panes to be hidden by default!
@@ -945,7 +985,7 @@ _q_ Quit             Current: %`custom-enabled-themes
                   (markdown-header-face-3 . 1.05)
                   (markdown-header-face-4 . 1.0)
                   (markdown-header-face-5 . 1.0)))
-    (set-face-attribute (car face) nil :weight 'normal :height (cdr face)))
+    (set-face-attribute (car face) 'unspecified :weight 'normal :height (cdr face)))
 )
 
 (use-package pdf-tools

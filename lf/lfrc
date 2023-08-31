@@ -48,10 +48,17 @@ cmd open ${{
     case $(file --mime-type $f -b) in
         image/vnd.djvu|application/pdf|application/octet-stream|application/postscript) setsid -f zathura $fx >/dev/null 2>&1 ;;
         text/xml)
-          is_maple=$(file $f --mime-type | sed -E 's|^.*\.([mw]{2}):\s(.*)|\1:\2|')
+          is_maple=$(file $f --mime-type | sed -E 's|^.*\.(mw):\s(.*)|\1:\2|')
 
           if [[ $is_maple = mw:text/xml ]]; then
-            setsid -f /home/reikimann/.local/src/maple2022/bin/xmaple $f >/dev/null 2>&1
+            setsid -f /home/reikimann/.local/src/maple2023/bin/xmaple $f >/dev/null 2>&1
+          fi
+        ;;
+        text/plain)
+          is_org=$(file $f --mime-type | sed -E 's|^.*\.(org):\s(.*)|\1:\2|')
+
+          if [[ $is_org = org:text/plain ]]; then
+            setsid -f emacs -f $f >/dev/null 2>&1
           fi
         ;;
         text/*|application/json|application/x-ndjson|inode/x-empty) $EDITOR $fx;;
@@ -76,6 +83,10 @@ cmd mkfile %{{
     touch $ans
 }}
 
+cmd get_path %{{
+  printf $f
+}}
+
 cmd dragon %dragon -a -x $fx
 cmd dragon-stay %dragon -a $fx
 cmd dragon-individual %dragon $fx
@@ -85,6 +96,8 @@ cmd dlfile %dlfile
 # Bindings
 map m
 map d
+
+map gP get_path
 
 map x cut
 map y copy
