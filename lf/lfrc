@@ -59,6 +59,8 @@ cmd open ${{
 
           if [[ $is_org = org:text/plain ]]; then
             setsid -f emacs -f $f >/dev/null 2>&1
+          else
+            $EDITOR $fx
           fi
         ;;
         text/*|application/json|application/x-ndjson|inode/x-empty) $EDITOR $fx;;
