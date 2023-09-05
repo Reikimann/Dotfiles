@@ -9,6 +9,7 @@
   "modules-left": [
     "custom/launcher",
     "wlr/workspaces",
+    // "hyprland/workspaces",
     "cpu",
     "memory",
     "temperature",
