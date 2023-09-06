@@ -16,6 +16,10 @@ map('v', '>', '>gv', {noremap = true, silent = false})
 map('v', 'J', ":m '>+1<CR>gv=gv", {noremap = true, silent = false})
 map('v', 'K', ":m '<-2<CR>gv=gv", {noremap = true, silent = false})
 
+map('v', 'u', "t_", {noremap = true, silent = false})
+
+map('n', 'cu', "ct_", {noremap = true, silent = false})
+
 map("n", "J", "mzJ`z", {noremap = true, silent = false})
 
 map("n", "<C-d>", "<C-d>zz", {noremap = true, silent = false})
