@@ -8,8 +8,7 @@
 
   "modules-left": [
     "custom/launcher",
-    "wlr/workspaces",
-    // "hyprland/workspaces",
+    "hyprland/workspaces",
     "cpu",
     "memory",
     "temperature",
@@ -30,7 +29,7 @@
     "icon-size": 18,
     "spacing": 10
   },
-  "wlr/workspaces": {
+  "hyprland/workspaces": {
     "disable-scroll": true,
     "all-outputs": true,
     "on-click": "activate",
