@@ -1,24 +1,24 @@
 project () {
   local search_dir=~/coding
-  local preview_cmd="exa -lah --sort=type --icons --no-permissions --no-filesize --no-time --no-user $search_dir/{}"
+  local preview_cmd="eza -lah --sort=type --icons --no-permissions --no-filesize --no-time --no-user $search_dir/{}"
 
   local target_dir=$(fd . $search_dir --exact-depth=1 --type d --exec printf '{/}\0' | fzf --preview $preview_cmd --exit-0 --read0)
 
   if [[ -n $target_dir ]]; then
     cd $search_dir/$target_dir
-    exa -lah --group-directories-first --icons
+    eza -lah --group-directories-first --icons
   fi
 }
 
 configs () {
   local search_dir=~/.config
-  local preview_cmd="exa -lah --sort=type --icons --no-permissions --no-filesize --no-time --no-user $search_dir/{}"
+  local preview_cmd="eza -lah --sort=type --icons --no-permissions --no-filesize --no-time --no-user $search_dir/{}"
 
   local target_dir=$(fd . $search_dir --exact-depth=1 --type d --exec printf '{/}\0' | fzf --preview $preview_cmd --exit-0 --read0)
 
   if [[ -n $target_dir ]]; then
     cd $search_dir/$target_dir
-    exa -lah --group-directories-first --icons
+    eza -lah --group-directories-first --icons
   fi
 }
 
@@ -30,7 +30,6 @@ school () {
 
   if [[ -n $target_dir ]]; then
     cd $search_dir/$target_dir
-    exa -lah --group-directories-first --icons
+    eza -lah --group-directories-first --icons
   fi
 }
-

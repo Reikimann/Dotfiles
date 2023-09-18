@@ -173,8 +173,8 @@ alias nvidia-settings="nvidia-settings --config="$XDG_CONFIG_HOME"/nvidia/settin
 alias matrix="unimatrix -l cCaGgkr -s 98 -a -f"
 alias c="clear && zsh"
 alias C="clear && bash"
-alias exa="exa --sort=type --icons"
-alias exal="exa -lah --sort=type --icons"
+alias exa="eza --sort=type --icons"
+alias exal="eza -lah --sort=type --icons"
 alias v="nvim"
 alias lf="lfub"
 alias ls="ls --group-directories-first --color=always"
@@ -184,7 +184,7 @@ alias standalone="convert -density 300 -alpha remove"
 
 eval "$(zoxide init zsh)"
 eval "$(starship init zsh)"
-neofetch
+# neofetch
 
 
 source ~/.local/bin/change_pwd.sh
