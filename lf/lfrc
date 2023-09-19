@@ -58,7 +58,7 @@ cmd open ${{
           is_org=$(file $f --mime-type | sed -E 's|^.*\.(org):\s(.*)|\1:\2|')
 
           if [[ $is_org = org:text/plain ]]; then
-            setsid -f emacs -f $f >/dev/null 2>&1
+            setsid -f emacs --file $f >/dev/null 2>&1
           else
             $EDITOR $fx
           fi
