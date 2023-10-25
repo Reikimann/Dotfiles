@@ -1,6 +1,7 @@
 #!/usr/bin/env sh
 
-WALLPAPER_DIR=~/pix/wall_pretty
+WALLPAPER_DIR=$RICE_WALL_DIR
+echo $WALLPAPER_DIR
 WALLPAPER=$(fd --type=f . $WALLPAPER_DIR | shuf -n 1)
 
 swww img $WALLPAPER \

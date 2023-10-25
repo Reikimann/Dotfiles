@@ -1,7 +1,13 @@
 #!/usr/bin/env sh
 
+# Set wallpaper dir
+export RICE_WALL_DIR=~/pix/rices/tokyonight
+
 # Starts Wallpaper Deamon
-swww init
+# swww init
+
+# Randomizes wallpapers (This now inits daemon)
+~/.config/swww/swww_randomize.sh $RICE_WALL_DIR &
 
 # Sets Cursor Theme
 hyprctl setcursor Breeze_Snow 16

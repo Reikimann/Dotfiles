@@ -6,6 +6,8 @@
 # NOTE: this script is in bash (not posix shell), because the RANDOM variable
 # we use is not defined in posix
 
+swww init
+
 if [[ $# -lt 1 ]] || [[ ! -d $1   ]]; then
 	echo "Usage:
 	$0 <dir containg images>"
