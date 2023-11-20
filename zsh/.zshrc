@@ -169,6 +169,7 @@ bindkey -s '^s' 'school\n'
 alias nvidia-settings="nvidia-settings --config="$XDG_CONFIG_HOME"/nvidia/settings"
 
 ################################################
+# Random
 
 alias matrix="unimatrix -l cCaGgkr -s 98 -a -f"
 alias c="clear && zsh"
@@ -181,6 +182,19 @@ alias ls="ls --group-directories-first --color=always"
 alias fzff="fzf --preview 'bat --style=numbers --color=always --line-range :500 {}'"
 alias yolo='git commit -m "$(curl -s http://whatthecommit.com/index.txt)"'
 alias standalone="convert -density 300 -alpha remove"
+alias lv="NVIM_APPNAME=nvimLazy nvim"
+
+################################################
+# Dev
+
+alias gits="git status"
+alias gita="git add"
+alias gpatch="git add --patch"
+alias gitc="git commit"
+alias gitp="git push"
+
+
+################################################
 
 eval "$(zoxide init zsh)"
 eval "$(starship init zsh)"
