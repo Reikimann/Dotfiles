@@ -1,15 +1,12 @@
 adobe-source-han-sans-cn-fonts
 adobe-source-han-sans-jp-fonts
 adobe-source-han-sans-kr-fonts
-asciiquarium
-bat
 mpv
 brightnessctl
-cowsay
 discord
 dunst
 emacs
-exa
+eza
 figlet
 flameshot
 gdu
