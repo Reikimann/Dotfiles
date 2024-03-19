@@ -11,7 +11,7 @@
     "hyprland/workspaces",
     "cpu",
     "memory",
-    "temperature",
+    // "temperature",
     "custom/media",
     "custom/updates"
   ],
@@ -96,9 +96,9 @@
   },
   "clock": {
     "timezone": "Europe/Copenhagen",
-    "format": "{: %R }",
+    "format": " {:%R }",
     // "format": "{: %R   }",
-    "format-alt":"{: %d/%m }",
+    "format-alt":" {:%d/%m }",
     "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>"
   },
   "cpu": {
